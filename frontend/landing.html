@@ -86,6 +86,36 @@
     /* ---- Screenshot ---- */
     .screenshot { max-width:1060px; margin:0 auto 40px; padding:0 24px; }
     .screenshot img { width:100%; max-width:100%; height:auto; display:block; border-radius:12px; border:1px solid var(--border); }
+    /* CSS dashboard mockup */
+    .mock { border:1px solid var(--border); border-radius:12px; overflow:hidden; background:var(--card); text-align:left; }
+    .mock-bar { display:flex; align-items:center; gap:8px; padding:12px 16px; border-bottom:1px solid var(--border); }
+    .mdot { width:10px; height:10px; border-radius:50%; background:#3a3b38; }
+    .murl { margin-left:8px; font-size:12px; color:var(--muted); background:var(--bg); border:1px solid var(--border); border-radius:6px; padding:4px 14px; }
+    .mock-body { display:flex; min-height:340px; }
+    .mock-side { width:180px; flex:none; border-right:1px solid var(--border); padding:18px 14px; display:flex; flex-direction:column; gap:10px; }
+    .mlogo { display:flex; align-items:center; gap:10px; margin-bottom:8px; }
+    .mbox { width:22px; height:22px; border-radius:6px; background:var(--accent); flex:none; }
+    .mnav { padding:8px 10px; border-radius:6px; }
+    .mnav.on { background:rgba(217,32,56,0.12); border:1px solid rgba(217,32,56,0.35); }
+    .mock-main { flex:1; padding:22px; display:flex; flex-direction:column; gap:18px; }
+    .mhead { display:flex; align-items:center; justify-content:space-between; }
+    .mpill { width:120px; height:32px; border-radius:8px; background:var(--accent); }
+    .mstats { display:flex; gap:12px; }
+    .mstat { flex:1; border:1px solid var(--border); border-radius:8px; padding:12px; display:flex; flex-direction:column; gap:8px; }
+    .mcards { display:grid; grid-template-columns:repeat(4,1fr); gap:12px; }
+    .mcard { border:1px solid var(--border); border-radius:8px; padding:12px; display:flex; flex-direction:column; gap:8px; }
+    .mdotstat { width:8px; height:8px; border-radius:50%; }
+    .mdotstat.ok { background:#4caf7d; } .mdotstat.bad { background:#ef4444; }
+    .mrow { border:1px solid var(--border); border-radius:8px; padding:14px; display:flex; flex-direction:column; gap:12px; }
+    .mtrack { display:flex; gap:6px; }
+    .mseg { flex:1; height:34px; border-radius:6px; background:#22231f; }
+    .mseg.acc { background:var(--accent); }
+    .mline { display:block; height:10px; border-radius:5px; background:#33342f; }
+    .mline.big { height:16px; } .mline.dim { opacity:0.55; }
+    .mline.w25 { width:25%; } .mline.w30 { width:30%; } .mline.w40 { width:40%; }
+    .mline.w50 { width:50%; } .mline.w55 { width:55%; } .mline.w58 { width:58%; }
+    .mline.w60 { width:60%; } .mline.w65 { width:65%; } .mline.w70 { width:70%; } .mline.w80 { width:80%; }
+    .mock-cap { text-align:center; color:var(--muted); font-size:13px; margin:14px 0 0; }
 
     /* ---- Sections ---- */
     .section { max-width:1120px; margin:0 auto; padding:96px 24px; }
@@ -239,9 +269,37 @@
     <p class="trust-note">Trusted by retail, hospitality and corporate teams</p>
   </section>
 
-  <!-- Dashboard preview -->
+  <!-- Dashboard preview (pure CSS product mockup — no image asset needed) -->
   <div class="screenshot">
-    <img src="/assets/dashboard-preview.png" alt="Kardinal Screens dashboard showing online displays with playlist assignments" loading="lazy">
+    <div class="mock" aria-hidden="true">
+      <div class="mock-bar"><span class="mdot"></span><span class="mdot"></span><span class="mdot"></span><span class="murl">app.kardinalscreens.com</span></div>
+      <div class="mock-body">
+        <div class="mock-side">
+          <div class="mlogo"><span class="mbox"></span><span class="mline w60"></span></div>
+          <div class="mnav on"><span class="mline w70"></span></div>
+          <div class="mnav"><span class="mline w55"></span></div>
+          <div class="mnav"><span class="mline w65"></span></div>
+          <div class="mnav"><span class="mline w50"></span></div>
+          <div class="mnav"><span class="mline w58"></span></div>
+        </div>
+        <div class="mock-main">
+          <div class="mhead"><span class="mline w30 big"></span><span class="mpill"></span></div>
+          <div class="mstats">
+            <div class="mstat"><span class="mline w40"></span><span class="mline w70 dim"></span></div>
+            <div class="mstat"><span class="mline w40"></span><span class="mline w70 dim"></span></div>
+            <div class="mstat"><span class="mline w40"></span><span class="mline w70 dim"></span></div>
+          </div>
+          <div class="mcards">
+            <div class="mcard"><span class="mdotstat ok"></span><span class="mline w55"></span><span class="mline w80 dim"></span></div>
+            <div class="mcard"><span class="mdotstat ok"></span><span class="mline w55"></span><span class="mline w80 dim"></span></div>
+            <div class="mcard"><span class="mdotstat ok"></span><span class="mline w55"></span><span class="mline w80 dim"></span></div>
+            <div class="mcard"><span class="mdotstat bad"></span><span class="mline w55"></span><span class="mline w80 dim"></span></div>
+          </div>
+          <div class="mrow"><span class="mline w25"></span><span class="mtrack"><span class="mseg"></span><span class="mseg"></span><span class="mseg acc"></span><span class="mseg"></span></span></div>
+        </div>
+      </div>
+    </div>
+    <p class="mock-cap">Kardinal Screens dashboard — every display, playlist and schedule in one place.</p>
   </div>
 
   <!-- Features -->
