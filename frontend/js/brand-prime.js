@@ -33,7 +33,7 @@
     // default colour is not a brand, so only a customised one flattens the gradient palette.
     if (wl.primary_color) {
       root.style.setProperty('--accent', wl.primary_color);
-      var custom = String(wl.primary_color).trim().toLowerCase() !== '#a3e635';
+      var custom = String(wl.primary_color).trim().toLowerCase() !== '#d92038';
       ['--accent-2', '--accent-3'].forEach(function (v) {
         if (custom) root.style.setProperty(v, wl.primary_color); else root.style.removeProperty(v);
       });

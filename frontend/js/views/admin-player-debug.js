@@ -184,7 +184,7 @@ async function loadSummary() {
     const data = await res.json();
     const families = [
       ['Tizen', data.byFamily.tizen, '#3b82f6'],
-      ['WebOS', data.byFamily.webos, '#a3e635'],
+      ['WebOS', data.byFamily.webos, '#d92038'],
       ['Fire TV', data.byFamily.fire_tv, '#f97316'],
       ['Bravia', data.byFamily.bravia, '#a855f7'],
       ['Edge', data.byFamily.edge, '#06b6d4'],

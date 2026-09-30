@@ -512,6 +512,20 @@ CREATE TABLE IF NOT EXISTS ai_settings (
     updated_at      INTEGER NOT NULL DEFAULT (strftime('%s','now'))
 );
 
+-- Kardinal AI layer: the Brain knowledge base. Workspace-scoped facts the AI
+-- operator injects into chat; retrieval is keyword overlap (lib/ai-agent.js),
+-- no vector DB. Mirrors the migration in db/database.js for existing DBs.
+CREATE TABLE IF NOT EXISTS ai_brain (
+    id              TEXT PRIMARY KEY,
+    workspace_id    TEXT NOT NULL REFERENCES workspaces(id) ON DELETE CASCADE,
+    title           TEXT NOT NULL,
+    content         TEXT NOT NULL,
+    tags            TEXT NOT NULL DEFAULT '',
+    created_at      INTEGER NOT NULL DEFAULT (strftime('%s','now')),
+    updated_at      INTEGER
+);
+CREATE INDEX IF NOT EXISTS idx_ai_brain_ws ON ai_brain(workspace_id);
+
 -- ===================== KIOSK PAGES =====================
 
 CREATE TABLE IF NOT EXISTS kiosk_pages (

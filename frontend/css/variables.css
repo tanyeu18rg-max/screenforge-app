@@ -1,33 +1,33 @@
 :root {
-  /* ScreenForge brand: lime on charcoal. */
-  --bg-primary: #0b0d0a;
-  --bg-secondary: #12150f;
-  --bg-card: #171b14;
-  --bg-card-hover: #1e241a;
-  --bg-input: #0e110c;
-  --accent: #a3e635;
-  --accent-hover: #bef264;
-  --accent-dim: #3f6212;
-  /* Text that sits ON the accent colour (dark, because lime is light). White-label
+  /* Kardinal brand: cardinal red on warm charcoal. */
+  --bg-primary: #0c0d0c;
+  --bg-secondary: #121312;
+  --bg-card: #161716;
+  --bg-card-hover: #1b1c1b;
+  --bg-input: #0e0f0e;
+  --accent: #d92038;
+  --accent-hover: #b3122e;
+  --accent-dim: #5c1220;
+  /* Text that sits ON the accent colour (white, because cardinal is dark). White-label
      brands overwrite the accents (js/branding.js); keep --on-accent readable there. */
-  --on-accent: #1a2e05;
-  /* The release palette (lime + deep green) that the gradients are built from. A white-label brand
-     colour overwrites all three accents (js/branding.js), so gradients fall back to that colour. */
-  --accent-2: #65a30d;
-  --accent-3: #d9f99d;
-  --grad-accent: linear-gradient(135deg, var(--accent), var(--accent-2));
-  --grad-bar: linear-gradient(90deg, var(--accent-2), var(--accent-3));
-  --text-primary: #f1f5f9;
-  --text-secondary: #a3b09a;
-  --text-muted: #6b7565;
-  --success: #a3e635;
-  --success-dim: #3f6212;
+  --on-accent: #ffffff;
+  /* Solid accent treatments — no gradients in the Kardinal theme. Kept as solid
+     fallbacks so any gradient usage degrades to the brand colour. */
+  --accent-2: #b3122e;
+  --accent-3: #d92038;
+  --grad-accent: var(--accent);
+  --grad-bar: var(--accent);
+  --text-primary: #f4f1ea;
+  --text-secondary: #a8a29a;
+  --text-muted: #6e6a63;
+  --success: #4caf7d;
+  --success-dim: #1d4a33;
   --danger: #ef4444;
   --danger-dim: #991b1b;
   --warning: #f59e0b;
   --warning-dim: #92400e;
-  --border: #2a3125;
-  --border-light: #3a4433;
+  --border: #262724;
+  --border-light: #343532;
   --radius: 8px;
   --radius-lg: 12px;
   --shadow: 0 4px 24px rgba(0, 0, 0, 0.4);

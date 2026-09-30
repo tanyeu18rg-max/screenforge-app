@@ -4,6 +4,7 @@ import { showToast } from '../components/toast.js';
 import { getLanguage, setLanguage, getAvailableLanguages, t } from '../i18n.js';
 import { esc, isPlatformAdmin } from '../utils.js';
 import { resetBranding, applyAccent } from '../branding.js';
+import { openAiSettingsModal } from '../components/ai-settings-modal.js';
 
 export async function render(container) {
   const serverUrl = `${window.location.protocol}//${window.location.host}`;
@@ -25,6 +26,11 @@ export async function render(container) {
   // Read it from the server (/api/version) the same way the admin view does.
   let appVersion = '';
   try { appVersion = ((await fetch('/api/version').then(r => r.json())).version) || ''; } catch { /* leave blank on failure */ }
+
+  // The PUT /ai/settings route requires a workspace admin, so the section is
+  // only shown where it can actually be used. (The dialog itself is shared
+  // with the Designer via components/ai-settings-modal.js — one dialog, one row.)
+  const canAdminAi = isAdmin || user.current_workspace_role === 'workspace_admin';
 
   container.innerHTML = `
     <div class="page-header">
@@ -160,6 +166,21 @@ export async function render(container) {
           <input type="checkbox" id="widgetSandboxIsolationToggle" ${widgetIsolationDisabled ? '' : 'checked'}>
           <span>${widgetIsolationDisabled ? 'Isolation disabled' : 'Isolation enabled'}</span>
         </label>
+      </div>
+    </div>
+    ` : ''}
+
+    ${canAdminAi ? `
+    <div class="settings-section" id="aiSection">
+      <h3>AI</h3>
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:16px;flex-wrap:wrap">
+        <div style="min-width:260px;flex:1">
+          <div style="font-weight:600">Kardinal AI operator</div>
+          <div style="font-size:12px;color:var(--text-muted);margin-top:4px" id="aiStatusLine">
+            Connect your own AI endpoint (OpenAI-compatible, or a local model) to power the chat assistant and agentic actions. Your key is stored encrypted and never shown again.
+          </div>
+        </div>
+        <button class="btn btn-secondary btn-sm" id="openAiSettingsBtn" style="white-space:nowrap">Configure AI</button>
       </div>
     </div>
     ` : ''}
@@ -429,6 +450,19 @@ export async function render(container) {
     const url = `/api/status/export?token=${token}${includeFiles ? '&include_files=true' : ''}`;
     window.location.href = url;
   });
+
+  // Kardinal AI: the shared settings dialog (endpoint URL, key, model, test).
+  document.getElementById('openAiSettingsBtn')?.addEventListener('click', () => openAiSettingsModal());
+  (async () => {
+    const line = document.getElementById('aiStatusLine');
+    if (!line) return;
+    try {
+      const s = await api.aiGetSettings();
+      if (s && s.configured) {
+        line.textContent = `Connected: ${s.model || 'model set'}${s.base_url ? ` at ${s.base_url}` : ''}. The chat assistant and agentic actions use this endpoint.`;
+      }
+    } catch { /* leave the default hint */ }
+  })();
 
   // Import data handler
   document.getElementById('importDataBtn')?.addEventListener('click', () => {

@@ -82,7 +82,7 @@ export function resetBranding() {
 export function applyAccent(root, color) {
   if (!color) return;
   root.style.setProperty('--accent', color);
-  const custom = String(color).trim().toLowerCase() !== '#a3e635';
+  const custom = String(color).trim().toLowerCase() !== '#d92038';
   for (const v of ['--accent-2', '--accent-3']) {
     if (custom) root.style.setProperty(v, color); else root.style.removeProperty(v);
   }

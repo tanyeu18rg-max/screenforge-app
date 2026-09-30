@@ -16,6 +16,7 @@ const path = require('path');
 const { v4: uuidv4 } = require('uuid');
 const { ingestUploadedFile } = require('../lib/content-ingest');
 const { logActivity, getClientIp } = require('../services/activity');
+const agent = require('../lib/ai-agent'); // Kardinal chat: tool-calling operator + Brain retrieval
 
 /*
  * ⚠️ NOT 502, THOUGH THAT IS WHAT THESE FAILURES ARE. Cloudflare REPLACES a 502 body with its own
@@ -1089,6 +1090,111 @@ router.post('/generate-design', async (req, res) => {
 
   logActivity(req.user.id, 'ai_generate_design', `prompt: ${prompt.slice(0, 80)}${imagesAvailable ? ' (+images)' : ''}`, null, getClientIp(req), req.workspaceId);
   res.json(design);
+});
+
+/* ============ Kardinal chat + Brain ============ */
+
+/*
+ * ⚠️ THE MODEL IS A TENANT'S OWN. Chat runs against the workspace's configured
+ * endpoint/key (the same ai_settings row as the design tools); the server never
+ * substitutes a vendor key. Mutations are gated twice: the tool list the model
+ * sees is filtered by canEdit (lib/ai-agent), and every mutating executor
+ * re-checks workspace ownership and calls logActivity.
+ */
+
+// In-memory per-user throttle: 30 chat requests/minute. Cheap abuse guard for a
+// route that spends somebody's AI budget on every call.
+const CHAT_THROTTLE = new Map(); // userId -> [timestamps]
+function chatThrottled(userId) {
+  const now = Date.now();
+  const window = (CHAT_THROTTLE.get(userId) || []).filter((t) => now - t < 60000);
+  if (window.length >= 30) { CHAT_THROTTLE.set(userId, window); return true; }
+  window.push(now);
+  CHAT_THROTTLE.set(userId, window);
+  return false;
+}
+
+// POST /api/ai/chat — any workspace member; viewers get read-only answers.
+router.post('/chat', async (req, res) => {
+  const uid = req.user && req.user.id;
+  if (chatThrottled(uid || 'anon')) {
+    return res.status(429).json({ error: 'Slow down — too many chat requests. Try again in a moment.' });
+  }
+  const message = String(req.body && req.body.message || '').trim().slice(0, 2000);
+  if (!message) return res.status(400).json({ error: 'Message required' });
+  const rawHist = Array.isArray(req.body && req.body.history) ? req.body.history.slice(-20) : [];
+  const history = rawHist
+    .filter((h) => h && (h.role === 'user' || h.role === 'assistant') && typeof h.content === 'string')
+    .map((h) => ({ role: h.role, content: h.content.slice(0, 2000) }));
+
+  const out = await agent.chatWithTools({
+    workspaceId: req.workspaceId,
+    userId: uid,
+    ip: getClientIp(req),
+    canMutate: canEdit(req),
+    messages: [...history, { role: 'user', content: message }],
+    brainContext: agent.getBrainContext(req.workspaceId, message),
+  });
+  if (out.error) return res.status(out.status || UPSTREAM_STATUS).json({ error: out.error });
+  res.json({ reply: out.reply, actions: out.actions });
+});
+
+// GET /api/ai/brain — editor+; list entries with a content preview.
+router.get('/brain', (req, res) => {
+  if (!canEdit(req)) return res.status(403).json({ error: 'Editor access required' });
+  const rows = db.prepare(
+    "SELECT id, title, tags, created_at, substr(content, 1, 200) AS preview FROM ai_brain WHERE workspace_id = ? ORDER BY updated_at DESC, created_at DESC"
+  ).all(req.workspaceId);
+  res.json({ entries: rows });
+});
+
+// GET /api/ai/brain/:id — editor+; full entry (the list only carries a preview).
+router.get('/brain/:id', (req, res) => {
+  if (!canEdit(req)) return res.status(403).json({ error: 'Editor access required' });
+  const row = db.prepare('SELECT id, title, tags, content, created_at, updated_at FROM ai_brain WHERE id = ? AND workspace_id = ?')
+    .get(req.params.id, req.workspaceId);
+  if (!row) return res.status(404).json({ error: 'Entry not found' });
+  res.json({ entry: row });
+});
+
+// POST /api/ai/brain — editor+; add a knowledge entry.
+router.post('/brain', (req, res) => {
+  if (!canEdit(req)) return res.status(403).json({ error: 'Editor access required' });
+  const title = String(req.body && req.body.title || '').trim().slice(0, 200);
+  const content = String(req.body && req.body.content || '').trim().slice(0, 20000);
+  const tags = String(req.body && req.body.tags || '').trim().slice(0, 500);
+  if (!title) return res.status(400).json({ error: 'Title required' });
+  if (!content) return res.status(400).json({ error: 'Content required' });
+  const id = uuidv4();
+  db.prepare('INSERT INTO ai_brain (id, workspace_id, title, content, tags) VALUES (?, ?, ?, ?, ?)')
+    .run(id, req.workspaceId, title, content, tags);
+  logActivity(req.user.id, 'ai_brain_add', `Brain entry: ${title.slice(0, 120)}`, null, getClientIp(req), req.workspaceId);
+  res.status(201).json({ id, title, tags });
+});
+
+// PUT /api/ai/brain/:id — editor+; edit an entry (workspace-scoped).
+router.put('/brain/:id', (req, res) => {
+  if (!canEdit(req)) return res.status(403).json({ error: 'Editor access required' });
+  const title = String(req.body && req.body.title || '').trim().slice(0, 200);
+  const content = String(req.body && req.body.content || '').trim().slice(0, 20000);
+  const tags = String(req.body && req.body.tags || '').trim().slice(0, 500);
+  if (!title) return res.status(400).json({ error: 'Title required' });
+  if (!content) return res.status(400).json({ error: 'Content required' });
+  const r = db.prepare(
+    "UPDATE ai_brain SET title = ?, content = ?, tags = ?, updated_at = strftime('%s','now') WHERE id = ? AND workspace_id = ?"
+  ).run(title, content, tags, req.params.id, req.workspaceId);
+  if (!r.changes) return res.status(404).json({ error: 'Entry not found' });
+  logActivity(req.user.id, 'ai_brain_edit', `Brain entry: ${title.slice(0, 120)}`, null, getClientIp(req), req.workspaceId);
+  res.json({ ok: true });
+});
+
+// DELETE /api/ai/brain/:id — editor+; workspace-scoped.
+router.delete('/brain/:id', (req, res) => {
+  if (!canEdit(req)) return res.status(403).json({ error: 'Editor access required' });
+  const r = db.prepare('DELETE FROM ai_brain WHERE id = ? AND workspace_id = ?').run(req.params.id, req.workspaceId);
+  if (!r.changes) return res.status(404).json({ error: 'Entry not found' });
+  logActivity(req.user.id, 'ai_brain_delete', `Brain entry ${String(req.params.id).slice(0, 40)}`, null, getClientIp(req), req.workspaceId);
+  res.json({ ok: true });
 });
 
 module.exports = router;

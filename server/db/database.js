@@ -378,6 +378,11 @@ const migrations = [
   // settings_pin: 6-digit PIN for the in-app hidden settings menu, provisioned by
   // the server during pairing so each device gets a unique PIN (never a hardcoded default).
   "ALTER TABLE devices ADD COLUMN settings_pin TEXT",
+  // Kardinal AI layer: the Brain knowledge base — workspace-scoped facts the AI
+  // operator injects into chat. Retrieval is keyword overlap in lib/ai-agent.js:
+  // no vector DB, no embeddings endpoint, nothing else to configure.
+  "CREATE TABLE IF NOT EXISTS ai_brain (id TEXT PRIMARY KEY, workspace_id TEXT NOT NULL REFERENCES workspaces(id) ON DELETE CASCADE, title TEXT NOT NULL, content TEXT NOT NULL, tags TEXT NOT NULL DEFAULT '', created_at INTEGER NOT NULL DEFAULT (strftime('%s','now')), updated_at INTEGER)",
+  "CREATE INDEX IF NOT EXISTS idx_ai_brain_ws ON ai_brain(workspace_id)",
   // #155/#161: per-device self-update (OTA) switch. 0 => the server never offers this
   // device an update (an MDM/operator owns its updates). Default 1 (self-update on).
   //   UPDATE devices SET ota_enabled = 0 WHERE id = '<device_id>';  (1 to re-enable)
