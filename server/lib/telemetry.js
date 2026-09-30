@@ -3,7 +3,7 @@
 /*
  * Opt-in install statistics.
  *
- * WHY THIS EXISTS: there is no way to answer "how many screens run ScreenTinker?" — the product is
+ * WHY THIS EXISTS: there is no way to answer "how many screens run ScreenForge?" — the product is
  * self-hostable by design, so most installs are invisible to us on purpose. This asks, once, and
  * only reports if the operator says yes.
  *
@@ -39,20 +39,20 @@ const KEY_LAST = 'telemetry_last_report';     // last SUCCESSFUL send
 const KEY_LAST_ERROR = 'telemetry_last_error';// last FAILED attempt — see getLastError
 
 /*
- * Where reports go. TWO independent destinations, deliberately:
+ * Where reports go. ScreenForge runs no vendor collector: there is no address
+ * a report could be "shared" to out of the box, so sharing is inert until the
+ * operator points TELEMETRY_ENDPOINT at their own collector. This keeps the
+ * fork from ever phoning the upstream project's stats server, and keeps the
+ * opt-in honest — the toggle only appears in the UI when an endpoint exists.
  *
- *   SCREENTINKER_ENDPOINT  hard-wired, and reached only when the operator has switched sharing on.
- *                          Not overridable — an "override" that silently redirected the shared
- *                          report would make the opt-in mean something different from what it says.
+ *   TELEMETRY_ENDPOINT        the operator's OWN collector for fleet numbers.
+ *                             Unset (the default) = the share toggle is hidden
+ *                             and nothing is ever sent anywhere.
  *
- *   TELEMETRY_EXTRA_ENDPOINT  an operator's OWN collector, for their own fleet numbers. Additional,
- *                          never a replacement, and named so it cannot be mistaken for one. It is
- *                          sent independently of the sharing toggle: it is their server posting to
- *                          their host, so our opt-in has no business gating it. An operator who
- *                          wants internal statistics and nothing leaving for us sets this and
- *                          leaves sharing off — that combination is supported on purpose.
+ *   TELEMETRY_EXTRA_ENDPOINT  unchanged from upstream: an additional copy to the
+ *                             operator's own host, independent of the sharing
+ *                             toggle.
  */
-const SCREENTINKER_ENDPOINT = 'https://stats.screentinker.com/api/telemetry/report';
 const REPORT_INTERVAL_MS = 24 * 60 * 60 * 1000;   // daily; this is a count, not a metric
 const FIRST_REPORT_DELAY_MS = 5 * 60 * 1000;      // let boot settle before any outbound call
 
@@ -103,8 +103,9 @@ function countScreens(db) {
   }
 }
 
-/* The address an operator may need to allowlist for the shared report. Hard-wired. */
-function endpoint() { return SCREENTINKER_ENDPOINT; }
+/* The operator's collector for the shared report, or null when they have not
+   configured one. Null means sharing is unavailable, not merely off. */
+function endpoint() { return process.env.TELEMETRY_ENDPOINT || null; }
 
 /* The operator's own collector, if they configured one. Null when they have not. */
 function extraEndpoint() { return process.env.TELEMETRY_EXTRA_ENDPOINT || null; }
@@ -115,7 +116,8 @@ function extraEndpoint() { return process.env.TELEMETRY_EXTRA_ENDPOINT || null; 
  */
 function destinations() {
   const out = [];
-  if (state() === 'on') out.push({ url: endpoint(), kind: 'screentinker' });
+  // Sharing gates the operator's endpoint, and only when one is configured.
+  if (state() === 'on' && endpoint()) out.push({ url: endpoint(), kind: 'screenforge' });
   const extra = extraEndpoint();
   if (extra) out.push({ url: extra, kind: 'extra' });
   return out;

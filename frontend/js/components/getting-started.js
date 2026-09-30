@@ -65,7 +65,7 @@ export function computeSteps({ devices = [], content = [], playlists = [] } = {}
       title: t('gs.device.title'),
       desc: t('gs.device.desc'),
       cta: t('gs.device.cta'),
-      href: '#/',
+      href: '#/displays',
       action: 'add-device',
     },
     {
@@ -92,7 +92,7 @@ export function computeSteps({ devices = [], content = [], playlists = [] } = {}
       title: t('gs.assign.title'),
       desc: t('gs.assign.desc'),
       cta: t('gs.assign.cta'),
-      href: '#/',
+      href: '#/displays',
       action: 'assign',
     },
   ];

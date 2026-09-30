@@ -46,7 +46,7 @@ const MAX_DEFER_MS = 30 * 60 * 1000;
 const state = {
   deferred: false,
   reason: null,        // 'plays-index' | 'stranded-sweep'
-  forced: false,       // SCREENTINKER_DEFER_PLAYERS=1 rather than an inferred defer
+  forced: false,       // SCREENFORGE_DEFER_PLAYERS=1 rather than an inferred defer
   since: 0,
   openPlaysAtBoot: null,
   closed: 0,
@@ -55,11 +55,11 @@ const state = {
 };
 
 /**
- * Tri-state read of SCREENTINKER_DEFER_PLAYERS.
+ * Tri-state read of SCREENFORGE_DEFER_PLAYERS.
  * @returns {boolean|null} true = force on, false = force off, null = decide from the boot itself.
  */
 function envOverride() {
-  const v = process.env.SCREENTINKER_DEFER_PLAYERS;
+  const v = process.env.SCREENFORGE_DEFER_PLAYERS;
   if (v === undefined || v === '') return null;
   if (/^(1|true|yes|on)$/i.test(v)) return true;
   if (/^(0|false|no|off)$/i.test(v)) return false;
@@ -103,7 +103,7 @@ function begin({ openPlays, reason = 'stranded-sweep' }) {
 
   console.warn(
     `[boot-defer] holding players off: ${reason}; ${openPlays} open play(s) to sweep` +
-    `${forced ? ' (SCREENTINKER_DEFER_PLAYERS forced)' : ''}. ` +
+    `${forced ? ' (SCREENFORGE_DEFER_PLAYERS forced)' : ''}. ` +
     `/api/status stays 200; the dashboard is unaffected; players get 503 and retry.`
   );
   return true;

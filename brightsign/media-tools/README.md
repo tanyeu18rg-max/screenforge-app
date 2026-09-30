@@ -1,7 +1,7 @@
 # Bundled media tools (ffprobe, ffmpeg)
 
 `ffprobe.gz` and `ffmpeg.gz` are gzipped aarch64 binaries shipped in the **BrightSign player package
-only**. `bs-server-boot.js` unpacks them into `/tmp/screentinker-bin` at boot — every writable volume
+only**. `bs-server-boot.js` unpacks them into `/tmp/screenforge-bin` at boot — every writable volume
 on a BrightSign player is mounted `noexec`, so a copy onto tmpfs is the only way to execute anything
 — and puts that directory on `PATH` so the server's normal ffprobe/ffmpeg lookups find them.
 
@@ -26,7 +26,7 @@ stream geometry come from the container — which is why it is 1.8MB against ffm
   --disable-gpl --disable-nonfree --disable-autodetect \
   --disable-shared --enable-static --enable-small \
   --disable-doc --disable-network --disable-debug --disable-ffplay \
-  --extra-version="ScreenTinker" \
+  --extra-version="ScreenForge" \
   --disable-everything \
   --enable-demuxer=mov,matroska,mp3,image2,wav,avi,flv,mpegts,ogg,aac \
   --enable-muxer=image2,mjpeg \
@@ -55,4 +55,4 @@ Debian's is also built `--enable-gpl`. These binaries deliberately link nothing 
 These are statically linked, so the licence requires that we can supply the corresponding source and
 the object files needed to relink against a modified library. The configure line above plus the
 upstream 7.1.1 tarball reproduces them exactly; the written offer is published at
-<https://screentinker.com/legal/third-party.html>.
+<https://your-server.example.com/legal/third-party.html>.

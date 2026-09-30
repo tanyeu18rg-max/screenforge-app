@@ -17,7 +17,7 @@ const { db } = require('../db/database');
 const submissions = require('../lib/hardware-submissions');
 const email = require('../services/email');
 
-const NOTIFY = process.env.HARDWARE_SUBMISSIONS_EMAIL || 'support@screentinker.com';
+const NOTIFY = process.env.HARDWARE_SUBMISSIONS_EMAIL || null;
 
 // APP_URL pins the canonical origin, same as workspace invites and signup emails. Falls back to the
 // request's own host so a self-hosted instance still gets working links with nothing configured.
@@ -37,7 +37,7 @@ function page(res, status, heading, body) {
 <html lang="en"><head><meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="robots" content="noindex">
-<title>${esc(heading)} | ScreenTinker</title>
+<title>${esc(heading)} | ScreenForge</title>
 <link rel="stylesheet" href="/css/seo-page.css"></head>
 <body><main class="article"><h1>${esc(heading)}</h1>${body}
 <p><a href="/certified-hardware">Back to Certified Hardware</a></p></main></body></html>`);
@@ -63,7 +63,7 @@ router.post('/', async (req, res) => {
   const detail = [
     ['Device', row.name], ['Manufacturer', row.manufacturer], ['Model numbers', row.model_numbers],
     ['Category', row.category], ['OS', row.os], ['Player', row.player],
-    ['Resolution', row.max_resolution], ['ScreenTinker version', row.player_version],
+    ['Resolution', row.max_resolution], ['ScreenForge version', row.player_version],
     ['Notes', row.notes], ['From', `${row.submitter_name || 'anonymous'} ${row.submitter_email || ''}`],
   ].filter(([, v]) => v).map(([k, v]) => `<tr><td><b>${esc(k)}</b></td><td>${esc(v)}</td></tr>`).join('');
 
@@ -78,7 +78,10 @@ router.post('/', async (req, res) => {
   }
 
   try {
-    await email.sendEmail({
+    // No notification address configured: the submission is already stored and the
+    // approve/reject links are printed to the server log above, so there is nothing
+    // to send. Never invent a recipient.
+    if (NOTIFY) await email.sendEmail({
       to: NOTIFY,
       subject: `Hardware report: ${row.name}`,
       text: `${row.name}\n\nApprove: ${approve}\nReject: ${reject}\n`,

@@ -96,7 +96,7 @@ async function callTool(name, args, authorization, scope) {
         Authorization: authorization,
         'Content-Type': 'application/json',
         // So a handler (and an operator reading logs) can tell an agent from a script.
-        'User-Agent': 'ScreenTinker-MCP/1.0',
+        'User-Agent': 'ScreenForge-MCP/1.0',
       },
       body: req.body ? JSON.stringify(req.body) : undefined,
       signal: controller.signal,
@@ -134,7 +134,7 @@ async function callTool(name, args, authorization, scope) {
   }
 }
 
-const INSTRUCTIONS = `ScreenTinker manages digital signage: screens ("displays"), the media library,
+const INSTRUCTIONS = `ScreenForge manages digital signage: screens ("displays"), the media library,
 playlists and schedules.
 
 Typical flow to change what a screen shows: find the display with list_displays, add or find media
@@ -153,7 +153,7 @@ router.post('/', express.json({ limit: '1mb' }), async (req, res) => {
     res.set('WWW-Authenticate', `${wwwAuthenticate(req)}, error="invalid_token"`);
     return res.status(401).json(protocol.rpcError(
       req.body && req.body.id, protocol.ERR.INVALID_REQUEST,
-      'A ScreenTinker API token is required. Create one in the dashboard under Settings -> API tokens and send it as: Authorization: Bearer st_...'
+      'A ScreenForge API token is required. Create one in the dashboard under Settings -> API tokens and send it as: Authorization: Bearer st_...'
     ));
   }
 

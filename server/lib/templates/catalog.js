@@ -29,7 +29,7 @@ const paramsLib = require('./params');
 const { readZip } = require('./zip');
 
 const OFFICIAL_ID = 'official';
-const DEFAULT_OFFICIAL_URL = 'https://screentinker.github.io/templates/';
+const DEFAULT_OFFICIAL_URL = 'https://screenforge.github.io/templates/';
 const CATALOG_ID_RE = /^[a-z][a-z0-9-]{1,31}$/;
 const MAX_INDEX_BYTES = 2 * 1024 * 1024;
 const MAX_TEMPLATES = 2000;
@@ -73,7 +73,7 @@ function ensureOfficial() {
   const row = db.prepare('SELECT * FROM template_catalogs WHERE id = ?').get(OFFICIAL_ID);
   if (!row) {
     db.prepare('INSERT INTO template_catalogs (id, label, url, public_key, builtin, enabled) VALUES (?, ?, ?, ?, 1, 1)')
-      .run(OFFICIAL_ID, 'ScreenTinker', officialUrl(), pem);
+      .run(OFFICIAL_ID, 'ScreenForge', officialUrl(), pem);
   } else if (row.public_key !== pem || row.url !== officialUrl() || !row.builtin) {
     // A changed key invalidates the cached index: it was verified under the old one.
     const keyChanged = row.public_key !== pem;
@@ -375,7 +375,7 @@ function stopPoller() { if (pollTimer) clearInterval(pollTimer); pollTimer = nul
 
 function checkInstallable(env) {
   if (semverCmp(env.manifest.min_server, serverVersion()) > 0) {
-    throw new CatalogError(`this template needs ScreenTinker ${env.manifest.min_server} or newer`);
+    throw new CatalogError(`this template needs ScreenForge ${env.manifest.min_server} or newer`);
   }
   const bad = paramsLib.checkDefaults(env.manifest, env.files);
   if (bad) throw new CatalogError(`the template's own defaults are invalid: ${bad}`);

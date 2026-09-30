@@ -926,7 +926,7 @@ function liveVideoOn(device) {
  * stream for this device actually exists (a publisher is connected). Anything short of that is
  * mode 'snapshot' — the existing screenshot path — so the Devices page never breaks when the
  * sidecar is absent, down, or nobody is publishing. The browser signals through signalPath (a
- * proxied ScreenTinker route), never straight to go2rtc, so the admin API stays private.
+ * proxied ScreenForge route), never straight to go2rtc, so the admin API stays private.
  */
 router.get('/:id/live', async (req, res) => {
   const device = checkDeviceRead(req, res);

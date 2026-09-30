@@ -1,42 +1,38 @@
-# ScreenTinker — Open-Source, Self-Hosted Digital Signage Software
+# ScreenForge — Open-Source, Self-Hosted Digital Signage Software
 
 <p align="center">
-  <img src="frontend/assets/dashboard-preview.png" alt="ScreenTinker dashboard showing online displays with playlist assignments" width="800">
+  <img src="frontend/assets/dashboard-preview.png" alt="ScreenForge dashboard showing online displays with playlist assignments" width="800">
 </p>
 
 <p align="center">
-  <a href="https://screentinker.com">Live demo</a> ·
-  <a href="https://screentinker.com/docs">API reference</a> ·
-  <a href="https://screentinker.com/guides/self-hosted-digital-signage.html">Self-hosting guide</a> ·
-  <a href="https://discord.gg/utTdsrqq4Z">Discord</a> ·
-  <a href="https://youtu.be/FW8eVv8GHAw">What's new in 2.1 (video)</a>
+  <a href="https://screenforge-tff9.vercel.app">Website</a> ·
+  <a href="https://screenforge-tff9.vercel.app/api-docs.html">API reference</a> ·
+  <a href="https://screenforge-tff9.vercel.app/guides/self-hosted-digital-signage.html">Self-hosting guide</a>
 </p>
 
-ScreenTinker is a free, open-source **digital signage CMS** you can self-host on your own server — or run in our managed cloud. Manage TVs, video walls, and kiosks across multiple locations from one dashboard, with remote control, scheduling, playlists, and analytics. Built for retail, QSR menu boards, offices, lobbies, education, and any environment where you need centralized control over remote screens. Multi-tenant, MIT-licensed, single-developer maintained with direct contact access.
+ScreenForge is a free, open-source **digital signage CMS** you can self-host on your own server. Manage TVs, video walls, and kiosks across multiple locations from one dashboard, with remote control, scheduling, playlists, and analytics. Built for retail, QSR menu boards, offices, lobbies, education, and any environment where you need centralized control over remote screens. Multi-tenant, MIT-licensed.
 
 **Runs on any screen** — Android TV, Fire TV, Samsung Tizen, LG webOS, Amazon Vega OS, Raspberry Pi, Windows, ChromeOS, or any web browser. No per-device player licence, no hardware lock-in.
 
 **Why self-host?** Keep your content and data on your own infrastructure, avoid per-screen SaaS fees, run air-gapped on a private LAN, and read or fork the source. Set `SELF_HOSTED=true` and a $5 VPS drives hundreds of screens.
 
-**Hosted version:** [screentinker.com](https://screentinker.com) — free tier available, no credit card required.
-**Guides:** [What is digital signage?](https://screentinker.com/guides/what-is-digital-signage.html) · [Open-source digital signage](https://screentinker.com/guides/open-source-digital-signage.html) · [Self-hosting guide](https://screentinker.com/guides/self-hosted-digital-signage.html)
-**Community:** [Discord](https://discord.gg/utTdsrqq4Z)
-**What's new in 2.1:** [watch the release video](https://youtu.be/FW8eVv8GHAw) — every scene in it is a real ScreenTinker slide, played on a real ScreenTinker screen.
+**Website:** [screenforge-tff9.vercel.app](https://screenforge-tff9.vercel.app)
+**Guides:** [What is digital signage?](https://screenforge-tff9.vercel.app/guides/what-is-digital-signage.html) · [Open-source digital signage](https://screenforge-tff9.vercel.app/guides/open-source-digital-signage.html) · [Self-hosting guide](https://screenforge-tff9.vercel.app/guides/self-hosted-digital-signage.html)
 
 ## Features
 
 - **Playlists** — first-class playlist objects: create, reorder, set per-item duration, share one playlist across multiple displays; draft/publish workflow with revert-to-published
-- **Slides** — a built-in slide editor: build decks of slides with templates, fields, and per-element entrance animations, an optional voiceover per slide and a music bed across the deck, then publish a deck straight to a playlist. (The 2.1 launch [video](https://youtu.be/FW8eVv8GHAw) is itself a ScreenTinker deck.)
+- **Slides** — a built-in slide editor: build decks of slides with templates, fields, and per-element entrance animations, an optional voiceover per slide and a music bed across the deck, then publish a deck straight to a playlist.
 - **Device groups** — organize displays into groups, assign a playlist to an entire group, send bulk commands (reboot, screen on/off, launch, update, shutdown), schedule content group-wide
 - **Multi-zone layouts** — split screens into zones with drag-and-drop editor; 7 built-in templates (fullscreen, split, L-bar, PiP, grid)
 - **Video walls** — combine multiple displays into one screen with bezel compensation, device rotation, and leader-based sync
 - **Remote control** — live view, touch injection, key input, power on/off
 - **Live video & Talk** — optional WebRTC path via a [go2rtc](https://github.com/AlexxIT/go2rtc) sidecar: sub-second live video of what a screen is actually playing (one screen watched by many dashboards without re-encoding), plus **Talk** — one-way announce or two-way intercom to a single screen, and one-way PA broadcast to a whole group or workspace, with an optional operator webcam shown fullscreen. Off by default and enabled per organization; an org can bring its own TURN/STUN. See [`docs/live-video.md`](docs/live-video.md)
-- **Live TV / IPTV & camera feeds** — play a **live stream on a screen** as an ordinary playlist item: an IPTV/TV channel over **HLS** (`.m3u8`, every player type), or an **RTSP** camera/NVR on native Android (lowest latency). The screen opens the URL itself, so it can be a LAN address and the server never ingests or restreams it — a channel on 40 screens is 40 pulls from your source, not 40 through ScreenTinker. Capability-gated per transport, so a player only receives a stream it can decode. See [`docs/live-playback.md`](docs/live-playback.md)
+- **Live TV / IPTV & camera feeds** — play a **live stream on a screen** as an ordinary playlist item: an IPTV/TV channel over **HLS** (`.m3u8`, every player type), or an **RTSP** camera/NVR on native Android (lowest latency). The screen opens the URL itself, so it can be a LAN address and the server never ingests or restreams it — a channel on 40 screens is 40 pulls from your source, not 40 through ScreenForge. Capability-gated per transport, so a player only receives a stream it can decode. See [`docs/live-playback.md`](docs/live-playback.md)
 - **Scheduling** — visual weekly calendar with recurrence rules (daily/weekly/monthly), priority-based conflict resolution, both device-level and group-level schedules (device-level overrides win over group-level), timezone support
 - **Resumable uploads** — large files upload in 5 MiB chunks, one file at a time, so a dropped connection costs one chunk instead of the whole file and progress **survives a page reload**. This is what makes uploading workable on a slow or distant connection: a single-request upload has to finish inside the shortest timeout between browser and server (behind a CDN, roughly two minutes), and that ceiling does not scale with file size. Declaring the size up front also means a workspace near its storage limit is told before the upload rather than after
-- **Device-side REST** — make a **screen** perform an HTTP request from **its own network**, so a LAN target is reachable at all: a PLC, a sensor, a local Home Assistant on the shop's `192.168.x.x` that the ScreenTinker server has no route to. Nothing is proxied through the server. Up to 64 KiB of the response comes back for the dashboard to show. ⚠️ Only `http://`/`https://` — `file://` and `content://` are refused, because the boundary worth defending is not "which host" but "is this still an HTTP fetch or has it become a local file read". Cloud metadata addresses are refused too, a hostname that resolves to one is caught by re-checking and pinning the resolved address, and redirects are not followed. ⚠️ Deliberately **not** a mesh command: a hub must not be able to aim someone else's panel at addresses inside their private network. See [`docs/android-troubleshooting.md`](docs/android-troubleshooting.md#device-side-rest-http_request)
-- **Display power schedules** — blank the **screen** on a weekly clock ("off 22:00–06:00, Mon–Fri") to save backlight hours, per device or per group, with device-level overriding group-level as everywhere else. The panel keeps running the whole time — playlists, downloads, heartbeats and remote control all continue, and waking it is instant — so this is **not** the same as switching the device off, which ScreenTinker deliberately does not schedule (see [`docs/android-troubleshooting.md`](docs/android-troubleshooting.md#scheduled-screen-off-vs-device-off)). Windows are evaluated **on the player** against its own timezone, so a screen sleeps and wakes on time with the network down. Android today; other players accept and store the schedule and report it as unsupported until their local evaluator lands
+- **Device-side REST** — make a **screen** perform an HTTP request from **its own network**, so a LAN target is reachable at all: a PLC, a sensor, a local Home Assistant on the shop's `192.168.x.x` that the ScreenForge server has no route to. Nothing is proxied through the server. Up to 64 KiB of the response comes back for the dashboard to show. ⚠️ Only `http://`/`https://` — `file://` and `content://` are refused, because the boundary worth defending is not "which host" but "is this still an HTTP fetch or has it become a local file read". Cloud metadata addresses are refused too, a hostname that resolves to one is caught by re-checking and pinning the resolved address, and redirects are not followed. ⚠️ Deliberately **not** a mesh command: a hub must not be able to aim someone else's panel at addresses inside their private network. See [`docs/android-troubleshooting.md`](docs/android-troubleshooting.md#device-side-rest-http_request)
+- **Display power schedules** — blank the **screen** on a weekly clock ("off 22:00–06:00, Mon–Fri") to save backlight hours, per device or per group, with device-level overriding group-level as everywhere else. The panel keeps running the whole time — playlists, downloads, heartbeats and remote control all continue, and waking it is instant — so this is **not** the same as switching the device off, which ScreenForge deliberately does not schedule (see [`docs/android-troubleshooting.md`](docs/android-troubleshooting.md#scheduled-screen-off-vs-device-off)). Windows are evaluated **on the player** against its own timezone, so a screen sleeps and wakes on time with the network down. Android today; other players accept and store the schedule and report it as unsupported until their local evaluator lands
 - **Widgets** — clocks, weather, RSS tickers, text/HTML, webpages, social feeds, and Directory Board (scrolling lobby tenant/room/staff directories with dark/light themes, category management, and anti-burn-in motion)
 - **Data sources** — bind live external data into a slide or widget with `{{ds:slug.field}}`: an iCal/Webcal calendar or any JSON-over-HTTP feed, refreshed on its own schedule. Secret fields in a source's config are encrypted at rest
 - **Meeting-room signs** — point a slide at a room's calendar to show Busy / Available, what's on now, and when the room frees up — in every dashboard language, defaulting to English
@@ -59,7 +55,7 @@ ScreenTinker is a free, open-source **digital signage CMS** you can self-host on
 - **Built-in billing** — Stripe integration for SaaS subscriptions (optional)
 - **Auto-update** — OTA updates pushed to devices automatically
 - **Public REST API** — scoped personal access tokens (`read` / `write` / `full`) over the same resources the dashboard uses, workspace-confined by construction. Documented as an OpenAPI 3.1 contract ([`docs/openapi.yaml`](docs/openapi.yaml)) and browsable on any instance at `/docs` (served locally, no CDN, so it works air-gapped)
-- **Node Mesh** — link ScreenTinker servers together so one dashboard can watch many. A site server reports upward to a hub over a consent-scoped link; a hub can relay content back down to a customer's server. Data flows up by default and nothing flows down uninvited: every write is a *request* the receiving server decides on against its own grant. See [Node Mesh](#node-mesh) below
+- **Node Mesh** — link ScreenForge servers together so one dashboard can watch many. A site server reports upward to a hub over a consent-scoped link; a hub can relay content back down to a customer's server. Data flows up by default and nothing flows down uninvited: every write is a *request* the receiving server decides on against its own grant. See [Node Mesh](#node-mesh) below
 - **Triggers** — let an external system interrupt a playlist with different content, fired over the LAN by HTTP POST or a UDP datagram (`ST1 <secret> <token>`). Resolved entirely on the device, so an evacuation message still appears with the WAN down. Targets a published playlist whose items are all cached locally, checked when you save rather than when it fires
 - **Embedded & E-Paper Displays** — server-side renderer for low-power MCUs (ESP32-S3, Seeed Studio reTerminal Sticky, Waveshare e-paper, SPI TFTs). Delivers pre-dithered 1-bit bitstreams, RGB565, BMP, or PNG over HTTP with ETag/304 caching and deep sleep coordination. See [`docs/embedded-renderer.md`](docs/embedded-renderer.md)
 - **Activity log** — full audit trail of user and system actions
@@ -101,7 +97,7 @@ Schema migrations run automatically the first time the server starts after a git
 
 ### Node Mesh
 
-Two or more ScreenTinker servers can be linked, so an MSP, a franchise group or a multi-site estate
+Two or more ScreenForge servers can be linked, so an MSP, a franchise group or a multi-site estate
 can see everything from one place without merging anybody's data into one tenant.
 
 **It is off until you turn it on.** With `MESH_ACCEPT_ENROLLMENT` and `MESH_ALLOW_UPLINK` both unset
@@ -185,8 +181,8 @@ a kiosk and it has not been certified on hardware; see [docs/vega-player.md](doc
 ### Quick Start
 
 ```bash
-git clone https://github.com/screentinker/screentinker.git
-cd screentinker/server
+git clone https://github.com/tanyeu18rg-max/screenforge-app.git
+cd screenforge/server
 npm install
 SELF_HOSTED=true npm start
 ```
@@ -219,7 +215,7 @@ Schema migrations run automatically on first boot — no manual migration comman
 | `MAX_FILE_SIZE` | Largest upload the server will accept. Bytes, or a suffix (`2GB`, `1500MB`). **A reverse proxy caps this independently** — see below. | `500MB` |
 | `COMMAND_QUEUE_TTL_MS` | How long the server holds commands and playlist-updates for a device that's offline at emit time (ms). Flushed in order on reconnect within this window; dropped past TTL. | `30000` |
 | `OTA_ALLOW_MANAGED_DEVICES` | Let Android players self-update even when an MDM/DPC owns the device. Off by default — see below before enabling. | `0` |
-| `MESH_ACCEPT_ENROLLMENT` | Let other ScreenTinker servers report to this one. Off means the hub API is not mounted at all — see [Node Mesh](#node-mesh). | `false` |
+| `MESH_ACCEPT_ENROLLMENT` | Let other ScreenForge servers report to this one. Off means the hub API is not mounted at all — see [Node Mesh](#node-mesh). | `false` |
 | `MESH_ALLOW_UPLINK` | Let this server report to another one. | `false` |
 | `MESH_MAX_DEPTH` | Longest chain of linked servers. | `2` |
 | `MESH_MIN_NODE_VERSION` | Oldest peer version this server will pair with. | `2.0.0-0` |
@@ -239,7 +235,7 @@ content — and the MDM is normally the thing distributing packages anyway. Such
 `manual_update_required` rather than going quiet, so it still shows up as needing attention.
 
 Set `OTA_ALLOW_MANAGED_DEVICES=1` if you run an MDM that does **not** distribute the player and you
-want ScreenTinker's OTA to own updates instead. The server then advertises `allow_managed: true` in
+want ScreenForge's OTA to own updates instead. The server then advertises `allow_managed: true` in
 `/api/update/check` and players stop standing down.
 
 Two things to know before enabling it:
@@ -284,9 +280,9 @@ dialog. It is the right button once you have fixed whatever was breaking the upd
 By default an instance serves one APK to every display, at `/download/apk`. You can publish a second
 build alongside it and send it only to displays you choose:
 
-1. Put the beta APK next to the stable one, as **`ScreenTinker-beta.apk`** (same locations as
-   `ScreenTinker.apk` — `/data/` in a container, or the install root).
-2. Declare its version in a sidecar text file, **`ScreenTinker-beta.apk.version`**, containing just
+1. Put the beta APK next to the stable one, as **`ScreenForge-beta.apk`** (same locations as
+   `ScreenForge.apk` — `/data/` in a container, or the install root).
+2. Declare its version in a sidecar text file, **`ScreenForge-beta.apk.version`**, containing just
    the version — e.g. `1.9.27-rc1`. This is required. The server cannot read the version out of an
    APK cheaply, and advertising a version that does not match the bytes it serves is how update
    loops start, so **a beta with no declared version is ignored entirely** and opted-in displays
@@ -312,7 +308,7 @@ deleted one is not resurrected.)
 
 Two consequences that are easy to misread:
 
-- The old playlist reappearing is ScreenTinker restoring it, not a bug. If you deleted the display
+- The old playlist reappearing is ScreenForge restoring it, not a bug. If you deleted the display
   in order to *clear* it, change the playlist after re-pairing rather than before.
 - **A blocked display stays blocked**, deliberately. Blocking is a security control, so it must not
   be defeatable by deleting the display and pairing again. Use **Unblock** — that clears the stored
@@ -474,7 +470,7 @@ is filled in for you and their slugs are `google` and `microsoft`:
 | `MICROSOFT_CLIENT_SECRET` | Required in practice — register the redirect URI under the **Web** platform, which Entra treats as a confidential client. A **SPA** registration is rejected at the token endpoint, because this exchange runs server-side and sends no browser `Origin` |
 
 Register the redirect URI under **Web**, add the **`email`** optional claim under *Token configuration →
-ID*, and note that **Entra ID v2 does not send `email_verified`** — ScreenTinker treats a
+ID*, and note that **Entra ID v2 does not send `email_verified`** — ScreenForge treats a
 tenant-pinned Microsoft entry as vouching for the address rather than demanding a claim Microsoft
 never emits. An explicit `email_verified: false` is still refused, and an organization's own provider
 can never make that assumption.
@@ -575,7 +571,7 @@ it.** Typing a domain into a form reserves the name and nothing more.
 Publish this record, then press **Verify**:
 
 ```
-_screentinker-verify.example.com.  IN  TXT  "st-verify=<token>"
+_screenforge-verify.example.com.  IN  TXT  "st-verify=<token>"
 ```
 
 The token is unique per domain, so publishing one proof cannot be replayed to claim a second. A
@@ -588,7 +584,7 @@ project operates, answering for every token ever issued; documenting one without
 describe a check that can never pass.
 
 ⚠️ **The proof name itself must not be a CNAME.** A TXT lookup follows CNAMEs, and a wildcard
-`*.example.com` covers `_screentinker-verify.example.com` too — so a wildcard CNAME would let
+`*.example.com` covers `_screenforge-verify.example.com` too — so a wildcard CNAME would let
 whoever controls its target prove the domain, turning an ordinary subdomain takeover into control of
 every `@example.com` login. A delegated proof name is refused, which is stricter than ACME's dns-01.
 
@@ -696,7 +692,7 @@ Microsoft Graph `Mail.Send` via the client-credentials flow. Best if you already
 | `GRAPH_CLIENT_ID` | Azure AD app registration client ID |
 | `GRAPH_CLIENT_SECRET` | Azure AD app registration client secret |
 | `GRAPH_SENDER_EMAIL` | Mailbox to send from (must be a valid mailbox or alias in the tenant) |
-| `GRAPH_SENDER_NAME` | Display name shown in the email `From` field (defaults to `ScreenTinker`) |
+| `GRAPH_SENDER_NAME` | Display name shown in the email `From` field (defaults to `ScreenForge`) |
 
 **Azure AD app setup:**
 
@@ -729,7 +725,7 @@ SMTP_PORT=587
 SMTP_SECURE=false
 SMTP_USER=you@gmail.com
 SMTP_PASSWORD=your-app-password
-SMTP_FROM=ScreenTinker <you@gmail.com>
+SMTP_FROM=ScreenForge <you@gmail.com>
 ```
 
 The Docker image bundles nodemailer, so no extra steps are needed for a self-hosted container — just set the `SMTP_*` vars in your `env_file` / compose `environment`.
@@ -760,26 +756,26 @@ For production, put the app behind a reverse proxy (nginx, Caddy, etc.) with SSL
 
 ```bash
 # Create a dedicated user
-sudo useradd -r -s /bin/false screentinker
+sudo useradd -r -s /bin/false screenforge
 
 # Copy the app
-sudo cp -r . /opt/screentinker
-sudo chown -R screentinker:screentinker /opt/screentinker
+sudo cp -r . /opt/screenforge
+sudo chown -R screenforge:screenforge /opt/screenforge
 
 # Install dependencies (ffmpeg is for video thumbnails + durations — see Requirements)
 sudo apt-get install -y ffmpeg
-cd /opt/screentinker/server && npm install --production
+cd /opt/screenforge/server && npm install --production
 
 # Create a systemd service
-sudo cat > /etc/systemd/system/screentinker.service << 'EOF'
+sudo cat > /etc/systemd/system/screenforge.service << 'EOF'
 [Unit]
-Description=ScreenTinker
+Description=ScreenForge
 After=network.target
 
 [Service]
 Type=simple
-User=screentinker
-WorkingDirectory=/opt/screentinker/server
+User=screenforge
+WorkingDirectory=/opt/screenforge/server
 ExecStart=/usr/bin/node server.js
 Restart=always
 Environment=PORT=3001
@@ -806,7 +802,7 @@ Environment=SELF_HOSTED=true
 WantedBy=multi-user.target
 EOF
 
-sudo systemctl enable --now screentinker
+sudo systemctl enable --now screenforge
 ```
 
 #### Nginx Example
@@ -868,7 +864,7 @@ headers to the app.
 To update a running instance to the latest version:
 
 ```bash
-cd /opt/screentinker
+cd /opt/screenforge
 
 # Upgrade to the latest tagged release. Backs up the db (a .backup snapshot under
 # ./backups), checks out the tag, runs npm ci --omit=dev, restarts the service,
@@ -879,25 +875,25 @@ scripts/upgrade.sh
 scripts/upgrade.sh v1.8.0
 ```
 
-Set `SERVICE_NAME` if your systemd unit is not named `screentinker`.
+Set `SERVICE_NAME` if your systemd unit is not named `screenforge`.
 
 If you deployed without git, initialize it once so `upgrade.sh` can resolve tags:
 
 ```bash
-cd /opt/screentinker
+cd /opt/screenforge
 git init
-git remote add origin https://github.com/screentinker/screentinker.git
+git remote add origin https://github.com/tanyeu18rg-max/screenforge-app.git
 git fetch origin --tags
 git checkout -f main
 cd server && npm install --production
-sudo systemctl restart screentinker
+sudo systemctl restart screenforge
 ```
 
 **Track bleeding edge (`main`)** instead of tagged releases - newest code, less tested:
 
 ```bash
-cd /opt/screentinker && git checkout main && git pull origin main
-cd server && npm install --production && sudo systemctl restart screentinker
+cd /opt/screenforge && git checkout main && git pull origin main
+cd server && npm install --production && sudo systemctl restart screenforge
 ```
 
 Your database, uploads, and configuration are preserved — only code files are updated.
@@ -920,11 +916,11 @@ retention and an error log. Add a cron entry:
 
 ```bash
 # as root (or your service user) — adjust the path to your install
-0 3 * * * /opt/screentinker/scripts/backup.sh
+0 3 * * * /opt/screenforge/scripts/backup.sh
 ```
 
 Override defaults with env vars if your layout differs:
-`SCREENTINKER_DIR` (default `/opt/screentinker`), `BACKUP_DIR`, `DB`, `UPLOADS`,
+`SCREENFORGE_DIR` (default `/opt/screenforge`), `BACKUP_DIR`, `DB`, `UPLOADS`,
 `DAILY_KEEP` (7), `MONTHLY_KEEP` (12), `DB_KEEP_DAYS` (30). Backups land in
 `$BACKUP_DIR` (`remote_display-<ts>.db`, `content-latest/`, `content-<ts>/`,
 `content-monthly-<YYYYMM>/`) and each run appends to `$BACKUP_DIR/backup.log`.
@@ -971,10 +967,10 @@ export KEY_PASSWORD=your_password
 ./gradlew assembleDebug
 ```
 
-The APK will be at `android/app/build/outputs/apk/debug/app-debug.apk`. Copy it to `server/` as `ScreenTinker.apk` to serve it from `/download/apk`:
+The APK will be at `android/app/build/outputs/apk/debug/app-debug.apk`. Copy it to `server/` as `ScreenForge.apk` to serve it from `/download/apk`:
 
 ```bash
-cp android/app/build/outputs/apk/debug/app-debug.apk ScreenTinker.apk
+cp android/app/build/outputs/apk/debug/app-debug.apk ScreenForge.apk
 ```
 
 > **Release builds & MDM signage (#81):** `./gradlew assembleRelease` is automatically
@@ -994,9 +990,9 @@ keytool -genkey -v -keystore android/release-key.jks -keyalg RSA -keysize 2048 -
 
 ### Device Setup
 
-1. Register at your ScreenTinker instance
+1. Register at your ScreenForge instance
 2. Go to **Displays** and click **Add Display**
-3. Install the ScreenTinker app on your device:
+3. Install the ScreenForge app on your device:
    - **Android TV / tablets**: Download the APK from your instance (`/download/apk`) or build it from source (see above)
    - **Raspberry Pi**: `curl -sSL https://your-instance/scripts/raspberry-pi-setup.sh | sudo bash` (see [Raspberry Pi notes](#raspberry-pi-notes))
    - **Debian 13 (headless)**: `curl -sSL https://your-instance/scripts/debian-13-setup.sh | sudo bash`
@@ -1036,7 +1032,7 @@ at session start with `wtype`. Two things make this fiddlier than it looks:
 - ⚠️ **The root element must be `<labwc_config>`.** Pi OS ships an rc.xml that is a stub rooted at
   `<openbox_config/>`, and labwc ignores *every* keybinding while that root is there
   ([labwc#3190](https://github.com/labwc/labwc/discussions/3190)) — with no error to say so. The
-  installer replaces that stub (keeping a `.screentinker-bak`) and merges into a real
+  installer replaces that stub (keeping a `.screenforge-bak`) and merges into a real
   `<labwc_config>` rather than overwriting it.
 - **Changes need a reboot or `labwc --reconfigure`** — labwc re-reads rc.xml only on SIGHUP, so
   writing the file while a session is running does nothing until one or the other happens. The
@@ -1055,7 +1051,7 @@ install, and remember that pairing is stored on the device — re-pair once with
 disabled, then enable it, or the pairing is lost at every reboot.
 
 **Do not enable it on an All-in-One install without moving the data first.** That Pi *is* the
-server: the SQLite database, uploaded media and the JWT secret live under `/opt/screentinker`, and
+server: the SQLite database, uploaded media and the JWT secret live under `/opt/screenforge`, and
 an overlay discards every write at reboot — so content you upload and displays you pair vanish on
 the next power cycle. If you want both, put `DATA_DIR` on a writable partition or an external
 drive that is excluded from the overlay, and confirm the database file is genuinely outside it
@@ -1081,11 +1077,11 @@ strength, and the dashboard says the network name needs that permission rather t
 
 ### For Developers
 
-Working on ScreenTinker itself:
+Working on ScreenForge itself:
 
 ```bash
-git clone https://github.com/screentinker/screentinker.git
-cd screentinker/server
+git clone https://github.com/tanyeu18rg-max/screenforge-app.git
+cd screenforge/server
 npm install
 npm start          # starts in dev with --env-file-if-exists=.env
 # or:
@@ -1110,7 +1106,7 @@ APP_URL=https://localhost:3443
 
 **Running against a fresh prod DB clone?** Set `GRAPH_DEV_RESTRICT_TO=your-email@example.com` to keep accidental sends from reaching real users in the cloned database. Sends to anyone outside the list are logged but never posted to Graph.
 
-**Reporting issues:** [GitHub Issues](https://github.com/screentinker/screentinker/issues) for bugs and feature requests, or drop into [Discord](https://discord.gg/utTdsrqq4Z) for quick questions and feedback.
+**Reporting issues:** [GitHub Issues](https://github.com/tanyeu18rg-max/screenforge-app/issues) for bugs and feature requests.
 
 **Contributions welcome.** Fork → branch → PR. There are no formal style guides yet beyond what you can pick up from reading the existing code. Tests aren't required but smoke-test against your local server before opening a PR.
 
@@ -1149,13 +1145,10 @@ scripts/          Device setup scripts + admin recovery
 
 ## Support
 
-ScreenTinker is free and MIT licensed, and it stays that way. If it's useful to you and you want to help keep development going, you can chip in:
+ScreenForge is free and MIT licensed, and it stays that way. If it's useful to you and you want to help keep development going, you can chip in:
 
 - ⭐ Star the repo, honestly this helps more than you'd think
-- 💬 Report bugs or ideas in [Discord](https://discord.gg/utTdsrqq4Z) or [issues](https://github.com/screentinker/screentinker/issues)
-- ☕ [Donate via Wise](https://wise.com/pay/business/bytetinkerllc?utm_source=quick_pay) (ByteTinker LLC)
-
-GitHub Sponsors integration is also planned. Direct contact: [dan@bytetinker.net](mailto:dan@bytetinker.net) or via Discord.
+- 💬 Report bugs or ideas in [issues](https://github.com/tanyeu18rg-max/screenforge-app/issues)
 
 ## License
 

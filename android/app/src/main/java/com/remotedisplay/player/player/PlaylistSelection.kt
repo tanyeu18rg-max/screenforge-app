@@ -193,7 +193,7 @@ object PendingSwap {
  */
 object ItemTiming {
     /** The mime the server stamps on an uploaded HTML bundle (lib/html-bundle.js). */
-    const val BUNDLE_MIME = "application/vnd.screentinker.bundle+zip"
+    const val BUNDLE_MIME = "application/vnd.screenforge.bundle+zip"
 
     fun endsOnTimer(mimeType: String, isWidget: Boolean): Boolean =
         mimeType.startsWith("image/") || isWidget || mimeType == "video/youtube" ||

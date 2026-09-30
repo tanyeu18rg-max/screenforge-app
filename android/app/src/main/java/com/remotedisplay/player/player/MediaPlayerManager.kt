@@ -529,7 +529,7 @@ class MediaPlayerManager(
      *
      * ⚠️ loadDataWithBaseURL WITH A NULL BASE URL, DELIBERATELY. A null base gives the document an
      * OPAQUE origin, so operator-uploaded bundle scripts cannot reach this app's WebView storage or
-     * issue same-origin requests against the ScreenTinker server — the same isolation the web
+     * issue same-origin requests against the ScreenForge server — the same isolation the web
      * player gets from `sandbox="allow-scripts"`. Passing the server URL as the base would be the
      * obvious way to "make relative paths work" and would hand a bundle the server's origin; there
      * are no relative paths left to fix, because the server already inlined everything.

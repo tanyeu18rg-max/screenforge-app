@@ -1,7 +1,7 @@
 'use strict';
 
 /**
- * iCal (.ics) Data Source Resolver for ScreenTinker.
+ * iCal (.ics) Data Source Resolver for ScreenForge.
  *
  * Ingests VCALENDAR feeds, handles RRULE recurring series, timezones,
  * and extracts standard structured fields for room signage and agenda displays.
@@ -29,7 +29,7 @@ async function fetchCalendar(urlString) {
       maxBytes: MAX_BODY_BYTES,
       responseType: 'text',
       headers: {
-        'User-Agent': 'ScreenTinker-DataSource/2.0',
+        'User-Agent': 'ScreenForge-DataSource/2.0',
         'Accept': 'text/calendar, application/json, text/plain',
       },
     });

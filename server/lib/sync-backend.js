@@ -3,7 +3,7 @@
 /*
  * Which synchronisation protocol a group runs.
  *
- * ScreenTinker has its own group sync: every member derives its position from a shared clock,
+ * ScreenForge has its own group sync: every member derives its position from a shared clock,
  * so it needs no leader, survives a server outage, and works across Android, web, Tizen and
  * BrightSign alike. BrightSign has its own — BrightWall — which is native, frame-accurate, and
  * only exists between BrightSign players.
@@ -11,6 +11,7 @@
  * The choice is therefore not "which is better" but "what is in this group":
  *
  *   screentinker  works everywhere, mixed fleets included; sync is to the second, not the frame
+ *               (wire value kept from upstream for player/database compatibility)
  *   brightsign    frame-accurate video walls; requires EVERY member to be a BrightSign
  *
  * `auto` picks the strongest protocol the group can actually run, which is what an operator
@@ -21,7 +22,7 @@
  * Kept pure so the decision is testable without a fleet: callers pass plain device rows.
  */
 
-const BACKENDS = ['auto', 'screentinker', 'brightsign'];
+const BACKENDS = ['auto', 'screentinker', 'brightsign']; // 'screentinker' is the wire value
 
 /*
  * A device is a BrightSign if it said so: the player sends ?platform=brightsign (autorun.brs puts

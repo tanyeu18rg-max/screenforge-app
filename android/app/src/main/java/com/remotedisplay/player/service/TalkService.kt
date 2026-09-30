@@ -105,7 +105,7 @@ class TalkService : Service() {
 
     private fun startForegroundCompat() {
         val notif = NotificationCompat.Builder(this, RemoteDisplayApp.CHANNEL_ID)
-            .setContentTitle("ScreenTinker")
+            .setContentTitle("ScreenForge")
             .setContentText("Intercom active")
             .setSmallIcon(android.R.drawable.ic_btn_speak_now)
             .setOngoing(true)

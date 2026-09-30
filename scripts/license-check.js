@@ -59,7 +59,7 @@ const REVIEW = [/\bLGPL/i, /\bMPL/i, /\bEPL/i, /\bCDDL/i, /\bOSL/i, /\bEUPL/i, /
 const EXCEPTIONS = {
   'exif-parser': { license: 'MIT', evidence: 'LICENSE.md — "The MIT License"' },
   'thirty-two':  { license: 'MIT', evidence: 'LICENSE.txt — MIT, Copyright (c) 2011 Chris Umbel' },
-  'screentinker': { license: 'MIT', evidence: 'repository root LICENSE' },
+  'screenforge': { license: 'MIT', evidence: 'repository root LICENSE' },
 };
 
 function classify(id) {
@@ -139,14 +139,14 @@ if (SBOM_OUT) {
     metadata: {
       component: {
         type: 'application',
-        name: 'screentinker',
+        name: 'screenforge',
         version: fs.readFileSync(path.join(__dirname, '..', 'VERSION'), 'utf8').trim(),
         licenses: [{ license: { id: 'MIT' } }],
       },
-      properties: [{ name: 'screentinker:scope', value: INCLUDE_DEV ? 'all' : 'production' }],
+      properties: [{ name: 'screenforge:scope', value: INCLUDE_DEV ? 'all' : 'production' }],
     },
     components: pkgs
-      .filter(p => p.name !== 'screentinker')
+      .filter(p => p.name !== 'screenforge')
       .sort((a, b) => a.name.localeCompare(b.name))
       .map(p => ({
         type: 'library',

@@ -9,7 +9,7 @@
  * stranger submitted would start looking different from the half that carries contract weight.
  *
  * The split of responsibility is deliberate and is the whole design:
- *   certified-hardware.json   ScreenTinker's own entries. In git, human-committed, guarded by tests.
+ *   certified-hardware.json   ScreenForge's own entries. In git, human-committed, guarded by tests.
  *                             Certification is a support obligation; it does not come from a form.
  *   hardware_submissions      community reports. In the database, published by an approval click.
  *                             No support commitment attaches, which is why this half can be dynamic.
@@ -22,32 +22,33 @@ const ROOT = path.join(__dirname, '..', '..');
 const DATA = path.join(ROOT, 'certified-hardware.json');
 const OUT = path.join(ROOT, 'frontend', 'certified-hardware.html');
 
-const URL = 'https://screentinker.com/certified-hardware';
-const TITLE = 'Certified Hardware | ScreenTinker';
+const config = require('../config');
+const URL = `${config.siteUrl}/certified-hardware`;
+const TITLE = 'Certified Hardware | ScreenForge';
 const DESCRIPTION =
-  'Device models tested with ScreenTinker, what each one actually does, and which are not '
-  + 'supported. Certified Hardware under ScreenTinker reseller agreements.';
+  'Device models tested with ScreenForge, what each one actually does, and which are not '
+  + 'supported. Certified Hardware under ScreenForge reseller agreements.';
 
 /** Status groups, in the order they appear on the page. Certified first, deliberately. */
 const GROUPS = [
   {
     status: 'certified',
     heading: 'Certified',
-    blurb: 'Tested by ScreenTinker, works, and supported under ScreenTinker agreements. '
-      + 'A unit of each is kept in the ScreenTinker test lab for regression testing.',
+    blurb: 'Tested by ScreenForge, works, and supported under ScreenForge agreements. '
+      + 'A unit of each is kept in the ScreenForge test lab for regression testing.',
     certified: true,
   },
   {
     status: 'certified-with-limits',
     heading: 'Certified with limits',
-    blurb: 'Supported under ScreenTinker agreements, with a documented limitation. '
+    blurb: 'Supported under ScreenForge agreements, with a documented limitation. '
       + 'The limitation is spelled out on each entry.',
     certified: true,
   },
   {
     status: 'community-reported',
     heading: 'Community reported',
-    blurb: 'A user reports that this works. ScreenTinker has not tested it and keeps no unit. '
+    blurb: 'A user reports that this works. ScreenForge has not tested it and keeps no unit. '
       + 'These are NOT Certified Hardware and carry no support commitment.',
     certified: false,
   },
@@ -94,12 +95,12 @@ function deviceCard(d) {
     ['Model numbers', value(d.model_numbers)],
     ['Category', value(CATEGORY_LABELS[d.category] || d.category)],
     ['Operating system', value(d.os)],
-    ['ScreenTinker player', value(d.player)],
+    ['ScreenForge player', value(d.player)],
     ['Maximum resolution', value(d.max_resolution)],
     ['Validated on', value(d.validated_on)],
     ['Validated by', value(d.validated_by)],
     ['Tested against', value(d.player_version)],
-    ['Minimum ScreenTinker version', value(d.min_version)],
+    ['Minimum ScreenForge version', value(d.min_version)],
     ['Manufacturer end of life', value(d.eol)],
   ];
   const notes = (d.notes || []).map((n) => `          <li>${esc(n)}</li>`).join('\n');
@@ -110,7 +111,7 @@ function deviceCard(d) {
    * A real installation photograph, credited.
    *
    * ⚠️ A PHOTO ON THIS PAGE IS A CLAIM, like every other field here. It shows THIS hardware running
-   * ScreenTinker, published with the owner's permission and credited to them — never a stock product
+   * ScreenForge, published with the owner's permission and credited to them — never a stock product
    * shot, which would quietly turn a compatibility record into an advert on a page that reseller
    * agreements point at.
    *
@@ -174,7 +175,7 @@ function render(data) {
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>${esc(TITLE)}</title>
   <meta name="description" content="${esc(DESCRIPTION)}">
-  <meta name="keywords" content="certified hardware, digital signage hardware, signage player hardware, screentinker supported devices">
+  <meta name="keywords" content="certified hardware, digital signage hardware, signage player hardware, screenforge supported devices">
   <meta name="robots" content="index, follow">
   <link rel="canonical" href="${URL}">
   <!-- The plain-text twin, named in the document as well as in the Link header: a CDN may serve a
@@ -185,13 +186,13 @@ function render(data) {
   <meta property="og:url" content="${URL}">
   <meta property="og:title" content="Certified Hardware">
   <meta property="og:description" content="${esc(DESCRIPTION)}">
-  <meta property="og:image" content="https://screentinker.com/assets/dashboard-preview.png">
-  <meta property="og:site_name" content="ScreenTinker">
+  <meta property="og:image" content="${config.siteUrl}/assets/dashboard-preview.png">
+  <meta property="og:site_name" content="ScreenForge">
 
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Certified Hardware">
   <meta name="twitter:description" content="${esc(DESCRIPTION)}">
-  <meta name="twitter:image" content="https://screentinker.com/assets/dashboard-preview.png">
+  <meta name="twitter:image" content="${config.siteUrl}/assets/dashboard-preview.png">
 
   <meta name="theme-color" content="#111827">
   <link rel="icon" href="/assets/icon-192.png">
@@ -244,7 +245,7 @@ function render(data) {
       <div class="nav-logo">
         <a href="/" style="display:flex;align-items:center;gap:10px">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
-          <span class="nav-logo-text">ScreenTinker</span>
+          <span class="nav-logo-text">ScreenForge</span>
         </a>
       </div>
       <div class="nav-links">
@@ -266,7 +267,7 @@ function render(data) {
     </nav>
 
     <h1>Certified Hardware</h1>
-    <p class="lead">The device models ScreenTinker has tested with ScreenTinker, what each one actually
+    <p class="lead">The device models ScreenForge has tested with ScreenForge, what each one actually
       does, and which ones to avoid.</p>
     <p class="updated">Last updated ${esc(data.last_updated)}. ${certifiedCount} device${certifiedCount === 1 ? '' : 's'} currently certified.</p>
 
@@ -277,19 +278,19 @@ function render(data) {
     <div class="callout">
       <p><strong>What "Certified Hardware" means.</strong> Only entries listed below as
         <strong>Certified</strong> or <strong>Certified with limits</strong> are Certified Hardware
-        under ScreenTinker agreements. ScreenTinker has tested those models, keeps a unit of each in its
+        under ScreenForge agreements. ScreenForge has tested those models, keeps a unit of each in its
         test lab, and support obligations attach to them.</p>
       <p><strong>What it does not mean.</strong> Entries listed as Community reported, Known issues
         or Not supported are <strong>not</strong> Certified Hardware and carry
         <strong>no support commitment</strong>. They are published because knowing what other people
         have run, and what does not work, is useful when you are choosing what to buy.</p>
-      <p>ScreenTinker is open source and runs on far more hardware than this list. Certification is a
-        statement about what ScreenTinker has tested and will support, not about what is capable of
+      <p>ScreenForge is open source and runs on far more hardware than this list. Certification is a
+        statement about what ScreenForge has tested and will support, not about what is capable of
         running the software.</p>
     </div>
 
     <p class="affiliate-notice"><strong>Affiliate links.</strong> Some device cards below include a
-      "Buy this device" link that is an affiliate link. If you buy through one, ScreenTinker may earn a
+      "Buy this device" link that is an affiliate link. If you buy through one, ScreenForge may earn a
       commission at no extra cost to you. This has no bearing on what gets certified or how it is
       tested: certification is decided on the bench, never by whether a link earns anything.</p>
 
@@ -298,10 +299,10 @@ ${sections}
     <h2>Android panels, and why we recommend a player plus a display</h2>
     <p>No commercial Android signage panel or all-in-one commercial display has been validated to
       date. If you have arrived here holding a listing for a white-label Android panel, that is the
-      gap you are looking at. It is not a judgement about that panel. It means nobody at ScreenTinker
+      gap you are looking at. It is not a judgement about that panel. It means nobody at ScreenForge
       has had one on a bench, so it cannot be certified and no support obligation can attach to it.</p>
     <p>The recommended path is a certified player driving a commercial display over HDMI. The player
-      is the part that runs ScreenTinker, and it is the part that gets certified. <strong>The display
+      is the part that runs ScreenForge, and it is the part that gets certified. <strong>The display
       itself is not player hardware and does not require certification.</strong> Any commercial
       display with an HDMI input will work, and you are free to choose it on the things displays are
       actually chosen for: panel quality, brightness, operating hours, warranty and size.</p>
@@ -310,7 +311,7 @@ ${sections}
       replacement screen.</p>
 
     <h2>Getting a device certified</h2>
-    <p>If you need a specific model certified, contact ScreenTinker support and say which model and how
+    <p>If you need a specific model certified, contact ScreenForge support and say which model and how
       many screens are involved. Validation of non-certified hardware is a paid engagement for
       reseller partners, and the result is published here whatever the outcome, including a
       Not supported entry if that is what the testing shows.</p>
@@ -330,16 +331,16 @@ ${sections}
 
     <div class="cta">
       <h2>Ready to set up a screen?</h2>
-      <p>Start a free ScreenTinker account in under a minute.</p>
+      <p>Start a free ScreenForge account in under a minute.</p>
       <a href="/app#/login" class="btn btn-primary" style="padding:14px 28px;font-size:16px">Start Free</a>
-      <a href="https://github.com/screentinker/screentinker" target="_blank" rel="noopener" class="btn btn-outline" style="padding:14px 28px;font-size:16px;margin-left:12px">View on GitHub</a>
+      <a href="https://github.com/tanyeu18rg-max/screenforge-app" target="_blank" rel="noopener" class="btn btn-outline" style="padding:14px 28px;font-size:16px;margin-left:12px">View on GitHub</a>
     </div>
   </main>
 
   <footer>
-    <div style="color:var(--dim);font-size:13px">&copy; 2026 ScreenTinker. All rights reserved.</div>
+    <div style="color:var(--dim);font-size:13px">&copy; 2026 ScreenForge. All rights reserved.</div>
     <div class="links">
-      <a href="https://github.com/screentinker/screentinker" target="_blank" rel="noopener">GitHub</a>
+      <a href="https://github.com/tanyeu18rg-max/screenforge-app" target="_blank" rel="noopener">GitHub</a>
       <a href="https://discord.gg/utTdsrqq4Z" target="_blank" rel="noopener">Discord</a>
       <a href="/legal/terms.html">Terms</a>
       <a href="/legal/privacy.html">Privacy</a>
@@ -353,7 +354,7 @@ ${sections}
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
     "itemListElement": [
-      { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://screentinker.com/" },
+      { "@type": "ListItem", "position": 1, "name": "Home", "item": "${config.siteUrl}/" },
       { "@type": "ListItem", "position": 2, "name": "Certified Hardware", "item": "${URL}" }
     ]
   }

@@ -11,7 +11,7 @@
 // access control IS filesystem/shell access to the host — i.e. the platform owner. It is
 // deliberately NOT in the workspace API-Tokens UI (that surface is workspace-scoped, self-
 // service; a billing token grants platform-wide billing-read and must be issued by the owner).
-// On the container: `docker exec screentinker node ../scripts/mint-billing-token.js --name "…"`.
+// On the container: `docker exec screenforge node ../scripts/mint-billing-token.js --name "…"`.
 //
 // The logic lives in server/lib/billing-token.js (unit-tested); this file is a thin wrapper.
 

@@ -1,11 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <widget xmlns="http://www.w3.org/ns/widgets" xmlns:tizen="http://tizen.org/ns/widgets"
-        id="http://screentinker.com/player" version="2.3.0" viewmodes="maximized">
-    <tizen:application id="ScrnTinkr1.ScreenTinker" package="ScrnTinkr1" required_version="2.4"/>
+        id="http://screenforge.com/player" version="2.3.0" viewmodes="maximized">
+    <!--
+      FORK NOTE: the tizen:application id/package below is the upstream seller's
+      Samsung Apps TV identity. Replace both with your own seller prefix before
+      submitting this app to the store under your account; the author email must
+      be a real contact address you monitor.
+    -->
+    <tizen:application id="ScrnTinkr1.ScreenForge" package="ScrnTinkr1" required_version="2.4"/>
     <tizen:profile name="tv"/>
-    <name>ScreenTinker</name>
-    <author email="support@screentinker.com">ScreenTinker</author>
-    <description>ScreenTinker digital signage player</description>
+    <name>ScreenForge</name>
+    <author email="support@screenforge.invalid">ScreenForge</author>
+    <description>ScreenForge digital signage player</description>
     <icon src="icon.png"/>
     <content src="index.html"/>
 

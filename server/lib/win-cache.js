@@ -1,7 +1,7 @@
 'use strict';
 
 /*
- * The native Windows player's installer (ScreenTinker-Setup-<ver>.exe, Inno Setup) for
+ * The native Windows player's installer (ScreenForge-Setup-<ver>.exe, Inno Setup) for
  * /api/win/update/check and /download/win. A thin instance of lib/package-cache.js — read that
  * header for the rules (newest by VERSION not mtime, a release beats any prerelease, sha256 hashed
  * once per (path, size, mtime) and never offered before it exists).
@@ -14,7 +14,7 @@
 
 const { createPackageCache } = require('./package-cache');
 
-const EXE_RE = /^ScreenTinker-Setup-(\d+\.\d+\.\d+(?:[~-][0-9A-Za-z.~-]+)?)\.exe$/;
+const EXE_RE = /^ScreenForge-Setup-(\d+\.\d+\.\d+(?:[~-][0-9A-Za-z.~-]+)?)\.exe$/;
 
 const cache = createPackageCache({ name: 'win', filenameRe: EXE_RE, envDirVar: 'WIN_DIST_DIR' });
 

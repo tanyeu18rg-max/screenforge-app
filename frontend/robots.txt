@@ -1,4 +1,4 @@
-# ScreenTinker — https://screentinker.com
+# ScreenForge — https://screenforge-tff9.vercel.app
 #
 # Content Signals declare what automated systems may do with what they fetch here. The syntax is
 # Cloudflare's proposal, expressed as a comment-safe directive so a crawler that does not understand
@@ -35,5 +35,5 @@ Disallow: /unsubscribe
 # Machine-readable descriptions of this site, for agents that would rather not parse HTML.
 # Every published page is also available as Markdown: append .md to its path, or send
 # `Accept: text/markdown`.
-Sitemap: https://screentinker.com/sitemap.xml
-Agentmap: https://screentinker.com/.well-known/ai-catalog.json
+Sitemap: https://screenforge-tff9.vercel.app/sitemap.xml
+Agentmap: https://screenforge-tff9.vercel.app/.well-known/ai-catalog.json

@@ -259,7 +259,7 @@ router.get('/export', (req, res) => {
   const whiteLabel = workspaceId ? db.prepare('SELECT * FROM white_labels WHERE workspace_id = ?').get(workspaceId) : null;
 
   const exportData = {
-    format: 'screentinker-export-v2',
+    format: 'screentinker-export-v2', // format unchanged from upstream; import accepts both names
     exported_at: new Date().toISOString(),
     user,
     devices: devices.map(d => {
@@ -290,7 +290,7 @@ router.get('/export', (req, res) => {
     const archiver = require('archiver');
     const dateStr = new Date().toISOString().split('T')[0];
     res.setHeader('Content-Type', 'application/zip');
-    res.setHeader('Content-Disposition', `attachment; filename=screentinker-export-${dateStr}.zip`);
+    res.setHeader('Content-Disposition', `attachment; filename=screenforge-export-${dateStr}.zip`);
 
     const archive = archiver('zip', { zlib: { level: 5 } });
     archive.pipe(res);
@@ -323,13 +323,13 @@ router.get('/export', (req, res) => {
   }
 
   res.setHeader('Content-Type', 'application/json');
-  res.setHeader('Content-Disposition', `attachment; filename=screentinker-export-${new Date().toISOString().split('T')[0]}.json`);
+  res.setHeader('Content-Disposition', `attachment; filename=screenforge-export-${new Date().toISOString().split('T')[0]}.json`);
   res.json(exportData);
 });
 
 // User data import (JSON or ZIP with files)
 const multer = require('multer');
-const importUpload = multer({ dest: path.join(os.tmpdir(), 'screentinker-import'), limits: { fileSize: 2 * 1024 * 1024 * 1024 } }); // 2GB max
+const importUpload = multer({ dest: path.join(os.tmpdir(), 'screenforge-import'), limits: { fileSize: 2 * 1024 * 1024 * 1024 } }); // 2GB max
 
 /*
  * Scale-out (docs/scale-out.md): an import WRITES into the session's workspace. When that workspace
@@ -402,7 +402,7 @@ router.post('/import', proxyImportIfCopied, importUpload.single('file'), async (
     // ZIP upload — extract export.json and files/
     try {
       const unzipper = require('unzipper');
-      const extractDir = path.join(os.tmpdir(), `screentinker-import-${Date.now()}`);
+      const extractDir = path.join(os.tmpdir(), `screenforge-import-${Date.now()}`);
       fs.mkdirSync(extractDir, { recursive: true });
 
       await new Promise((resolve, reject) => {
@@ -448,11 +448,14 @@ router.post('/import', proxyImportIfCopied, importUpload.single('file'), async (
   } else {
     data = req.body;
   }
-  if (!data || !data.format || !data.format.startsWith('screentinker-export')) {
-    return res.status(400).json({ error: 'Invalid export file. Must be a ScreenTinker export JSON.' });
+  // Accept both the fork's format name and the upstream's, so exports made
+  // before the ScreenForge rebrand still import.
+  const fmt = data && data.format;
+  if (!fmt || !(fmt.startsWith('screenforge-export') || fmt.startsWith('screentinker-export'))) {
+    return res.status(400).json({ error: 'Invalid export file. Must be a ScreenForge or ScreenTinker export JSON.' });
   }
 
-  const isV2 = data.format === 'screentinker-export-v2';
+  const isV2 = fmt === 'screenforge-export-v2' || fmt === 'screentinker-export-v2';
   const uuid = require('uuid');
   const stats = { devices: 0, content: 0, widgets: 0, layouts: 0, playlists: 0, schedules: 0, video_walls: 0, kiosk_pages: 0, device_groups: 0 };
 
@@ -691,9 +694,9 @@ router.post('/import', proxyImportIfCopied, importUpload.single('file'), async (
       // enforces: the domain drives the pre-auth branding resolver, the CSS lands on the login page.
       const existing = db.prepare('SELECT id, custom_domain, custom_css FROM white_labels WHERE workspace_id = ?').get(workspaceId);
       if (existing) {
-        db.prepare(`UPDATE white_labels SET brand_name=?, logo_url=?, favicon_url=?, primary_color=?, bg_color=?, custom_domain=?, custom_css=?, hide_branding=?, updated_at=strftime('%s','now') WHERE workspace_id=?`).run(wl.brand_name || 'ScreenTinker', wl.logo_url || null, wl.favicon_url || null, wl.primary_color || '#3B82F6', wl.bg_color || '#111827', importerIsPlatformAdmin ? (wl.custom_domain || null) : (existing.custom_domain ?? null), importerIsPlatformAdmin ? (wl.custom_css || null) : (existing.custom_css ?? null), wl.hide_branding || 0, workspaceId);
+        db.prepare(`UPDATE white_labels SET brand_name=?, logo_url=?, favicon_url=?, primary_color=?, bg_color=?, custom_domain=?, custom_css=?, hide_branding=?, updated_at=strftime('%s','now') WHERE workspace_id=?`).run(wl.brand_name || 'ScreenForge', wl.logo_url || null, wl.favicon_url || null, wl.primary_color || '#a3e635', wl.bg_color || '#0b0d0a', importerIsPlatformAdmin ? (wl.custom_domain || null) : (existing.custom_domain ?? null), importerIsPlatformAdmin ? (wl.custom_css || null) : (existing.custom_css ?? null), wl.hide_branding || 0, workspaceId);
       } else {
-        db.prepare(`INSERT INTO white_labels (id, user_id, workspace_id, brand_name, logo_url, favicon_url, primary_color, bg_color, custom_domain, custom_css, hide_branding) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`).run(uuid.v4(), userId, workspaceId, wl.brand_name || 'ScreenTinker', wl.logo_url || null, wl.favicon_url || null, wl.primary_color || '#3B82F6', wl.bg_color || '#111827', importerIsPlatformAdmin ? (wl.custom_domain || null) : null, importerIsPlatformAdmin ? (wl.custom_css || null) : null, wl.hide_branding || 0);
+        db.prepare(`INSERT INTO white_labels (id, user_id, workspace_id, brand_name, logo_url, favicon_url, primary_color, bg_color, custom_domain, custom_css, hide_branding) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`).run(uuid.v4(), userId, workspaceId, wl.brand_name || 'ScreenForge', wl.logo_url || null, wl.favicon_url || null, wl.primary_color || '#3B82F6', wl.bg_color || '#111827', importerIsPlatformAdmin ? (wl.custom_domain || null) : null, importerIsPlatformAdmin ? (wl.custom_css || null) : null, wl.hide_branding || 0);
       }
     }
   });

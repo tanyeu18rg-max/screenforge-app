@@ -1,6 +1,6 @@
 {
-  "name": "ScreenTinker",
-  "short_name": "ScreenTinker",
+  "name": "ScreenForge",
+  "short_name": "ScreenForge",
   "description": "Digital Signage Management",
   "start_url": "/",
   "display": "standalone",

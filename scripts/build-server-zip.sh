@@ -1,5 +1,5 @@
 #!/bin/bash
-# Build the ScreenTinker SERVER, packaged to run ON a player.
+# Build the ScreenForge SERVER, packaged to run ON a player.
 #
 #   scripts/build-server-zip.sh            -> brightsign/server-all-in-one.zip
 #   scripts/build-server-zip.sh --payload  -> brightsign/server-payload.zip   (the one that ships)

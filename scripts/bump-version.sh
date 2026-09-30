@@ -1,5 +1,5 @@
 #!/bin/bash
-# Bump the ScreenTinker version across every source of truth in one commit + tag.
+# Bump the ScreenForge version across every source of truth in one commit + tag.
 #
 #   scripts/bump-version.sh major|minor|patch|X.Y.Z
 #
@@ -185,7 +185,7 @@ if [ -f "$HOME/vega/env" ]; then
       echo "       see /tmp/vega-build-$$.log" >&2
       exit 1
     }
-    VPKG=build/armv7-release/screentinker-vega_armv7.vpkg
+    VPKG=build/armv7-release/screenforge-vega_armv7.vpkg
     # ⚠️ A .vpkg with no JS bundle still "builds" and still exits 0. Check for the bundle, not the
     # exit code — that empty 4.5 KB package is what installs and then does nothing on a stick.
     #
@@ -248,7 +248,7 @@ fi
 #    and a test run dirtied the tree. v2.2.0 was tagged that way once before this was fixed.
 git add VERSION server/package.json server/package-lock.json android/app/build.gradle.kts tizen/config.xml tizen/js/app.js docs/openapi.yaml webos/appinfo.json webos/js/app.js vega/package.json vega/manifest.toml vega/src/deviceInfo.ts
 git commit -q -m "chore(release): v$NEW"
-git tag -a "v$NEW" -m "ScreenTinker v$NEW"
+git tag -a "v$NEW" -m "ScreenForge v$NEW"
 
 echo
 echo "Committed + tagged v$NEW (nothing pushed). To release:"

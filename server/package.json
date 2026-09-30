@@ -1,8 +1,8 @@
 {
-  "name": "screentinker",
+  "name": "screenforge",
   "version": "2.3.0",
   "license": "MIT",
-  "description": "ScreenTinker - Digital Signage Management Server",
+  "description": "ScreenForge - Digital Signage Management Server",
   "main": "server.js",
   "scripts": {
     "start": "node --env-file-if-exists=.env server.js",

@@ -40,7 +40,7 @@ function apkVersionOf(slot) {
   return version;
 }
 
-// A copy under DATA_DIR wins (container operators mount /data/ScreenTinker.apk),
+// A copy under DATA_DIR wins (container operators mount /data/ScreenForge.apk),
 // else the legacy in-repo root path — same order as the old resolveApkPath().
 function candidates(name) {
   return [path.join(config.dataDir, name), path.join(__dirname, '..', '..', name)];
@@ -73,13 +73,13 @@ function readDeclaredVersion(apkPath) {
 }
 
 function refresh() {
-  stable = statFirst('ScreenTinker.apk');
+  stable = statFirst('ScreenForge.apk');
   /*
    * #341: THE STABLE SLOT DECLARES ITS VERSION TOO, when it can.
    *
    * The header above assumed "server and APK ship together", so latest_version on stable was the
    * server's own VERSION. That assumption breaks the moment an operator mounts their own APK at
-   * /data/ScreenTinker.apk, and it breaks silently and expensively: a server on 2.0.7 serving a
+   * /data/ScreenForge.apk, and it breaks silently and expensively: a server on 2.0.7 serving a
    * 2.0.0 APK offers 2.0.7 to a 2.0.0 device, Android accepts the download as a same-version
    * reinstall, the device returns on 2.0.0, and is offered again. Reported in the field as two
    * displays looping for five days and 493 downloads with nothing failing anywhere.
@@ -89,7 +89,7 @@ function refresh() {
    * VERSION exactly as before, which is correct whenever server and APK really did ship together.
    */
   stable.version = stable.exists ? (apkVersionOf(stable) || readDeclaredVersion(stable.path)) : null;
-  const b = statFirst('ScreenTinker-beta.apk');
+  const b = statFirst('ScreenForge-beta.apk');
   b.version = b.exists ? (apkVersionOf(b) || readDeclaredVersion(b.path)) : null;
   beta = b.exists && b.version ? b : { ...EMPTY };   // no declared version -> no beta channel
   return stable;

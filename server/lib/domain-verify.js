@@ -15,10 +15,10 @@
  *
  * ONE RECORD FORM — a TXT record at a dedicated name:
  *
- *   _screentinker-verify.example.com.  IN  TXT  "st-verify=<token>"
+ *   _screenforge-verify.example.com.  IN  TXT  "st-verify=<token>"
  *
  * A CNAME alternative was drafted and dropped. It would have pointed at
- * `<token>.verify.screentinker.com`, which requires operating a wildcard DNS zone that answers for
+ * `<token>.verify.screenforge.com`, which requires operating a wildcard DNS zone that answers for
  * every token ever issued — infrastructure this project does not have, so the instructions would
  * have described a check that could never pass. TXT needs nothing but the customer's own zone.
  *
@@ -27,7 +27,7 @@
  * administrator is most reluctant to touch.
  *
  * ⚠️ THE PROOF NAME MUST NOT BE A CNAME. A TXT lookup follows CNAMEs transparently, and RFC 4592
- * means a wildcard `*.example.com` synthesizes `_screentinker-verify.example.com` too — so a
+ * means a wildcard `*.example.com` synthesizes `_screenforge-verify.example.com` too — so a
  * wildcard CNAME pointing anywhere the attacker controls would let them prove a domain they do not
  * own. That turns an ordinary subdomain takeover into an apex takeover, and from there into every
  * `@example.com` login. ACME's dns-01 permits this delegation deliberately; here the thing being
@@ -37,7 +37,7 @@
 const dns = require('dns').promises;
 const crypto = require('crypto');
 
-const RECORD_PREFIX = '_screentinker-verify';
+const RECORD_PREFIX = '_screenforge-verify';
 const TXT_PREFIX = 'st-verify=';
 
 // A DNS answer that never arrives must not hold an HTTP request open. The resolver's own retries

@@ -1724,7 +1724,7 @@ class WebSocketService : Service() {
     }
 
     /*
-     * #312 follow-up: is `url` a reachable ScreenTinker server? The verify half of verify-then-commit.
+     * #312 follow-up: is `url` a reachable ScreenForge server? The verify half of verify-then-commit.
      * A GET of /api/status returns JSON carrying version/features on our server; we accept a 2xx that
      * looks like that. Deliberately conservative — a redirect, a 401/404, a captive portal or a
      * timeout all read as "not reachable", so the caller keeps the old URL. Blocking; call off the
@@ -1745,7 +1745,7 @@ class WebSocketService : Service() {
                 if (code in 200..299) {
                     val body = conn.inputStream.bufferedReader().use { it.readText() }.take(4000)
                     if (body.contains("\"version\"") || body.contains("\"features\"") || body.contains("\"status\"")) return true
-                    Log.w("WebSocketService", "probe: $url answered $code but not a ScreenTinker /api/status")
+                    Log.w("WebSocketService", "probe: $url answered $code but not a ScreenForge /api/status")
                 } else {
                     Log.w("WebSocketService", "probe: $url returned HTTP $code")
                 }
@@ -1828,7 +1828,7 @@ class WebSocketService : Service() {
         )
 
         return NotificationCompat.Builder(this, RemoteDisplayApp.CHANNEL_ID)
-            .setContentTitle("ScreenTinker")
+            .setContentTitle("ScreenForge")
             .setContentText("Display service is running")
             .setSmallIcon(android.R.drawable.ic_media_play)
             .setContentIntent(pendingIntent)
@@ -2023,7 +2023,7 @@ class WebSocketService : Service() {
             // #312 follow-up: rewrite the stored server URL, e.g. after a server move,
             // pushed from the dashboard to one device / a group / a whole workspace.
             // VERIFY-THEN-COMMIT: keep the old URL, confirm the new one is a reachable
-            // ScreenTinker server, and only then persist it (mirrored to both stores by
+            // ScreenForge server, and only then persist it (mirrored to both stores by
             // ServerConfig, #312) and reconnect. A bad address rolls back, so a
             // fat-fingered URL cannot strand the panel — the failure this whole issue is
             // about. Runs off the socket thread because it does blocking network I/O.

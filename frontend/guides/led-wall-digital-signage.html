@@ -3,24 +3,24 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>LED Video Wall Digital Signage | ScreenTinker</title>
-  <meta name="description" content="Run a large LED video wall with ScreenTinker. The processor hands the wall's native resolution to the player over EDID — and why streaming sticks cannot.">
+  <title>LED Video Wall Digital Signage | ScreenForge</title>
+  <meta name="description" content="Run a large LED video wall with ScreenForge. The processor hands the wall's native resolution to the player over EDID — and why streaming sticks cannot.">
   <meta name="keywords" content="led wall digital signage, led video wall software, colorlight signage, led wall raspberry pi, led wall cms, non standard resolution signage">
   <meta name="robots" content="index, follow">
-  <link rel="canonical" href="https://screentinker.com/guides/led-wall-digital-signage.html">
-  <link rel="alternate" type="text/markdown" href="https://screentinker.com/guides/led-wall-digital-signage.md">
+  <link rel="canonical" href="https://screenforge-tff9.vercel.app/guides/led-wall-digital-signage.html">
+  <link rel="alternate" type="text/markdown" href="https://screenforge-tff9.vercel.app/guides/led-wall-digital-signage.md">
 
   <meta property="og:type" content="article">
-  <meta property="og:url" content="https://screentinker.com/guides/led-wall-digital-signage.html">
-  <meta property="og:title" content="LED Video Walls with ScreenTinker">
-  <meta property="og:description" content="Run a large LED video wall with ScreenTinker. The processor hands the wall's native resolution to the player over EDID — and why streaming sticks cannot.">
-  <meta property="og:image" content="https://screentinker.com/assets/dashboard-preview.png">
-  <meta property="og:site_name" content="ScreenTinker">
+  <meta property="og:url" content="https://screenforge-tff9.vercel.app/guides/led-wall-digital-signage.html">
+  <meta property="og:title" content="LED Video Walls with ScreenForge">
+  <meta property="og:description" content="Run a large LED video wall with ScreenForge. The processor hands the wall's native resolution to the player over EDID — and why streaming sticks cannot.">
+  <meta property="og:image" content="https://screenforge-tff9.vercel.app/assets/dashboard-preview.png">
+  <meta property="og:site_name" content="ScreenForge">
 
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="LED Video Walls with ScreenTinker">
-  <meta name="twitter:description" content="Run a large LED video wall with ScreenTinker. The processor hands the wall's native resolution to the player over EDID — and why streaming sticks cannot.">
-  <meta name="twitter:image" content="https://screentinker.com/assets/dashboard-preview.png">
+  <meta name="twitter:title" content="LED Video Walls with ScreenForge">
+  <meta name="twitter:description" content="Run a large LED video wall with ScreenForge. The processor hands the wall's native resolution to the player over EDID — and why streaming sticks cannot.">
+  <meta name="twitter:image" content="https://screenforge-tff9.vercel.app/assets/dashboard-preview.png">
 
   <meta name="theme-color" content="#111827">
   <link rel="icon" href="/assets/icon-192.png">
@@ -33,7 +33,7 @@
       <div class="nav-logo">
         <a href="/" style="display:flex;align-items:center;gap:10px">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
-          <span class="nav-logo-text">ScreenTinker</span>
+          <span class="nav-logo-text">ScreenForge</span>
         </a>
       </div>
       <div class="nav-links">
@@ -57,7 +57,7 @@
     </nav>
 
     <h1>LED video walls</h1>
-    <p class="lead">ScreenTinker runs on large LED video walls with no special configuration. The LED processor handles the wall geometry and presents itself to the player as an ordinary HDMI display &mdash; so a 2808&times;648 wall is, from here, a screen with an unusual aspect ratio.</p>
+    <p class="lead">ScreenForge runs on large LED video walls with no special configuration. The LED processor handles the wall geometry and presents itself to the player as an ordinary HDMI display &mdash; so a 2808&times;648 wall is, from here, a screen with an unusual aspect ratio.</p>
 
     <p class="lead" style="font-size:15px;color:var(--muted)"><strong>Status:</strong> community verified.
     <strong>Contributed by</strong> <a href="https://www.watterott.com" rel="noopener">Watterott electronic</a>
@@ -73,7 +73,7 @@
     player for this category. This is tested, not theoretical: Watterott tried the streaming sticks first.</p>
 
     <h2 id="setup">The signal chain</h2>
-    <pre><code>ScreenTinker player (Raspberry Pi)
+    <pre><code>ScreenForge player (Raspberry Pi)
         |  HDMI / DVI
         v
 LED processor (e.g. Colorlight X4 / X8)
@@ -85,7 +85,7 @@ Receiving cards
 LED modules</code></pre>
     <p>The processor is configured once with the native resolution of the wall. It then <strong>advertises
     that resolution to the player over EDID</strong>, and the player picks it up on boot as if a monitor with
-    that native mode had been plugged in. Nothing is configured on the Pi, and ScreenTinker needs no LED-wall
+    that native mode had been plugged in. Nothing is configured on the Pi, and ScreenForge needs no LED-wall
     feature at all &mdash; which is why walls of essentially any geometry already work.</p>
 
     <h2>Tested configuration</h2>
@@ -116,7 +116,7 @@ LED modules</code></pre>
       roughly double.</li>
     </ul>
     <p>For most installs, native is better. Design content to the wall&rsquo;s actual dimensions in
-    ScreenTinker and skip the scaler &mdash; a multi-zone layout built at the wall&rsquo;s real aspect ratio
+    ScreenForge and skip the scaler &mdash; a multi-zone layout built at the wall&rsquo;s real aspect ratio
     beats stretching a 16:9 design across it.</p>
 
     <h2>Off hours</h2>
@@ -125,7 +125,7 @@ LED modules</code></pre>
     opening hours without building a black image into the timetable. If you want the wall to physically power
     down rather than show black, that is a separate job for the processor.</p>
 
-    <h2>What ScreenTinker does not control</h2>
+    <h2>What ScreenForge does not control</h2>
     <p>Brightness, colour calibration and gamma belong to the LED processor and the receiving cards. We send
     the picture; the processor decides how hard to drive the diodes. Content designed on a monitor often looks
     blown out on a wall at full brightness &mdash; prefer bright type on a dark background over the reverse.</p>
@@ -148,9 +148,9 @@ LED modules</code></pre>
     </div>
   </main>
   <footer>
-    <div style="color:var(--dim);font-size:13px">&copy; 2026 ScreenTinker. All rights reserved.</div>
+    <div style="color:var(--dim);font-size:13px">&copy; 2026 ScreenForge. All rights reserved.</div>
     <div class="links">
-      <a href="https://github.com/screentinker/screentinker" target="_blank" rel="noopener">GitHub</a>
+      <a href="https://github.com/tanyeu18rg-max/screenforge-app" target="_blank" rel="noopener">GitHub</a>
       <a href="https://discord.gg/utTdsrqq4Z" target="_blank" rel="noopener">Discord</a>
       <a href="/legal/terms.html">Terms</a>
       <a href="/legal/privacy.html">Privacy</a>
@@ -168,19 +168,19 @@ LED modules</code></pre>
         "@type": "ListItem",
         "position": 1,
         "name": "Home",
-        "item": "https://screentinker.com/"
+        "item": "https://screenforge-tff9.vercel.app/"
       },
       {
         "@type": "ListItem",
         "position": 2,
         "name": "Guides",
-        "item": "https://screentinker.com/"
+        "item": "https://screenforge-tff9.vercel.app/"
       },
       {
         "@type": "ListItem",
         "position": 3,
         "name": "LED video walls",
-        "item": "https://screentinker.com/guides/led-wall-digital-signage.html"
+        "item": "https://screenforge-tff9.vercel.app/guides/led-wall-digital-signage.html"
       }
     ]
   }
@@ -190,8 +190,8 @@ LED modules</code></pre>
   {
     "@context": "https://schema.org",
     "@type": "HowTo",
-    "name": "Run a LED video wall with ScreenTinker",
-    "description": "Run a large LED video wall with ScreenTinker. The processor hands the wall's native resolution to the player over EDID — and why streaming sticks cannot.",
+    "name": "Run a LED video wall with ScreenForge",
+    "description": "Run a large LED video wall with ScreenForge. The processor hands the wall's native resolution to the player over EDID — and why streaming sticks cannot.",
     "totalTime": "PT30M",
     "tool": [
       {
@@ -204,7 +204,7 @@ LED modules</code></pre>
       },
       {
         "@type": "HowToTool",
-        "name": "A ScreenTinker account"
+        "name": "A ScreenForge account"
       }
     ],
     "step": [
@@ -213,28 +213,28 @@ LED modules</code></pre>
         "position": 1,
         "name": "Set the wall resolution on the processor",
         "text": "Configure the wall layout and native resolution in the processor’s vendor software. This is the only place the resolution needs to be set.",
-        "url": "https://screentinker.com/guides/led-wall-digital-signage.html#setup"
+        "url": "https://screenforge-tff9.vercel.app/guides/led-wall-digital-signage.html#setup"
       },
       {
         "@type": "HowToStep",
         "position": 2,
         "name": "Connect the player over HDMI",
         "text": "Plug a Raspberry Pi or small PC into the processor. Do not use a streaming stick.",
-        "url": "https://screentinker.com/guides/led-wall-digital-signage.html#setup"
+        "url": "https://screenforge-tff9.vercel.app/guides/led-wall-digital-signage.html#setup"
       },
       {
         "@type": "HowToStep",
         "position": 3,
         "name": "Boot and let EDID do the work",
         "text": "The processor advertises the wall’s native mode over EDID and the player picks it up automatically. No resolution settings on the Pi.",
-        "url": "https://screentinker.com/guides/led-wall-digital-signage.html#setup"
+        "url": "https://screenforge-tff9.vercel.app/guides/led-wall-digital-signage.html#setup"
       },
       {
         "@type": "HowToStep",
         "position": 4,
         "name": "Pair and check the fit",
         "text": "Install the player, claim the pairing code, and confirm the output fills the wall with no letterboxing or cropping.",
-        "url": "https://screentinker.com/guides/led-wall-digital-signage.html#setup"
+        "url": "https://screenforge-tff9.vercel.app/guides/led-wall-digital-signage.html#setup"
       }
     ]
   }

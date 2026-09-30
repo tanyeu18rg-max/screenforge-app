@@ -10,7 +10,7 @@
   <link rel="manifest" href="/manifest.json">
   <link rel="icon" href="/assets/icon-192.png">
   <link rel="apple-touch-icon" href="/assets/icon-192.png">
-  <title>ScreenTinker</title>
+  <title>ScreenForge</title>
   <link rel="stylesheet" href="/css/variables.css">
   <link rel="stylesheet" href="/css/reset.css">
   <link rel="stylesheet" href="/css/main.css">
@@ -35,9 +35,9 @@
           <line x1="8" y1="21" x2="16" y2="21"/>
           <line x1="12" y1="17" x2="12" y2="21"/>
         </svg>
-        <span id="brandName">ScreenTinker</span>
+        <span id="brandName">ScreenForge</span>
       </div>
-      <!-- #38: apply cached white-label before first paint (no ScreenTinker flash) -->
+      <!-- #38: apply cached white-label before first paint (no ScreenForge flash) -->
       <script src="/js/brand-prime.js"></script>
       <!-- Client-error reporter. Plain script, not a module: a module is deferred and would
            install its handlers after js/app.js has already booted and thrown. -->
@@ -56,7 +56,13 @@
           <svg class="nav-group-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
         </button>
         <ul class="nav-group-items" id="navGroup-devices">
-          <li><a href="#/" class="nav-link active" data-view="dashboard">
+          <li><a href="#/" class="nav-link active" data-view="overview">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>
+            </svg>
+            <span>Overview</span>
+          </a></li>
+          <li><a href="#/displays" class="nav-link" data-view="dashboard">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/>
               <rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/>

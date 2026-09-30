@@ -491,9 +491,9 @@ router.put('/branding', requirePlatformAdmin, (req, res) => {
       VALUES (?, ?, NULL, ?, ?, ?, ?, ?, ?, ?, ?)
     `).run(
       PLATFORM_DEFAULT_ID, req.user.id,
-      req.body.brand_name || 'ScreenTinker',
+      req.body.brand_name || 'ScreenForge',
       req.body.logo_url || null, req.body.favicon_url || null,
-      req.body.primary_color || '#3B82F6', req.body.secondary_color || '#1E293B', req.body.bg_color || '#111827',
+      req.body.primary_color || '#a3e635', req.body.secondary_color || '#1e241a', req.body.bg_color || '#0b0d0a',
       req.body.custom_css || null, req.body.hide_branding ? 1 : 0
     );
   }
@@ -590,7 +590,7 @@ router.post('/check-update', requireAdmin, async (req, res) => {
  * How this instance is actually installed, so "Update Now" can hand back a command that works.
  *
  * This used to build a `docker compose` line unconditionally, with composeFilePath defaulting to
- * /opt/screentinker/docker-compose.yml whether or not that file existed. Self-hosters running the
+ * /opt/screenforge/docker-compose.yml whether or not that file existed. Self-hosters running the
  * git + systemd install documented in docs/operations.md were therefore told to run a docker
  * command against a compose file they do not have. One of them upgraded 1.9.39 to 2.0.8 only
  * because he had written his own update script; the dashboard's advice was useless to him.

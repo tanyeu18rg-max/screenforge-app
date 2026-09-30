@@ -97,7 +97,7 @@ class ItemTimingTest {
          * defect this class was written for, arriving through a different door.
          */
         assertTrue(ItemTiming.endsOnTimer(ItemTiming.BUNDLE_MIME, isWidget = false))
-        assertEquals("application/vnd.screentinker.bundle+zip", ItemTiming.BUNDLE_MIME)
+        assertEquals("application/vnd.screenforge.bundle+zip", ItemTiming.BUNDLE_MIME)
     }
 
     @Test fun an_unknown_type_is_still_not_timed_because_the_player_skips_it_instead() {

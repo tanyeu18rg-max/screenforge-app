@@ -8,7 +8,7 @@
  * and never connects. go2rtc's WS API instead returns a candidate-less answer and TRICKLES the
  * candidates afterwards, which is what its own working web client does. This proxy lets a device
  * speak that trickle protocol without ever seeing go2rtc's URL or admin token: it connects to one of
- *   ws(s)://<screentinker>/api/devices/:id/<what>?token=<device_token>
+ *   ws(s)://<screenforge>/api/devices/:id/<what>?token=<device_token>
  * and we pipe the webrtc/offer|answer|candidate JSON to go2rtc's /api/ws?<dir>=<stream>.
  *
  * Routes (all device-authenticated, gated on the same three live-video flags, fail-soft):

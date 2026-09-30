@@ -145,7 +145,7 @@ function buildGraphPayload(to, subject, html, fromName) {
       from: {
         emailAddress: {
           address: config.graphSenderEmail,
-          name: fromName || config.graphSenderName || 'ScreenTinker',
+          name: fromName || config.graphSenderName || 'ScreenForge',
         },
       },
     },
@@ -238,7 +238,7 @@ function unsubscribeParts(userId) {
 }
 
 // Caller passes { to, subject, text, html } (html optional; derived from text if
-// absent). rawSubject:true sends the subject verbatim (no "[ScreenTinker] "
+// absent). rawSubject:true sends the subject verbatim (no "[ScreenForge] "
 // prefix). fromName overrides the display name. Returns a result object and never
 // throws — delivery failures are logged and returned as sent:false so app flow
 // (offline alerts, signup mail, etc.) keeps running even when email is broken.
@@ -260,7 +260,7 @@ async function sendEmail({ to, subject, text, html, fromName, rawSubject, unsubs
       return { sent: false, reason: 'dev_restricted' };
     }
   }
-  const finalSubject = rawSubject ? subject : `[ScreenTinker] ${subject}`;
+  const finalSubject = rawSubject ? subject : `[ScreenForge] ${subject}`;
   const unsub = unsubscribeParts(unsubscribeUserId);
   const baseHtml = html || `<pre style="font-family:sans-serif">${escapeHtml(text || '')}</pre>`;
   const finalHtml = baseHtml + unsub.footerHtml;

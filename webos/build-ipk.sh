@@ -1,5 +1,5 @@
 #!/bin/bash
-# Build webos/ScreenTinker.ipk for LG webOS Signage.
+# Build webos/ScreenForge.ipk for LG webOS Signage.
 #
 # Uses LG's `ares-package` when it is on PATH (npm i -g @webos-tools/cli) and otherwise assembles
 # the same Debian-style archive itself: an `ar` of debian-binary + control.tar.gz + data.tar.gz,
@@ -9,7 +9,7 @@
 set -euo pipefail
 cd "$(dirname "$0")"
 
-OUT="${1:-ScreenTinker.ipk}"
+OUT="${1:-ScreenForge.ipk}"
 case "$OUT" in /*) ;; *) OUT="$PWD/$OUT" ;; esac      # absolute: the archive is written from a temp dir
 APPID="$(grep -oE '"id": *"[^"]+"' appinfo.json | head -1 | sed -E 's/.*"([^"]+)"$/\1/')"
 VER="$(grep -oE '"version": *"[^"]+"' appinfo.json | head -1 | sed -E 's/.*"([^"]+)"$/\1/')"
@@ -66,7 +66,7 @@ Section: misc
 Priority: optional
 Architecture: all
 Installed-Size: $SIZE_KB
-Maintainer: $VENDOR <hello@screentinker.com>
+Maintainer: $VENDOR <hello@screenforge.com>
 Description: $TITLE - digital signage player
 webOS_package_format_version: 2
 webOS_manifest_version: 1

@@ -27,8 +27,9 @@ object WebViewSupport {
     // a normal embedding site, NOT youtube.com itself — a page claiming to be
     // youtube.com embedding a youtube.com iframe is rejected as an invalid embed
     // context ("This video is unavailable / Error 152"). A real third-party domain
-    // is what legitimate embeds use.
-    const val EMBED_BASE = "https://screentinker.com"
+    // is what legitimate embeds use. For a self-hosted install this should be the
+    // operator's own server origin; the project's site is the fallback default.
+    const val EMBED_BASE = "https://screenforge-tff9.vercel.app"
 
     fun configure(webView: WebView, tag: String) {
         webView.settings.apply {

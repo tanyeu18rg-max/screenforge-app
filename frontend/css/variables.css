@@ -1,29 +1,33 @@
 :root {
-  --bg-primary: #111827;
-  --bg-secondary: #1f2937;
-  --bg-card: #1e293b;
-  --bg-card-hover: #283548;
-  --bg-input: #0f172a;
-  --accent: #3b82f6;
-  --accent-hover: #2563eb;
-  --accent-dim: #1d4ed8;
-  /* The release palette (violet + green) that the gradients are built from. A white-label brand
+  /* ScreenForge brand: lime on charcoal. */
+  --bg-primary: #0b0d0a;
+  --bg-secondary: #12150f;
+  --bg-card: #171b14;
+  --bg-card-hover: #1e241a;
+  --bg-input: #0e110c;
+  --accent: #a3e635;
+  --accent-hover: #bef264;
+  --accent-dim: #3f6212;
+  /* Text that sits ON the accent colour (dark, because lime is light). White-label
+     brands overwrite the accents (js/branding.js); keep --on-accent readable there. */
+  --on-accent: #1a2e05;
+  /* The release palette (lime + deep green) that the gradients are built from. A white-label brand
      colour overwrites all three accents (js/branding.js), so gradients fall back to that colour. */
-  --accent-2: #8b5cf6;
-  --accent-3: #22c55e;
+  --accent-2: #65a30d;
+  --accent-3: #d9f99d;
   --grad-accent: linear-gradient(135deg, var(--accent), var(--accent-2));
   --grad-bar: linear-gradient(90deg, var(--accent-2), var(--accent-3));
   --text-primary: #f1f5f9;
-  --text-secondary: #94a3b8;
-  --text-muted: #64748b;
-  --success: #22c55e;
-  --success-dim: #15803d;
+  --text-secondary: #a3b09a;
+  --text-muted: #6b7565;
+  --success: #a3e635;
+  --success-dim: #3f6212;
   --danger: #ef4444;
   --danger-dim: #991b1b;
   --warning: #f59e0b;
   --warning-dim: #92400e;
-  --border: #334155;
-  --border-light: #475569;
+  --border: #2a3125;
+  --border-light: #3a4433;
   --radius: 8px;
   --radius-lg: 12px;
   --shadow: 0 4px 24px rgba(0, 0, 0, 0.4);

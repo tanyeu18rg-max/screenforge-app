@@ -69,7 +69,7 @@ Message:
 ${cleanMessage || '(none)'}
 
 ---
-Submitted from screentinker.com pricing page
+Submitted from the ScreenForge pricing page
 Source IP: ${req.ip}
 `;
 

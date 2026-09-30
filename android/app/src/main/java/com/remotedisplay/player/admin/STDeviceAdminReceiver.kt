@@ -7,7 +7,7 @@ import android.content.Intent
 import android.util.Log
 
 /**
- * #161 device-owner foundation. The DeviceAdminReceiver ScreenTinker enrolls as — required to become
+ * #161 device-owner foundation. The DeviceAdminReceiver ScreenForge enrolls as — required to become
  * device owner (via `adb dpm set-device-owner` or QR provisioning) or a plain device admin (FORCE_LOCK).
  *
  * Deliberately minimal: it carries the admin component + policy declarations (res/xml/device_admin.xml);

@@ -1,4 +1,4 @@
-/* ScreenTinker — Tizen TV web player.
+/* ScreenForge — Tizen TV web player.
  * Speaks the same /device socket.io protocol as the Android player:
  *   emit  device:register {pairing_code | device_id+device_token, device_info, fingerprint}
  *   recv  device:registered {device_id, device_token, status}
@@ -655,7 +655,7 @@
       return '<div><span style="color:#8ab4f8;display:inline-block;min-width:210px">' + k + '</span>' +
         (val == null || val === '' ? '—' : String(val)) + '</div>';
     }
-    o.innerHTML = '<h2 style="margin:0 0 14px;color:#fff">ScreenTinker — Tizen Player</h2>' +
+    o.innerHTML = '<h2 style="margin:0 0 14px;color:#fff">ScreenForge — Tizen Player</h2>' +
       row('Device ID', deviceId) +
       row('Server', serverUrl) +
       row('App version', APP_VERSION) +
@@ -736,7 +736,7 @@
       if (!captured) {
         ctx.fillStyle = '#111827'; ctx.fillRect(0, 0, 960, 540);
         ctx.fillStyle = '#3b82f6'; ctx.font = 'bold 28px sans-serif'; ctx.textAlign = 'center';
-        ctx.fillText('ScreenTinker (Tizen)', 480, 235);
+        ctx.fillText('ScreenForge (Tizen)', 480, 235);
         ctx.fillStyle = '#94a3b8'; ctx.font = '16px sans-serif';
         ctx.fillText('Live preview unavailable for video / YouTube on Tizen', 480, 280);
         ctx.fillText(new Date().toLocaleTimeString(), 480, 312);

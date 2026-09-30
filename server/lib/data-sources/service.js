@@ -1,7 +1,7 @@
 'use strict';
 
 /**
- * Universal Data Sources Service for ScreenTinker.
+ * Universal Data Sources Service for ScreenForge.
  *
  * Handles fetching, caching, refreshing, and evaluating data sources.
  */

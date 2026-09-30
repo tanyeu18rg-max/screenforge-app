@@ -51,7 +51,7 @@ function classifyConnectivity(report) {
   } else if (r.internet_ok === true) {
     // Link up AND the wider internet was reachable, but WE weren't -> our server/hosting, not the site.
     reason = 'server_down';
-    detail = 'Internet reachable but the ScreenTinker server was unreachable (server/hosting issue)';
+    detail = 'Internet reachable but the ScreenForge server was unreachable (server/hosting issue)';
   } else if (r.internet_ok === false) {
     reason = 'no_internet';
     detail = 'No internet — router/ISP down (device link up, public hosts unreachable)';

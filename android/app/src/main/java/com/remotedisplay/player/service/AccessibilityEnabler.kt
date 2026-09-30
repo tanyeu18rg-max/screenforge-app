@@ -8,7 +8,7 @@ import android.provider.Settings
 import android.util.Log
 
 /**
- * Self-enable ScreenTinker's own AccessibilityService on a provisioned panel.
+ * Self-enable ScreenForge's own AccessibilityService on a provisioned panel.
  *
  * ⚠️ WHY THIS EXISTS. The accessibility service is the ONLY durable whole-screen capture path (it
  * survives OTAs, unlike MediaProjection consent) and the only working D-pad path. But nothing can

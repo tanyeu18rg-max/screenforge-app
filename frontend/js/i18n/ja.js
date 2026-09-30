@@ -354,7 +354,7 @@ export default {
   'dashboard.group_sync.toast_off': "同期再生無効",
   'dashboard.group_sync.toast_resync': "再同期がグループに送信されました",
   'dashboard.group_sync.backend_auto': "同期: 自動",
-  'dashboard.group_sync.backend_screentinker': "同期: 標準",
+  'dashboard.group_sync.backend_screenforge': "同期: 標準",
   'dashboard.group_sync.backend_brightsign': "同期: ブライトサイン",
   'dashboard.group_sync.backend_hint': "このグループが使用する同期プロトコル。スタンダードはあらゆるタイプのプレーヤーで機能し、リーダーやインターネットを必要とせずにディスプレイを 2 番目に揃えて表示します。 BrightSign はフレーム精度は高いですが、グループ内のすべてのディスプレイが同じネットワーク上の BrightSign である場合にのみ機能し、ビデオのみを同期します。グループが実際に実行できる場合は BrightSign が自動的に選択され、そうでない場合は Standard が選択されます。",
   'dashboard.group_sync.toast_backend': "同期プロトコルが更新されました",

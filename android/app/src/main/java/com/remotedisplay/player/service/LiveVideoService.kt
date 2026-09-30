@@ -132,7 +132,7 @@ class LiveVideoService : Service() {
 
     private fun startForegroundCompat() {
         val notif = NotificationCompat.Builder(this, RemoteDisplayApp.CHANNEL_ID)
-            .setContentTitle("ScreenTinker")
+            .setContentTitle("ScreenForge")
             .setContentText("Live view active")
             .setSmallIcon(android.R.drawable.ic_menu_view)
             .setOngoing(true)

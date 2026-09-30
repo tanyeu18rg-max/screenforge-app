@@ -102,7 +102,7 @@ async function checkNow(currentVersion) {
     try {
       // Step 1: get anonymous OAuth token for GHCR public repo access
       const tokenRes = await fetchWithTimeout(
-        'https://ghcr.io/token?scope=repository:screentinker/screentinker:pull'
+        'https://ghcr.io/token?scope=repository:screenforge/screenforge:pull'
       );
       if (!tokenRes.ok) throw new Error(`GHCR token endpoint returned ${tokenRes.status}`);
       const { token } = await tokenRes.json();
@@ -124,7 +124,7 @@ async function checkNow(currentVersion) {
        * tags gathered so far are still used, since a slightly stale answer beats none.
        */
       const MAX_PAGES = 20;
-      let tagsUrl = 'https://ghcr.io/v2/screentinker/screentinker/tags/list?n=100';
+      let tagsUrl = 'https://ghcr.io/v2/screenforge/screenforge/tags/list?n=100';
       const tags = [];
       let pages = 0;
       let firstStatus = null;

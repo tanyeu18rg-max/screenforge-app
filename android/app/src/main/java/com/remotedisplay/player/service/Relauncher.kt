@@ -35,7 +35,7 @@ object Relauncher {
     private const val TAG = "Relauncher"
     const val UPDATE = "update"
     const val BOOT = "boot"
-    // The relaunch/"ScreenTinker updated" notification id. MainActivity cancels it in onResume so it
+    // The relaunch/"ScreenForge updated" notification id. MainActivity cancels it in onResume so it
     // auto-dismisses the moment the display is actually back on screen (it exists only to get us there).
     const val RELAUNCH_NOTIFICATION_ID = 999
 
@@ -89,7 +89,7 @@ object Relauncher {
             // case; otherwise a LOW-importance channel so the transient notice never heads-up over content.
             val channel = if (failLoud) RemoteDisplayApp.BOOT_CHANNEL_ID else RemoteDisplayApp.RELAUNCH_QUIET_CHANNEL_ID
             val builder = NotificationCompat.Builder(context, channel)
-                .setContentTitle(if (isUpdate) "ScreenTinker updated" else "ScreenTinker")
+                .setContentTitle(if (isUpdate) "ScreenForge updated" else "ScreenForge")
                 .setContentText(if (isUpdate) "Tap to resume the display" else "Starting display...")
                 .setSmallIcon(android.R.drawable.ic_media_play)
                 .setPriority(if (failLoud) NotificationCompat.PRIORITY_HIGH else NotificationCompat.PRIORITY_LOW)

@@ -237,7 +237,7 @@ export async function render(container) {
       <div id="whiteLabelForm">
         <p style="color:var(--text-muted);font-size:12px;margin-bottom:16px">${t('settings.white_label_desc')}</p>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
-          <div class="form-group"><label>${t('settings.brand_name')}</label><input type="text" id="wlBrandName" class="input" placeholder="ScreenTinker"></div>
+          <div class="form-group"><label>${t('settings.brand_name')}</label><input type="text" id="wlBrandName" class="input" placeholder="ScreenForge"></div>
           <div class="form-group"><label>${t('settings.logo_url')}</label><input type="text" id="wlLogoUrl" class="input" placeholder="https://..."></div>
           <div class="form-group"><label>${t('settings.primary_color')}</label><input type="color" id="wlPrimaryColor" value="#3B82F6" style="width:100%;height:36px;border:none;cursor:pointer;border-radius:var(--radius)"></div>
           <div class="form-group"><label>${t('settings.bg_color')}</label><input type="color" id="wlBgColor" value="#111827" style="width:100%;height:36px;border:none;cursor:pointer;border-radius:var(--radius)"></div>
@@ -315,7 +315,7 @@ export async function render(container) {
     <div class="settings-section">
       <h3>${t('settings.about')}</h3>
       <div style="color:var(--text-secondary);font-size:13px">
-        <p><strong>${esc(window.__ST_BRAND_NAME || 'ScreenTinker')}</strong>${appVersion ? ` v${esc(appVersion)}` : ''}</p>
+        <p><strong>${esc(window.__ST_BRAND_NAME || 'ScreenForge')}</strong>${appVersion ? ` v${esc(appVersion)}` : ''}</p>
         <p style="margin-top:4px">${t('settings.about_tagline')}</p>
         <!-- The permanent home for the release notes the dashboard panel links to. Populated
              after render because it is a fetch, and About must not wait on one. -->
@@ -448,12 +448,12 @@ export async function render(container) {
       let data;
       if (isZip) {
         // For ZIP, show basic info and skip preview parsing
-        data = { format: 'screentinker-export-v1', _isZip: true };
+        data = { format: 'screenforge-export-v1', _isZip: true };
         statusEl.innerHTML = `${t('settings.import.zip_detected', { name: esc(file.name), size: (file.size / 1048576).toFixed(1) })}<br><br><button class="btn btn-primary btn-sm" id="confirmImportBtn">${t('settings.import.confirm')}</button> <button class="btn btn-secondary btn-sm" id="cancelImportBtn">${t('common.cancel')}</button>`;
       } else {
         const text = await file.text();
         data = JSON.parse(text);
-        if (!data.format || !data.format.startsWith('screentinker-export')) {
+        if (!data.format || !data.format.startsWith('screenforge-export')) {
           statusEl.style.color = 'var(--danger)';
           statusEl.textContent = t('settings.import.invalid_file');
           return;
@@ -689,6 +689,25 @@ export async function render(container) {
       ? `Last sent ${new Date(info.last_report.at * 1000).toLocaleString()}.`
       : 'Nothing has been sent yet.';
 
+    // No collector configured: sharing is unavailable, not merely off. Say so
+    // plainly instead of offering a toggle that could never send anything.
+    if (!info.endpoint) {
+      box.innerHTML = `
+        <p style="color:var(--text-muted);font-size:13px;margin-bottom:8px">
+          Install-statistics sharing is not configured on this server: no
+          telemetry endpoint has been set (<code style="font-size:11px">TELEMETRY_ENDPOINT</code>),
+          so nothing is collected and nothing can be sent.
+        </p>
+        <p style="color:var(--text-muted);font-size:13px;margin-bottom:0">
+          ${info.extra_endpoint
+            ? `A copy of the statistics payload still goes to your own collector at
+               <code style="font-size:11px">${esc(info.extra_endpoint)}</code>.`
+            : `To collect your own fleet numbers, set
+               <code style="font-size:11px">TELEMETRY_EXTRA_ENDPOINT</code> to your collector's URL.`}
+        </p>`;
+      return;
+    }
+
     // A blocked outbound connection is the normal failure on a self-hosted box, and it is
     // otherwise invisible — the operator just sees nothing arriving. Name the failure and the
     // host, so the fix is "allow this in the firewall" rather than "guess".
@@ -701,7 +720,7 @@ export async function render(container) {
 
     box.innerHTML = `
       <p style="color:var(--text-muted);font-size:13px;margin-bottom:12px">
-        ScreenTinker can't see how widely it's deployed, because most installs are private by
+        ScreenForge can't see how widely it's deployed, because most installs are private by
         design. Sharing lets us say how many screens are running — nothing more.
       </p>
       <label style="display:flex;align-items:center;gap:8px;margin-bottom:12px">
@@ -914,7 +933,7 @@ export async function render(container) {
         const blob = new Blob([text + '\n'], { type: 'text/plain' });
         const a = document.createElement('a');
         a.href = URL.createObjectURL(blob);
-        a.download = 'screentinker-recovery-codes.txt';
+        a.download = 'screenforge-recovery-codes.txt';
         a.click();
         URL.revokeObjectURL(a.href);
       });
@@ -1555,17 +1574,17 @@ function openWidgetSandboxDisableConfirmModal(confirmationPhrase) {
         <div class="modal-body" style="white-space:pre-wrap;line-height:1.45">
 Widget HTML currently runs in a null-origin sandbox. That means widget code
 cannot read your session, your cookies, or anything else stored by
-ScreenTinker in this browser.
+ScreenForge in this browser.
 
 Turning this off re-enables allow-same-origin. Widget HTML will then run with
-the same privileges as ScreenTinker itself. Any script in any widget in this
+the same privileges as ScreenForge itself. Any script in any widget in this
 organization will be able to:
 
   - Read the device token of every display that shows the widget, and act as
-    that display against the ScreenTinker API
+    that display against the ScreenForge API
   - Read the session token of any logged-in user who opens a display in their
     own browser
-  - Call the ScreenTinker API as that user, including admin actions
+  - Call the ScreenForge API as that user, including admin actions
   - Read and modify content on every other display in this organization
   - Silently exfiltrate all of the above to any server it likes
 

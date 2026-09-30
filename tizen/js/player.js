@@ -19,7 +19,7 @@ var TIZEN_I18N = {
 };
 /* The mime lib/html-bundle.js stamps on an uploaded HTML bundle. Matches no image/ or video/
  * prefix, so nothing in the dispatch chains below routes it as media by accident. */
-var BUNDLE_MIME = 'application/vnd.screentinker.bundle+zip';
+var BUNDLE_MIME = 'application/vnd.screenforge.bundle+zip';
 var TZ_LANG = (function () { try { return (localStorage.getItem('rd_lang') || navigator.language || 'en').split('-')[0]; } catch (e) { return 'en'; } })();
 function tzt(k) { return (TIZEN_I18N[TZ_LANG] && TIZEN_I18N[TZ_LANG][k]) || TIZEN_I18N.en[k] || k; }
 
@@ -277,7 +277,7 @@ PlaylistPlayer.prototype.idle = function () {
   if (this.showDefaultContent()) return;   // no playlist / empty playlist -> fallback image if set
   this.clearStage();
   this.stage.innerHTML =
-    '<div class="card" style="position:relative"><h1>ScreenTinker</h1>' +
+    '<div class="card" style="position:relative"><h1>ScreenForge</h1>' +
     '<p class="sub">' + tzt('no_content') + '</p></div>';
 };
 
@@ -437,7 +437,7 @@ PlaylistPlayer.prototype.nothingScheduled = function () {
   if (this.showDefaultContent()) return;
   this.clearStage();
   this.stage.innerHTML =
-    '<div class="card" style="position:relative"><h1>ScreenTinker</h1>' +
+    '<div class="card" style="position:relative"><h1>ScreenForge</h1>' +
     '<p class="sub">' + tzt('nothing_scheduled') + '</p></div>';
 };
 
@@ -983,7 +983,7 @@ PlaylistPlayer.prototype.resume = function (onReplay) {
 PlaylistPlayer.prototype.avFallback = function (item) {
   this.avStop();
   this.stage.innerHTML =
-    '<div class="card" style="position:relative"><h1>ScreenTinker</h1>' +
+    '<div class="card" style="position:relative"><h1>ScreenForge</h1>' +
     '<p class="sub">' + tzt('portrait_video_unsupported') + '</p></div>';
   // Don't wedge on a single looping item; re-check after a beat (or the item's duration).
   this.schedule(Math.max(this.durationMs(item), 30000));

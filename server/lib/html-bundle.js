@@ -37,7 +37,7 @@ const unzipper = require('unzipper');
  * The `.wgt` flavour is NOT a second mime. Players switch on one string; which container it arrived
  * in is recorded in the bundle's own metadata, not in the type.
  */
-const BUNDLE_MIME = 'application/vnd.screentinker.bundle+zip';
+const BUNDLE_MIME = 'application/vnd.screenforge.bundle+zip';
 
 /* Caps. Deliberately conservative — an HTML bundle that needs more than this is a website. */
 const MAX_ARCHIVE_BYTES = 64 * 1024 * 1024;   // the .zip itself

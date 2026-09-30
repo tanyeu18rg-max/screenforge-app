@@ -1,5 +1,5 @@
 /*
- * ScreenTinker — BrightSign native synchronisation (SyncManager).
+ * ScreenForge — BrightSign native synchronisation (SyncManager).
  *
  * The alternative to our own clock-derived group sync, for groups where every member is a
  * BrightSign. Frame-accurate, because it is the player's own video pipeline doing the aligning:
@@ -37,7 +37,7 @@
   // multicast policy can be pointed elsewhere without a code change.
   var DEFAULTS = {
     networkInterface: '',            // '' = let the OS choose
-    domain: 'ScreenTinkerSync',
+    domain: 'ScreenTinkerSync', // multicast discovery domain: not renamed
     multicastAddress: '224.0.126.10',
     multicastPort: 1539,
     prepareMs: 1000                  // lead time so every member can load before playback starts
@@ -161,7 +161,7 @@
     this.lastEvent = null;
   };
 
-  global.ScreenTinkerBSSync = {
+  global.ScreenTinkerBSSync = { // player-page contract: not renamed
     create: function (options) { return new Sync(options); },
     available: function () { return !!SyncManagerClass; },
     DEFAULTS: DEFAULTS

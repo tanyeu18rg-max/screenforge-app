@@ -1,11 +1,11 @@
 /*
- * ScreenTinker — BrightSign bridge (the JavaScript half of autorun.brs).
+ * ScreenForge — BrightSign bridge (the JavaScript half of autorun.brs).
  *
  * Loaded by the web player only when it is running on a BrightSign. Everything here is a
  * capability the page cannot get on its own, plus one thing it must be STOPPED from doing:
  *
  *   - reload():  a page-initiated location.reload() does not reliably bring an roHtmlWidget
- *                back (a ScreenTinker deploy darkened a customer's player this way on
+ *                back (a ScreenForge deploy darkened a customer's player this way on
  *                2026-07-28). Ask the host to rebuild the widget instead.
  *   - identity:  the registry survives reboots, content updates and origin changes;
  *                localStorage does not. The hardware serial is the stable id, so two panels
@@ -129,7 +129,7 @@
    */
   var probe = null;
 
-  var SECTION = 'screentinker';
+  var SECTION = 'screentinker'; // persisted registry section: not renamed
   // device_token belongs here as much as device_id: the server authenticates the claim to an
   // existing display with the token, so an id presented without one reads as a NEW display and
   // gets a fresh row. Persisting the id alone looked correct and still spawned a duplicate on
@@ -739,7 +739,8 @@
      * Which sync protocol this deployment runs. Resolved by the server
      * (server/lib/sync-backend.js) and pushed down; the registry holds the last known value so
      * a cold boot with no network still starts in the right mode.
-     *   'screentinker' — our clock-derived group sync; the only option in a mixed fleet.
+     *   'screentinker' — clock-derived group sync; the only option in a mixed fleet.
+     *     (Wire value kept from upstream for player compatibility; not renamed.)
      *   'brightsign'   — native BrightWall; the host drives it over the bridge.
      */
     syncBackend: function () {
@@ -1313,7 +1314,7 @@
     }
   };
 
-  global.ScreenTinkerBS = API;
+  global.ScreenTinkerBS = API; // player-page contract: not renamed
 
   // Kick the registry prefetch immediately, and never let a silent module hold boot: the player
   // stops waiting after this and carries on with whatever identity it has.

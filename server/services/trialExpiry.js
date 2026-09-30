@@ -48,11 +48,11 @@ const { LOCAL_USERS_SQL } = require('../lib/replica-proxy');
 const SWEEP_HOUR_UTC = 14;     // 14:00 UTC daily: mid-morning US, afternoon EU — the emails land in a workday
 const ENDING_SOON_DAYS = 3;
 const EXPIRED_EMAIL_MAX_AGE_DAYS = Math.max(0, Number(process.env.TRIAL_EXPIRED_EMAIL_MAX_AGE_DAYS) || 30);
-// ⚠️ /app IS PART OF THE PATH. `https://screentinker.com/#/billing` serves the MARKETING page and
+// ⚠️ /app IS PART OF THE PATH. `https://screenforge.com/#/billing` serves the MARKETING page and
 // throws the hash away, so every "Choose a plan" link in these emails — the one thing a lapsing
 // trial is asked to click — landed on the front door. Same defect that sent paying customers there
 // from Stripe (routes/stripe.js).
-const BILLING_URL = 'https://screentinker.com/app#/billing';
+const BILLING_URL = 'https://screenforge.com/app#/billing';
 const DISCORD_URL = 'https://discord.gg/utTdsrqq4Z';
 
 function isEnabled() { return !config.selfHosted; }
@@ -96,13 +96,13 @@ function endingSoonText({ name, daysLeft, screens, free, paid }) {
     : `Your ${screens === 0 ? 'account' : plural(screens, 'screen')} will keep working on the Free plan (${free.max_devices} ${plural(free.max_devices, 'screen')}, ${free.max_storage_mb} MB of content).`;
   return `Hi ${name},
 
-Your ScreenTinker Pro trial ends in ${d}. After that your account moves
+Your ScreenForge Pro trial ends in ${d}. After that your account moves
 to the Free plan.
 
 ${screensLine}
 Nothing gets deleted: your content, playlists and layouts all stay.
 
-If ScreenTinker is doing its job for you, keeping everything running is
+If ScreenForge is doing its job for you, keeping everything running is
 one click here:
 
   -> ${BILLING_URL}
@@ -111,7 +111,7 @@ If it isn't quite there yet, hit reply and tell me what's missing. It
 comes straight to me. The Discord is here too: ${DISCORD_URL}
 
 - Dan
-ScreenTinker`;
+ScreenForge`;
 }
 function endingSoonHtml({ name, daysLeft, screens, free, paid }) {
   const d = `${daysLeft} ${plural(daysLeft, 'day')}`;
@@ -120,13 +120,13 @@ function endingSoonHtml({ name, daysLeft, screens, free, paid }) {
     : `Your ${screens === 0 ? 'account' : plural(screens, 'screen')} will keep working on the Free plan (${free.max_devices} ${plural(free.max_devices, 'screen')}, ${free.max_storage_mb} MB of content).`;
   return `<div style="font-family:-apple-system,'Segoe UI',Roboto,sans-serif;font-size:15px;line-height:1.6;color:#222;max-width:560px">
 <p>Hi ${htmlEscape(name)},</p>
-<p>Your ScreenTinker Pro trial ends in <b>${d}</b>. After that your account moves to the Free plan.</p>
+<p>Your ScreenForge Pro trial ends in <b>${d}</b>. After that your account moves to the Free plan.</p>
 <p>${screensLine} Nothing gets deleted: your content, playlists and layouts all stay.</p>
-<p>If ScreenTinker is doing its job for you, keeping everything running is one click:</p>
+<p>If ScreenForge is doing its job for you, keeping everything running is one click:</p>
 <p><a href="${BILLING_URL}" style="font-weight:600">Choose a plan</a></p>
 ${ladderHtml(paid)}
 <p>If it isn't quite there yet, hit reply and tell me what's missing. It comes straight to me. The <a href="${DISCORD_URL}">Discord</a> is here too.</p>
-<p>- Dan<br>ScreenTinker</p>
+<p>- Dan<br>ScreenForge</p>
 </div>`;
 }
 
@@ -139,7 +139,7 @@ function expiredText({ name, screens, free, paid }) {
     : `Your ${screens === 0 ? 'account' : plural(screens, 'screen')} keeps working on the Free plan (${free.max_devices} ${plural(free.max_devices, 'screen')}, ${free.max_storage_mb} MB of content).`;
   return `Hi ${name},
 
-Your ScreenTinker Pro trial has ended and your account is now on the
+Your ScreenForge Pro trial has ended and your account is now on the
 Free plan.
 
 ${screensLine}
@@ -150,11 +150,11 @@ To bring every screen back and keep all the features, pick a plan here:
 
   -> ${BILLING_URL}
 ${paid.length ? '\n' + ladderText(paid) + '\n' : ''}
-If you decided ScreenTinker isn't for you, no hard feelings, and I'd
+If you decided ScreenForge isn't for you, no hard feelings, and I'd
 genuinely like to know why. Hit reply, it comes straight to me.
 
 - Dan
-ScreenTinker`;
+ScreenForge`;
 }
 function expiredHtml({ name, screens, free, paid }) {
   const blocked = Math.max(0, screens - free.max_devices);
@@ -163,13 +163,13 @@ function expiredHtml({ name, screens, free, paid }) {
     : `Your ${screens === 0 ? 'account' : plural(screens, 'screen')} keeps working on the Free plan (${free.max_devices} ${plural(free.max_devices, 'screen')}, ${free.max_storage_mb} MB of content).`;
   return `<div style="font-family:-apple-system,'Segoe UI',Roboto,sans-serif;font-size:15px;line-height:1.6;color:#222;max-width:560px">
 <p>Hi ${htmlEscape(name)},</p>
-<p>Your ScreenTinker Pro trial has ended and your account is now on the Free plan.</p>
+<p>Your ScreenForge Pro trial has ended and your account is now on the Free plan.</p>
 <p>${screensLine} Nothing was deleted: your content, playlists and layouts are all still there.</p>
 <p>To bring every screen back and keep all the features, pick a plan:</p>
 <p><a href="${BILLING_URL}" style="font-weight:600">Choose a plan</a></p>
 ${ladderHtml(paid)}
-<p>If you decided ScreenTinker isn't for you, no hard feelings, and I'd genuinely like to know why. Hit reply, it comes straight to me.</p>
-<p>- Dan<br>ScreenTinker</p>
+<p>If you decided ScreenForge isn't for you, no hard feelings, and I'd genuinely like to know why. Hit reply, it comes straight to me.</p>
+<p>- Dan<br>ScreenForge</p>
 </div>`;
 }
 
@@ -266,9 +266,9 @@ async function runTrialExpirySweep({ io = null } = {}) {
     const ctx = { name: displayName(u), daysLeft, screens: u.screens, ...facts };
     const r = await emailSvc.sendEmail({
       to: u.email,
-      fromName: 'Dan at ScreenTinker',
+      fromName: 'Dan at ScreenForge',
       rawSubject: true,
-      subject: `Your ScreenTinker Pro trial ends in ${daysLeft} ${plural(daysLeft, 'day')}`,
+      subject: `Your ScreenForge Pro trial ends in ${daysLeft} ${plural(daysLeft, 'day')}`,
       text: endingSoonText(ctx),
       html: endingSoonHtml(ctx),
       unsubscribeUserId: u.id,
@@ -282,9 +282,9 @@ async function runTrialExpirySweep({ io = null } = {}) {
     const ctx = { name: displayName(u), screens: u.screens, ...facts };
     const r = await emailSvc.sendEmail({
       to: u.email,
-      fromName: 'Dan at ScreenTinker',
+      fromName: 'Dan at ScreenForge',
       rawSubject: true,
-      subject: 'Your ScreenTinker Pro trial has ended',
+      subject: 'Your ScreenForge Pro trial has ended',
       text: expiredText(ctx),
       html: expiredHtml(ctx),
       unsubscribeUserId: u.id,

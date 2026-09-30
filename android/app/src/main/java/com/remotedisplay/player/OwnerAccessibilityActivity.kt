@@ -55,7 +55,7 @@ class OwnerAccessibilityActivity : AppCompatActivity() {
                     Uri.parse("package:$packageName")))
             } catch (_: Exception) { try { startActivity(Intent(Settings.ACTION_SETTINGS)) } catch (_: Exception) {} }
         }
-        // Step 2 — Accessibility settings, where they toggle ScreenTinker on.
+        // Step 2 — Accessibility settings, where they toggle ScreenForge on.
         findViewById<Button>(R.id.openA11yBtn).setOnClickListener {
             try { startActivity(Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS)) } catch (_: Exception) {}
         }

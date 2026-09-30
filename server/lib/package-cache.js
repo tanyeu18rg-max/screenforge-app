@@ -14,8 +14,8 @@
  * Two differences from those two, both forced by what these packages are:
  *
  *   1. THE VERSION COMES FROM THE FILENAME. The Pi build (native/packaging/linux, dpkg-deb) emits
- *      exactly `screentinker-pi_<ver>_all.deb`; the Windows build (Inno Setup) emits
- *      `ScreenTinker-Setup-<ver>.exe`. So the file describes itself. There is no single well-known
+ *      exactly `screenforge-pi_<ver>_all.deb`; the Windows build (Inno Setup) emits
+ *      `ScreenForge-Setup-<ver>.exe`. So the file describes itself. There is no single well-known
  *      name to stat: a directory can hold several builds (the previous release left beside the new
  *      one), and the NEWEST by version wins — not the newest mtime, because a `cp -p` or a restore
  *      from backup scrambles mtimes and would silently serve a downgrade that the version comparison

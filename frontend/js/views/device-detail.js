@@ -7,7 +7,6 @@ import { esc, livenessBadge, hydrateAuthImages, screenshotUrl } from '../utils.j
 import { t, tn } from '../i18n.js';
 import { showDeviceOwnerQRModal } from '../components/device-owner-qr-modal.js';
 import { frameDeviceOutput, displayAspectRatio } from '../lib/device-frame.js';
-import * as gettingStarted from '../components/getting-started.js';
 import { LiveViewer, whenVisible } from '../lib/webrtc-viewer.js';
 import { renderPowerScheduleEditor, readPowerScheduleEditor, presetWindows } from '../components/power-schedule-editor.js';
 
@@ -322,8 +321,8 @@ const LINUX_TERMINAL_PRESETS = [
   { label: 'Memory', cmd: 'free -m' },
   { label: 'Network', cmd: 'ip -br a' },
   { label: 'Uptime', cmd: 'uptime' },
-  { label: 'Player status', cmd: 'systemctl status screentinker-pi --no-pager' },
-  { label: 'Player log', cmd: 'journalctl -u screentinker-pi -n 50 --no-pager' },
+  { label: 'Player status', cmd: 'systemctl status screenforge-pi --no-pager' },
+  { label: 'Player log', cmd: 'journalctl -u screenforge-pi -n 50 --no-pager' },
   { label: 'Whoami', cmd: 'id' },
 ];
 
@@ -335,9 +334,9 @@ const WINDOWS_TERMINAL_PRESETS = [
   { label: 'Memory', cmd: 'Get-CimInstance Win32_OperatingSystem | Select FreePhysicalMemory,TotalVisibleMemorySize' },
   { label: 'Storage', cmd: 'Get-PSDrive C' },
   { label: 'Network', cmd: 'Get-NetIPAddress -AddressFamily IPv4 | Select InterfaceAlias,IPAddress' },
-  { label: 'Helper service', cmd: 'Get-Service ScreenTinkerHelper' },
-  { label: 'Player process', cmd: 'Get-Process ScreenTinker*' },
-  { label: 'Player events', cmd: "Get-WinEvent -LogName Application -MaxEvents 30 | ? ProviderName -like '*ScreenTinker*'" },
+  { label: 'Helper service', cmd: 'Get-Service ScreenForgeHelper' },
+  { label: 'Player process', cmd: 'Get-Process ScreenForge*' },
+  { label: 'Player events', cmd: "Get-WinEvent -LogName Application -MaxEvents 30 | ? ProviderName -like '*ScreenForge*'" },
   { label: 'Whoami', cmd: 'whoami /all' },
 ];
 
@@ -490,7 +489,7 @@ function terminalPresets(device) {
 export function render(container, deviceId) {
   container.innerHTML = `
     <div class="device-detail">
-      <a href="#/" class="back-link">
+      <a href="#/displays" class="back-link">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/>
         </svg>
@@ -664,10 +663,6 @@ async function loadDevice(deviceId, activeTab = null) {
         <button class="btn btn-secondary btn-sm" id="t2KioskOff">${t('device.tier2.kiosk_off')}</button>` : ''}
         <button class="btn btn-secondary btn-sm" id="t2PowerMenu">${t('device.tier2.power_menu')}</button>
       </div>` : ''}
-
-      <!-- Step 4 sends you to this page to assign a playlist. Losing the checklist on arrival is
-           the same dead end the Content, Playlists and playlist-detail pages had. -->
-      <div id="gettingStarted"></div>
 
       <div class="tabs">
         <div class="tab active" data-tab="nowplaying">${t('device.tab.now_playing')} <span class="help-tip" data-tip="${t('device.tab.now_playing_tip')}">?</span></div>
@@ -1434,26 +1429,6 @@ async function loadDevice(deviceId, activeTab = null) {
     setupRemote(device);
     setupPlaylistActions(device);
     setupEnrolKey(device);
-
-    /*
-     * The checklist, at the end of its own trail.
-     *
-     * ⚠️ THE ASSIGN CONTROL IS BEHIND A TAB. Step 4 says "Open the screen and assign the playlist"
-     * and lands here — on the Now Playing tab, with the playlist picker one tab over and nothing
-     * pointing at it. So the action opens the Playlist tab and focuses the picker, rather than
-     * falling back to `location.hash = '#/'`, which would bounce the user back to the dashboard
-     * they just came from.
-     */
-    gettingStarted.mount(document.getElementById('gettingStarted'), {
-      onAction: (a) => {
-        if (a !== 'assign') return false;
-        document.querySelector('.tab[data-tab="playlist"]')?.click();
-        const picker = document.getElementById('playlistPicker');
-        if (picker) { picker.scrollIntoView({ block: 'center' }); picker.focus(); }
-        return true;
-      },
-      ctaFor: { assign: t('gs.assign.cta_here') },
-    }).catch(() => {});
 
     // Restore active tab if specified (e.g. after layout change)
     if (activeTab) {
