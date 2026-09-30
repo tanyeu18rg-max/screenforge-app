@@ -3,7 +3,7 @@
 /*
  * Which synchronisation protocol a group runs.
  *
- * ScreenForge has its own group sync: every member derives its position from a shared clock,
+ * Kardinal Screens has its own group sync: every member derives its position from a shared clock,
  * so it needs no leader, survives a server outage, and works across Android, web, Tizen and
  * BrightSign alike. BrightSign has its own — BrightWall — which is native, frame-accurate, and
  * only exists between BrightSign players.

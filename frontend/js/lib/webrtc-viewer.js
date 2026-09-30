@@ -1,8 +1,8 @@
 // A small WHEP-style WebRTC viewer for a single screen's live stream.
 //
-// Reimplemented rather than vendoring go2rtc's video-rtc.js: that is Apache-2.0 and ScreenForge
+// Reimplemented rather than vendoring go2rtc's video-rtc.js: that is Apache-2.0 and Kardinal Screens
 // is MIT, and the client we need is small. The signaling is one non-trickle SDP exchange, proxied
-// through ScreenForge (the browser never talks to go2rtc directly, never sees its URL or token):
+// through Kardinal Screens (the browser never talks to go2rtc directly, never sees its URL or token):
 //
 //   GET  /api/devices/:id/live         -> { mode, signalPath, iceServers, fallback } (api.getDeviceLive)
 //   POST <signalPath>  body=offer SDP  -> answer SDP

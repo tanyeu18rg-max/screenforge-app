@@ -14,7 +14,7 @@
  * changeable text part of the template. Scala has template variables bound to a CMS record;
  * Appspace pairs `schema.json` with `model.json`; Xibo deliberately keeps widget HTML and widget
  * data in SEPARATE files so a data change never rebuilds the layout. The single vendor that does
- * what ScreenForge does today is the one where editing later genuinely breaks.
+ * what Kardinal Screens does today is the one where editing later genuinely breaks.
  *
  * So: `config.template` is a VIEW — geometry, style, motion, and a `slot` name per element.
  * `config.fields` is a RECORD — `{ slot: value }`. They meet here and nowhere else. Editing a

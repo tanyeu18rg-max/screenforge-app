@@ -73,7 +73,7 @@ function ensureOfficial() {
   const row = db.prepare('SELECT * FROM template_catalogs WHERE id = ?').get(OFFICIAL_ID);
   if (!row) {
     db.prepare('INSERT INTO template_catalogs (id, label, url, public_key, builtin, enabled) VALUES (?, ?, ?, ?, 1, 1)')
-      .run(OFFICIAL_ID, 'ScreenForge', officialUrl(), pem);
+      .run(OFFICIAL_ID, 'Kardinal Screens', officialUrl(), pem);
   } else if (row.public_key !== pem || row.url !== officialUrl() || !row.builtin) {
     // A changed key invalidates the cached index: it was verified under the old one.
     const keyChanged = row.public_key !== pem;
@@ -375,7 +375,7 @@ function stopPoller() { if (pollTimer) clearInterval(pollTimer); pollTimer = nul
 
 function checkInstallable(env) {
   if (semverCmp(env.manifest.min_server, serverVersion()) > 0) {
-    throw new CatalogError(`this template needs ScreenForge ${env.manifest.min_server} or newer`);
+    throw new CatalogError(`this template needs Kardinal Screens ${env.manifest.min_server} or newer`);
   }
   const bad = paramsLib.checkDefaults(env.manifest, env.files);
   if (bad) throw new CatalogError(`the template's own defaults are invalid: ${bad}`);

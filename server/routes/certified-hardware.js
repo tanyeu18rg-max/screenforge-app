@@ -1,10 +1,10 @@
 'use strict';
 
 /**
- * Serve the Certified Hardware page: ScreenForge's committed entries plus approved community reports.
+ * Serve the Certified Hardware page: Kardinal Screens's committed entries plus approved community reports.
  *
  * ⚠️ THIS PAGE MUST NEVER FAIL TO SERVE. Reseller agreements name its URL, so a database problem has
- * to degrade rather than error. The fallback is the committed static file, which holds ScreenForge's
+ * to degrade rather than error. The fallback is the committed static file, which holds Kardinal Screens's
  * own entries — exactly the half that carries contract weight. Losing community reports for a few
  * minutes costs nothing; returning a 500 from a URL named in a contract is a different matter.
  *

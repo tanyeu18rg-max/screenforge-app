@@ -361,13 +361,13 @@ function listMembers(workspaceId, organizationId) {
 }
 
 function buildInviteEmail({ workspaceName, organizationName, inviterName, role, acceptUrl }) {
-  const subject = `You've been invited to ${workspaceName} on ScreenForge`;
+  const subject = `You've been invited to ${workspaceName} on Kardinal Screens`;
   const roleLabel = role.replace(/^workspace_/, '');
   const text = [
-    `${inviterName || 'A ScreenForge user'} invited you to join ${workspaceName}`
+    `${inviterName || 'A Kardinal Screens user'} invited you to join ${workspaceName}`
       + (organizationName ? ` (${organizationName})` : '') + ` as ${roleLabel}.`,
     '',
-    `To accept, sign in to ScreenForge and open:`,
+    `To accept, sign in to Kardinal Screens and open:`,
     acceptUrl,
     '',
     `This invite expires in ${INVITE_EXPIRY_DAYS} days.`,

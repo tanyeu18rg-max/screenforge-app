@@ -1,7 +1,7 @@
 'use strict';
 
 /**
- * Data Sources & Integrations REST API Routes for ScreenForge.
+ * Data Sources & Integrations REST API Routes for Kardinal Screens.
  */
 
 const express = require('express');

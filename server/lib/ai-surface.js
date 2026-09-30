@@ -34,15 +34,15 @@ function apiCatalog(base) {
     linkset: [{
       anchor: `${base}/api`,
       'service-desc': [{ href: `${base}/openapi.yaml`, type: 'application/yaml',
-        title: 'ScreenForge Public API — OpenAPI 3 description' }],
+        title: 'Kardinal Screens Public API — OpenAPI 3 description' }],
       'service-doc': [{ href: `${base}/docs`, type: 'text/html',
-        title: 'ScreenForge Public API reference' }],
+        title: 'Kardinal Screens Public API reference' }],
       'service-meta': [{ href: `${base}/auth.md`, type: 'text/markdown',
-        title: 'How to authenticate against the ScreenForge API' }],
+        title: 'How to authenticate against the Kardinal Screens API' }],
       // The MCP endpoint is part of this API's surface, so it belongs in the catalogue an agent reads
       // first rather than only in prose.
       related: [{ href: `${base}/mcp`, type: 'application/json',
-        title: 'ScreenForge MCP server — manage signage from an AI client' }],
+        title: 'Kardinal Screens MCP server — manage signage from an AI client' }],
       author: [{ href: 'https://github.com/tanyeu18rg-max/screenforge-app' }],
     }],
   };
@@ -61,28 +61,28 @@ function aiCatalog(base) {
   return {
     specVersion: '1.0',
     host: {
-      displayName: 'ScreenForge',
+      displayName: 'Kardinal Screens',
       identifier: base,
       description: 'Open-source digital signage: manage screens, playlists and schedules.',
     },
     entries: [
       {
         identifier: `${base}/mcp`,
-        displayName: 'ScreenForge MCP server',
+        displayName: 'Kardinal Screens MCP server',
         description: 'Model Context Protocol endpoint. 21 tools, filtered by the token\'s scope.',
         type: 'application/json',
         url: `${base}/.well-known/mcp/server-card.json`,
       },
       {
         identifier: `${base}/openapi.yaml`,
-        displayName: 'ScreenForge Public API',
+        displayName: 'Kardinal Screens Public API',
         description: 'OpenAPI 3 description of the REST API the MCP server is a client of.',
         type: 'application/yaml',
         url: `${base}/openapi.yaml`,
       },
       {
         identifier: `${base}/.well-known/agent-skills/index.json`,
-        displayName: 'ScreenForge agent skills',
+        displayName: 'Kardinal Screens agent skills',
         description: 'Skill documents describing how to operate a screen estate.',
         type: 'application/json',
         url: `${base}/.well-known/agent-skills/index.json`,
@@ -115,7 +115,7 @@ function aiCatalog(base) {
 function protectedResourceMetadata(base) {
   return {
     resource: base,
-    resource_name: 'ScreenForge Public API',
+    resource_name: 'Kardinal Screens Public API',
     scopes_supported: [...SCOPES],
     bearer_methods_supported: ['header'],
     resource_documentation: `${base}/auth.md`,
@@ -137,16 +137,16 @@ function authMarkdown(base) {
   /*
    * ⚠️ THE H1 CONTAINS "auth.md" ON PURPOSE. Discovery scanners identify this document by its
    * heading, not only by its path, so a purely descriptive title ("Authenticating with the
-   * ScreenForge API") reads as a page that happens to be about auth rather than as the document
+   * Kardinal Screens API") reads as a page that happens to be about auth rather than as the document
    * the convention defines. The descriptive title survives as the line under it.
    */
-  return `# ScreenForge auth.md
+  return `# Kardinal Screens auth.md
 
-*How an automated client authenticates with this ScreenForge instance.*
+*How an automated client authenticates with this Kardinal Screens instance.*
 
-**Audience:** AI agents, MCP clients and scripts acting on behalf of a ScreenForge user.
+**Audience:** AI agents, MCP clients and scripts acting on behalf of a Kardinal Screens user.
 
-ScreenForge uses **scoped personal access tokens**. There is no OAuth flow, no client registration,
+Kardinal Screens uses **scoped personal access tokens**. There is no OAuth flow, no client registration,
 and no way for an agent to obtain a token on its own — a human creates one in the dashboard and gives
 it to you. If you do not have one, stop here and ask for one.
 
@@ -214,7 +214,7 @@ never shown a tool that writes.
 
 ## Self-hosted instances
 
-ScreenForge is open source and commonly self-hosted, so this document describes **this** instance at
+Kardinal Screens is open source and commonly self-hosted, so this document describes **this** instance at
 ${base}. Another deployment may be a different version with a different set of endpoints; read its own
 \`${base}/openapi.yaml\` rather than assuming ours.
 `;

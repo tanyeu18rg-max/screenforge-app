@@ -69,7 +69,7 @@ Message:
 ${cleanMessage || '(none)'}
 
 ---
-Submitted from the ScreenForge pricing page
+Submitted from the Kardinal Screens pricing page
 Source IP: ${req.ip}
 `;
 

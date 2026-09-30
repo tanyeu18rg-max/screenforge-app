@@ -9,7 +9,7 @@ const { resolveBranding, publicBranding } = require('../lib/branding');
 
 // Get the current workspace's effective branding. #15: when the workspace has no
 // row of its own, fall through to the platform default (workspace_id IS NULL)
-// instead of the hardcoded ScreenForge default, so unbranded/new workspaces
+// instead of the hardcoded Kardinal Screens default, so unbranded/new workspaces
 // inherit the instance brand.
 router.get('/', (req, res) => {
   res.json(resolveBranding(db, { workspaceId: req.workspaceId || null }));
@@ -59,7 +59,7 @@ router.post('/', requireWorkspaceAdmin, (req, res) => {
     const id = uuidv4();
     db.prepare(`INSERT INTO white_labels (id, user_id, workspace_id, brand_name, logo_url, favicon_url, primary_color, secondary_color, bg_color, custom_domain, custom_css, hide_branding)
       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`).run(
-      id, req.user.id, req.workspaceId, brand_name || 'ScreenForge', logo_url || null, favicon_url || null,
+      id, req.user.id, req.workspaceId, brand_name || 'Kardinal Screens', logo_url || null, favicon_url || null,
       primary_color || '#3B82F6', secondary_color || '#1E293B', bg_color || '#111827',
       custom_domain || null, custom_css || null, hide_branding ? 1 : 0);
   }

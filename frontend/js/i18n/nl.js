@@ -621,7 +621,7 @@ export default {
     'content.youtube_add_btn': 'YouTube-video toevoegen',
     // IPTV / live HLS-stream
     'content.hls': 'Livestream',
-    'content.hls_desc': 'HLS (.m3u8), of een rtsp://-camera op Android-spelers. Het scherm opent de URL zelf, dus het mag een LAN-adres zijn. ScreenForge haalt de video nooit zelf op.',
+    'content.hls_desc': 'HLS (.m3u8), of een rtsp://-camera op Android-spelers. Het scherm opent de URL zelf, dus het mag een LAN-adres zijn. Kardinal Screens haalt de video nooit zelf op.',
     'content.hls_url_placeholder': 'https://...m3u8  of  rtsp://user:pass@10.0.0.5/stream',
     'content.hls_name_placeholder': 'Kanaalnaam (optioneel)',
     'content.hls_add_btn': 'Livestream toevoegen',
@@ -1086,7 +1086,7 @@ export default {
     'device.remote.capture_projection':
         'Het volledige scherm wordt weergegeven. Deze toestemming geldt per sessie — een app-update wist ze, waarna alleen de speler opnieuw zichtbaar is. Als je in plaats daarvan de toegankelijkheidsservice inschakelt, blijft dit ook na updates behouden.',
     'device.remote.capture_view':
-        'Dit scherm toont alleen het eigen venster van de speler — al het andere op het apparaat verschijnt leeg. Druk op de knop hierboven om het volledige scherm te herstellen of schakel de ScreenForge-toegankelijkheidsservice op het apparaat in; die blijft ook na updates actief.',
+        'Dit scherm toont alleen het eigen venster van de speler — al het andere op het apparaat verschijnt leeg. Druk op de knop hierboven om het volledige scherm te herstellen of schakel de Kardinal Screens-toegankelijkheidsservice op het apparaat in; die blijft ook na updates actief.',
     'device.remote.capture_none': 'Op dit scherm is momenteel geen schermopname beschikbaar.',
     'device.remote.system_view_hint': 'Vereist eenmalige goedkeuring op het apparaat',
     'device.remote.system_view_owner':

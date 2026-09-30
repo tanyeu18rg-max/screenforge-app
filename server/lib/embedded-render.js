@@ -265,7 +265,7 @@ async function renderRemoteImage(content, profile) {
       responseType: 'buffer',
       maxBytes: REMOTE_IMAGE_MAX_BYTES,
       timeoutMs: 15000,
-      headers: { 'user-agent': 'ScreenForge-EmbeddedRenderer/1.0' },
+      headers: { 'user-agent': 'Kardinal Screens-EmbeddedRenderer/1.0' },
     });
   } catch (e) {
     if (e instanceof SsrfError) {
@@ -672,7 +672,7 @@ async function renderLayoutNative(layout, zoneEntries, screenProfile, options = 
           responseType: 'buffer',
           maxBytes: REMOTE_IMAGE_MAX_BYTES,
           timeoutMs: 10000,
-          headers: { 'user-agent': 'ScreenForge-EmbeddedRenderer/1.0' },
+          headers: { 'user-agent': 'Kardinal Screens-EmbeddedRenderer/1.0' },
         });
         const contentType = (res.headers && res.headers['content-type']) || '';
         if (!looksLikeImage(content.remote_url, contentType)) {

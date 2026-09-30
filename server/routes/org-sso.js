@@ -4,7 +4,7 @@
  * Per-organization SSO — the customer-facing half of single sign-on.
  *
  * Instance-wide providers live in the environment and belong to whoever runs the server. These
- * belong to a CUSTOMER: an organization points ScreenForge at its own identity provider, and its
+ * belong to a CUSTOMER: an organization points Kardinal Screens at its own identity provider, and its
  * people sign in with it without the operator editing a config file.
  *
  * The login flow is unchanged. A provider configured here is resolved by exactly the same
@@ -230,7 +230,7 @@ function syncDomains(providerId, orgId, domains) {
  *
  * Deliberately NOT sent to postmaster@ the claimed domain. That would mean this product emails
  * third parties who never signed up for it, on input any tenant can supply — a spam cannon with a
- * ScreenForge return address. The operator can contact a domain owner; the server should not do it
+ * Kardinal Screens return address. The operator can contact a domain owner; the server should not do it
  * unprompted.
  *
  * Failure to send is logged and swallowed: a mail outage must not stop a customer configuring SSO.
@@ -263,7 +263,7 @@ function notifyOperatorOfClaim(req, { domains, orgId, providerName }) {
     ].join('\n');
     const subject = domains.length === 1
       ? `SSO domain claimed: ${domains[0]}`
-      : `${domains.length} SSO domains claimed`;   // services/email.js adds the [ScreenForge] prefix
+      : `${domains.length} SSO domains claimed`;   // services/email.js adds the [Kardinal Screens] prefix
     for (const a of admins) {
       Promise.resolve(emailSvc.sendEmail({ to: a.email, subject, text: body }))
         .catch((e) => console.error('[org-sso] claim notification failed:', e && e.message));
@@ -300,7 +300,7 @@ function notifyOperatorOfRemovalRequest(req, { id, orgId, orgName, reason }) {
       `Organization: ${orgName || ''} (${orgId})`,
       `Request:      ${id}`,
       '',
-      'Review it in ScreenForge under Admin. There is no link in this email on purpose — the',
+      'Review it in Kardinal Screens under Admin. There is no link in this email on purpose — the',
       'decision has to be made while signed in as a platform admin, so a forwarded copy of this',
       'message cannot turn off a customer\u2019s single sign-on.',
     ].join('\n');

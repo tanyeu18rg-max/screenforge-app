@@ -49,9 +49,9 @@ function htmlEscape(s) {
 function welcomeText(name) {
   return `Hi ${name},
 
-Thanks for signing up for ScreenForge. Glad you're here.
+Thanks for signing up for Kardinal Screens. Glad you're here.
 
-One thing worth knowing up front. ScreenForge is run by one person, me.
+One thing worth knowing up front. Kardinal Screens is run by one person, me.
 There's no support queue or ticket robot. If you hit reply to this email,
 it comes straight to me and I'll answer.
 
@@ -74,14 +74,14 @@ Want to ask a human or see what others are building? Discord's here:
 Just hit reply if anything's unclear or not working. I read every email.
 
 - Dan
-ScreenForge`;
+Kardinal Screens`;
 }
 
 function welcomeHtml(name) {
   return `<div style="font-family:-apple-system,'Segoe UI',Roboto,sans-serif;font-size:15px;line-height:1.6;color:#222;max-width:560px">
 <p>Hi ${htmlEscape(name)},</p>
-<p>Thanks for signing up for ScreenForge. Glad you're here.</p>
-<p>One thing worth knowing up front. ScreenForge is run by one person, me. There's no support queue or ticket robot. If you hit reply to this email, it comes straight to me and I'll answer.</p>
+<p>Thanks for signing up for Kardinal Screens. Glad you're here.</p>
+<p>One thing worth knowing up front. Kardinal Screens is run by one person, me. There's no support queue or ticket robot. If you hit reply to this email, it comes straight to me and I'll answer.</p>
 <p>The fastest way to see it work is to put something on a screen. You can turn any browser into a display in about a minute with the web player:</p>
 <p><a href="${LINKS.player}" style="font-weight:600">Open the web player</a></p>
 <p>Open that on whatever you want to use as a screen, pair it from your dashboard, and you're live.</p>
@@ -93,7 +93,7 @@ function welcomeHtml(name) {
 </ul>
 <p>Want to ask a human or see what others are building? <a href="${LINKS.discord}">Discord's here</a>.</p>
 <p>Just hit reply if anything's unclear or not working. I read every email.</p>
-<p>- Dan<br>ScreenForge</p>
+<p>- Dan<br>Kardinal Screens</p>
 </div>`;
 }
 
@@ -110,7 +110,7 @@ function fmtCentral(unixSec) {
 }
 
 function adminText({ name, email, orgName, signupUnix, ip, country, userAgent }) {
-  return `New ScreenForge signup.
+  return `New Kardinal Screens signup.
 
 Name:       ${name}
 Email:      ${email}
@@ -152,9 +152,9 @@ function sendSignupEmails(user, req) {
     (async () => {
       const w = await sendEmail({
         to: email,
-        fromName: 'Dan at ScreenForge',
+        fromName: 'Dan at Kardinal Screens',
         rawSubject: true,
-        subject: 'Welcome to ScreenForge',
+        subject: 'Welcome to Kardinal Screens',
         text: welcomeText(name),
         html: welcomeHtml(name),
       });
@@ -190,13 +190,13 @@ function sendSignupEmails(user, req) {
 function verifyEmailBody(name, url) {
   const text = `Hi ${name},
 
-Confirm your email address to finish setting up your ScreenForge account:
+Confirm your email address to finish setting up your Kardinal Screens account:
 
 ${url}
 
 This link expires in 24 hours. If you didn't create this account, you can ignore this email.`;
   const html = `<p>Hi ${htmlEscape(name)},</p>
-<p>Confirm your email address to finish setting up your ScreenForge account:</p>
+<p>Confirm your email address to finish setting up your Kardinal Screens account:</p>
 <p><a href="${htmlEscape(url)}" style="display:inline-block;background:#2563eb;color:#fff;padding:10px 18px;border-radius:6px;text-decoration:none">Verify my email</a></p>
 <p style="color:#666;font-size:13px">Or paste this link into your browser:<br>${htmlEscape(url)}<br><br>This link expires in 24 hours. If you didn't create this account, you can ignore this email.</p>`;
   return { text, html };
@@ -209,7 +209,7 @@ async function sendVerificationEmail(user, token, req) {
   const base = process.env.APP_URL || `${req.protocol}://${req.get('host')}`;
   const url = `${base}/api/auth/verify-email?token=${encodeURIComponent(token)}`;
   const { text, html } = verifyEmailBody(user.name || user.email, url);
-  return sendEmail({ to: user.email, subject: 'Verify your email for ScreenForge', text, html });
+  return sendEmail({ to: user.email, subject: 'Verify your email for Kardinal Screens', text, html });
 }
 
 function escapeHtml(s) { return String(s == null ? '' : s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
@@ -224,17 +224,17 @@ async function sendPasswordResetEmail(user, token, req) {
   const who = user.name || user.email;
   const text = `Hi ${who},
 
-Someone asked to reset the password for your ScreenForge account.
+Someone asked to reset the password for your Kardinal Screens account.
 
 Open this link to choose a new password (valid for 1 hour, and usable once):
 ${url}
 
 If this wasn't you, you can ignore this email — your password has not changed.`;
   const html = `<p>Hi ${escapeHtml(who)},</p>
-<p>Someone asked to reset the password for your ScreenForge account.</p>
+<p>Someone asked to reset the password for your Kardinal Screens account.</p>
 <p><a href="${escapeHtml(url)}">Choose a new password</a> &mdash; the link is valid for 1 hour and can be used once.</p>
 <p style="color:#666">If this wasn't you, you can ignore this email &mdash; your password has not changed.</p>`;
-  return sendEmail({ to: user.email, subject: 'Reset your ScreenForge password', text, html });
+  return sendEmail({ to: user.email, subject: 'Reset your Kardinal Screens password', text, html });
 }
 
 module.exports = { sendSignupEmails, sendVerificationEmail, sendPasswordResetEmail };

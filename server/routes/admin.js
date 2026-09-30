@@ -491,7 +491,7 @@ router.put('/branding', requirePlatformAdmin, (req, res) => {
       VALUES (?, ?, NULL, ?, ?, ?, ?, ?, ?, ?, ?)
     `).run(
       PLATFORM_DEFAULT_ID, req.user.id,
-      req.body.brand_name || 'ScreenForge',
+      req.body.brand_name || 'Kardinal Screens',
       req.body.logo_url || null, req.body.favicon_url || null,
       req.body.primary_color || '#a3e635', req.body.secondary_color || '#1e241a', req.body.bg_color || '#0b0d0a',
       req.body.custom_css || null, req.body.hide_branding ? 1 : 0

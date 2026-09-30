@@ -5,7 +5,7 @@
  *
  * WHY THIS EXISTS. latest_version used to be the server's own VERSION constant, on the assumption
  * that server and APK ship together. An operator who mounts their own build at
- * /data/ScreenForge.apk breaks that, and it breaks silently: a 2.0.7 server serving a 2.0.0 APK
+ * /data/Kardinal Screens.apk breaks that, and it breaks silently: a 2.0.7 server serving a 2.0.0 APK
  * offers 2.0.7 to a 2.0.0 display, Android accepts the download as a same-version reinstall, the
  * display comes back on 2.0.0, and is offered again. Two field displays did that 493 times over
  * five days with nothing failing anywhere.

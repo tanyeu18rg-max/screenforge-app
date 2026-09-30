@@ -125,7 +125,7 @@ function frontMatter(html, url) {
   const title = (html.match(/<title>([\s\S]*?)<\/title>/i) || [])[1];
   const desc = (html.match(/<meta[^>]+name=["']description["'][^>]*content=["']([\s\S]*?)["']/i) || [])[1];
   const lines = [];
-  if (title) lines.push(`# ${decodeEntities(title).replace(/\s*\|\s*ScreenForge\s*$/, '').trim()}`);
+  if (title) lines.push(`# ${decodeEntities(title).replace(/\s*\|\s*Kardinal Screens\s*$/, '').trim()}`);
   if (desc) lines.push('', `> ${decodeEntities(desc).trim()}`);
   if (url) lines.push('', `Source: ${url}`);
   return lines.join('\n');

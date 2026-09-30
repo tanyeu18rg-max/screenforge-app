@@ -1,7 +1,7 @@
 'use strict';
 
 /*
- * The tool catalogue: what an AI agent can do with a ScreenForge instance.
+ * The tool catalogue: what an AI agent can do with a Kardinal Screens instance.
  *
  * ⚠️ EVERY TOOL IS A CALL TO OUR OWN PUBLIC REST API, and that is the whole security design. The MCP
  * server is a CLIENT of the API, not a second implementation of it — so `bearerAuth`,

@@ -217,7 +217,7 @@ export async function render(container) {
   container.innerHTML = `
     <div class="page-header">
       <div><h1>${esc(t('nav.servers'))}</h1>
-        <div class="subtitle">Other ScreenForge servers connected to this one.</div></div>
+        <div class="subtitle">Other Kardinal Screens servers connected to this one.</div></div>
       ${connect.canMint ? `
         <button class="btn btn-primary" id="connectServerBtn">+ Connect a server</button>` : ''}
     </div>

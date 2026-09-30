@@ -32,15 +32,18 @@ if ! id "$APP_USER" >/dev/null 2>&1; then
   echo "--- Created user $APP_USER ---"
 fi
 
-# 4. Code: expect the repo already cloned to $APP_DIR by the operator,
-#    or clone it here if a repo URL is given.
-if [ ! -d "$APP_DIR/.git" ]; then
-  if [ -n "$REPO_URL" ]; then
+# 4. Code: either a git checkout (with .git) or an extracted tarball.
+#    For tarball installs, the operator extracts to $APP_DIR before running.
+if [ ! -d "$APP_DIR/server" ]; then
+  if [ -d "$APP_DIR/.git" ]; then
+    echo "ERROR: $APP_DIR is a git repo but server/ is missing — corrupt checkout?"
+    exit 1
+  elif [ -n "$REPO_URL" ]; then
     echo "--- Cloning $REPO_URL ---"
     git clone --branch "${REPO_BRANCH:-rebrand/screenforge}" "$REPO_URL" "$APP_DIR"
   else
-    echo "ERROR: $APP_DIR is not a git checkout."
-    echo "Either clone the repo to $APP_DIR first, or set REPO_URL."
+    echo "ERROR: $APP_DIR/server not found."
+    echo "Extract the release tarball to $APP_DIR first, or set REPO_URL."
     exit 1
   fi
 fi

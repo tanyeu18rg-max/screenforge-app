@@ -45,7 +45,7 @@ async function fetchText(url, opts = {}) {
   try {
     res = await guardedRequest(url, {
       method: opts.method || 'GET',
-      headers: { 'User-Agent': 'ScreenForge-DataSource/1', ...(opts.headers || {}) },
+      headers: { 'User-Agent': 'Kardinal Screens-DataSource/1', ...(opts.headers || {}) },
       body: opts.body,
       timeoutMs: opts.timeoutMs || 12000,
       maxBytes: opts.maxBytes || 1024 * 1024,

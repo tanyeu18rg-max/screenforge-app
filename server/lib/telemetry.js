@@ -3,7 +3,7 @@
 /*
  * Opt-in install statistics.
  *
- * WHY THIS EXISTS: there is no way to answer "how many screens run ScreenForge?" — the product is
+ * WHY THIS EXISTS: there is no way to answer "how many screens run Kardinal Screens?" — the product is
  * self-hostable by design, so most installs are invisible to us on purpose. This asks, once, and
  * only reports if the operator says yes.
  *
@@ -39,7 +39,7 @@ const KEY_LAST = 'telemetry_last_report';     // last SUCCESSFUL send
 const KEY_LAST_ERROR = 'telemetry_last_error';// last FAILED attempt — see getLastError
 
 /*
- * Where reports go. ScreenForge runs no vendor collector: there is no address
+ * Where reports go. Kardinal Screens runs no vendor collector: there is no address
  * a report could be "shared" to out of the box, so sharing is inert until the
  * operator points TELEMETRY_ENDPOINT at their own collector. This keeps the
  * fork from ever phoning the upstream project's stats server, and keeps the

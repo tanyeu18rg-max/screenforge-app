@@ -182,7 +182,7 @@ function activatePlugin(entry, db) {
   });
 
   if (manifest.screenforge && !satisfies(manifest.screenforge, VERSION)) {
-    const error = `requires ScreenForge ${manifest.screenforge} (running ${VERSION})`;
+    const error = `requires Kardinal Screens ${manifest.screenforge} (running ${VERSION})`;
     info.error = error;
     persistError(db, manifest.id, error);
     console.warn(`[plugins] ${manifest.id}: ${error}`);

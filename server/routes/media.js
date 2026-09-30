@@ -8,7 +8,7 @@
 //    is eliminated by construction. The SSRF guard then handles the residual case: a customer who
 //    sets a hostile remote_url pointing at our internal network.
 //  * We serve upstream bytes SAME-ORIGIN (so a WebGL transition can read them), which means anything
-//    we serve executes in the ScreenForge origin. Content-Type from upstream is a lie we never trust:
+//    we serve executes in the Kardinal Screens origin. Content-Type from upstream is a lie we never trust:
 //    we sniff magic bytes, refuse anything that isn't a real image/video, serve the SNIFFED type with
 //    X-Content-Type-Options: nosniff and Content-Security-Policy: sandbox. That kills text/html -> XSS.
 //  * Size is capped on the STREAM (bytes actually received), not Content-Length (absent or lying);
@@ -77,7 +77,7 @@ function resolveWithRedirects(rawUrl, redirectsLeft, validators) {
   return guardedRequest(rawUrl, {
     maxRedirects: redirectsLeft,
     validators,
-    headers: { 'user-agent': 'ScreenForge-media-proxy', accept: 'image/*,video/*' },
+    headers: { 'user-agent': 'Kardinal Screens-media-proxy', accept: 'image/*,video/*' },
     idleTimeoutMs: IDLE_TIMEOUT_MS,
     timeoutMs: IDLE_TIMEOUT_MS,
   }).then((r) => {

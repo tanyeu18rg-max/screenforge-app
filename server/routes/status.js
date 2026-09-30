@@ -449,10 +449,10 @@ router.post('/import', proxyImportIfCopied, importUpload.single('file'), async (
     data = req.body;
   }
   // Accept both the fork's format name and the upstream's, so exports made
-  // before the ScreenForge rebrand still import.
+  // before the Kardinal Screens rebrand still import.
   const fmt = data && data.format;
   if (!fmt || !(fmt.startsWith('screenforge-export') || fmt.startsWith('screentinker-export'))) {
-    return res.status(400).json({ error: 'Invalid export file. Must be a ScreenForge or ScreenTinker export JSON.' });
+    return res.status(400).json({ error: 'Invalid export file. Must be a Kardinal Screens or ScreenTinker export JSON.' });
   }
 
   const isV2 = fmt === 'screenforge-export-v2' || fmt === 'screentinker-export-v2';
@@ -694,9 +694,9 @@ router.post('/import', proxyImportIfCopied, importUpload.single('file'), async (
       // enforces: the domain drives the pre-auth branding resolver, the CSS lands on the login page.
       const existing = db.prepare('SELECT id, custom_domain, custom_css FROM white_labels WHERE workspace_id = ?').get(workspaceId);
       if (existing) {
-        db.prepare(`UPDATE white_labels SET brand_name=?, logo_url=?, favicon_url=?, primary_color=?, bg_color=?, custom_domain=?, custom_css=?, hide_branding=?, updated_at=strftime('%s','now') WHERE workspace_id=?`).run(wl.brand_name || 'ScreenForge', wl.logo_url || null, wl.favicon_url || null, wl.primary_color || '#a3e635', wl.bg_color || '#0b0d0a', importerIsPlatformAdmin ? (wl.custom_domain || null) : (existing.custom_domain ?? null), importerIsPlatformAdmin ? (wl.custom_css || null) : (existing.custom_css ?? null), wl.hide_branding || 0, workspaceId);
+        db.prepare(`UPDATE white_labels SET brand_name=?, logo_url=?, favicon_url=?, primary_color=?, bg_color=?, custom_domain=?, custom_css=?, hide_branding=?, updated_at=strftime('%s','now') WHERE workspace_id=?`).run(wl.brand_name || 'Kardinal Screens', wl.logo_url || null, wl.favicon_url || null, wl.primary_color || '#a3e635', wl.bg_color || '#0b0d0a', importerIsPlatformAdmin ? (wl.custom_domain || null) : (existing.custom_domain ?? null), importerIsPlatformAdmin ? (wl.custom_css || null) : (existing.custom_css ?? null), wl.hide_branding || 0, workspaceId);
       } else {
-        db.prepare(`INSERT INTO white_labels (id, user_id, workspace_id, brand_name, logo_url, favicon_url, primary_color, bg_color, custom_domain, custom_css, hide_branding) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`).run(uuid.v4(), userId, workspaceId, wl.brand_name || 'ScreenForge', wl.logo_url || null, wl.favicon_url || null, wl.primary_color || '#3B82F6', wl.bg_color || '#111827', importerIsPlatformAdmin ? (wl.custom_domain || null) : null, importerIsPlatformAdmin ? (wl.custom_css || null) : null, wl.hide_branding || 0);
+        db.prepare(`INSERT INTO white_labels (id, user_id, workspace_id, brand_name, logo_url, favicon_url, primary_color, bg_color, custom_domain, custom_css, hide_branding) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`).run(uuid.v4(), userId, workspaceId, wl.brand_name || 'Kardinal Screens', wl.logo_url || null, wl.favicon_url || null, wl.primary_color || '#3B82F6', wl.bg_color || '#111827', importerIsPlatformAdmin ? (wl.custom_domain || null) : null, importerIsPlatformAdmin ? (wl.custom_css || null) : null, wl.hide_branding || 0);
       }
     }
   });

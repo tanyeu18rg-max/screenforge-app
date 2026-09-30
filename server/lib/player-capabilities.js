@@ -297,7 +297,7 @@ const BASELINE = {
    * running the same player a browser is, and it declares for itself; this list is only the
    * floor for a row whose capabilities column is still NULL.
    *
-   * Same floor as web. playback.transitions belongs here: an AFTCA002 (ScreenForge 2.1.6,
+   * Same floor as web. playback.transitions belongs here: an AFTCA002 (Kardinal Screens 2.1.6,
    * Kepler 1.2) ran the image wipe and it looked right. Withholding it hid a working control.
    * The page still caps the captured frame on Vega. The binding constraint on that stick was
    * CMA — about 236 MB of contiguous DMA, which fell to about 1 MB while MemFree stayed

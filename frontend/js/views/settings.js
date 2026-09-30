@@ -237,7 +237,7 @@ export async function render(container) {
       <div id="whiteLabelForm">
         <p style="color:var(--text-muted);font-size:12px;margin-bottom:16px">${t('settings.white_label_desc')}</p>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
-          <div class="form-group"><label>${t('settings.brand_name')}</label><input type="text" id="wlBrandName" class="input" placeholder="ScreenForge"></div>
+          <div class="form-group"><label>${t('settings.brand_name')}</label><input type="text" id="wlBrandName" class="input" placeholder="Kardinal Screens"></div>
           <div class="form-group"><label>${t('settings.logo_url')}</label><input type="text" id="wlLogoUrl" class="input" placeholder="https://..."></div>
           <div class="form-group"><label>${t('settings.primary_color')}</label><input type="color" id="wlPrimaryColor" value="#3B82F6" style="width:100%;height:36px;border:none;cursor:pointer;border-radius:var(--radius)"></div>
           <div class="form-group"><label>${t('settings.bg_color')}</label><input type="color" id="wlBgColor" value="#111827" style="width:100%;height:36px;border:none;cursor:pointer;border-radius:var(--radius)"></div>
@@ -315,7 +315,7 @@ export async function render(container) {
     <div class="settings-section">
       <h3>${t('settings.about')}</h3>
       <div style="color:var(--text-secondary);font-size:13px">
-        <p><strong>${esc(window.__ST_BRAND_NAME || 'ScreenForge')}</strong>${appVersion ? ` v${esc(appVersion)}` : ''}</p>
+        <p><strong>${esc(window.__ST_BRAND_NAME || 'Kardinal Screens')}</strong>${appVersion ? ` v${esc(appVersion)}` : ''}</p>
         <p style="margin-top:4px">${t('settings.about_tagline')}</p>
         <!-- The permanent home for the release notes the dashboard panel links to. Populated
              after render because it is a fetch, and About must not wait on one. -->
@@ -720,7 +720,7 @@ export async function render(container) {
 
     box.innerHTML = `
       <p style="color:var(--text-muted);font-size:13px;margin-bottom:12px">
-        ScreenForge can't see how widely it's deployed, because most installs are private by
+        Kardinal Screens can't see how widely it's deployed, because most installs are private by
         design. Sharing lets us say how many screens are running — nothing more.
       </p>
       <label style="display:flex;align-items:center;gap:8px;margin-bottom:12px">
@@ -1574,17 +1574,17 @@ function openWidgetSandboxDisableConfirmModal(confirmationPhrase) {
         <div class="modal-body" style="white-space:pre-wrap;line-height:1.45">
 Widget HTML currently runs in a null-origin sandbox. That means widget code
 cannot read your session, your cookies, or anything else stored by
-ScreenForge in this browser.
+Kardinal Screens in this browser.
 
 Turning this off re-enables allow-same-origin. Widget HTML will then run with
-the same privileges as ScreenForge itself. Any script in any widget in this
+the same privileges as Kardinal Screens itself. Any script in any widget in this
 organization will be able to:
 
   - Read the device token of every display that shows the widget, and act as
-    that display against the ScreenForge API
+    that display against the Kardinal Screens API
   - Read the session token of any logged-in user who opens a display in their
     own browser
-  - Call the ScreenForge API as that user, including admin actions
+  - Call the Kardinal Screens API as that user, including admin actions
   - Read and modify content on every other display in this organization
   - Silently exfiltrate all of the above to any server it likes
 

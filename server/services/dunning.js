@@ -82,7 +82,7 @@ const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&
 function failedText({ name, planName, graceDays }) {
   return `Hi ${name},
 
-We tried to take payment for your ScreenForge ${planName} plan and the card was declined.
+We tried to take payment for your Kardinal Screens ${planName} plan and the card was declined.
 
 Nothing has changed yet — your screens are playing and your account is untouched. Stripe will try
 the card again over the next few days, and if it goes through this sorts itself out and you can
@@ -102,7 +102,7 @@ Dan`;
 function failedHtml(ctx) {
   return `<div style="font-family:-apple-system,Segoe UI,sans-serif;font-size:15px;line-height:1.55;color:#111">
 <p>Hi ${esc(ctx.name)},</p>
-<p>We tried to take payment for your ScreenForge <strong>${esc(ctx.planName)}</strong> plan and the card was declined.</p>
+<p>We tried to take payment for your Kardinal Screens <strong>${esc(ctx.planName)}</strong> plan and the card was declined.</p>
 <p><strong>Nothing has changed yet</strong> — your screens are playing and your account is untouched. Stripe will try the
 card again over the next few days, and if it goes through this sorts itself out and you can ignore this.</p>
 <p>If it does not, we will move the account to the Free plan in ${ctx.graceDays} days. Nothing is deleted when that
@@ -115,7 +115,7 @@ happens; screens beyond the Free limit simply stop until a plan covers them agai
 function lapsedText({ name, planName, screens }) {
   return `Hi ${name},
 
-The payment for your ScreenForge ${planName} plan did not go through, so the account has moved to
+The payment for your Kardinal Screens ${planName} plan did not go through, so the account has moved to
 the Free plan.
 
 Nothing has been deleted. Your playlists, content and settings are exactly as you left them${screens ? `, and ${screens} screen${screens === 1 ? '' : 's'} ${screens === 1 ? 'is' : 'are'} affected by the Free limit` : ''}.
@@ -131,7 +131,7 @@ Dan`;
 function lapsedHtml(ctx) {
   return `<div style="font-family:-apple-system,Segoe UI,sans-serif;font-size:15px;line-height:1.55;color:#111">
 <p>Hi ${esc(ctx.name)},</p>
-<p>The payment for your ScreenForge <strong>${esc(ctx.planName)}</strong> plan did not go through, so the account has
+<p>The payment for your Kardinal Screens <strong>${esc(ctx.planName)}</strong> plan did not go through, so the account has
 moved to the Free plan.</p>
 <p><strong>Nothing has been deleted.</strong> Your playlists, content and settings are exactly as you left them.
 Putting a working card on the account restores everything immediately.</p>
@@ -162,9 +162,9 @@ async function sendPaymentFailedEmail(userId) {
   const ctx = { name: displayName(u), planName: planNameOf(u.plan_id), graceDays: subscriptions.GRACE_DAYS };
   const r = await emailSvc.sendEmail({
     to: u.email,
-    fromName: 'Dan at ScreenForge',
+    fromName: 'Dan at Kardinal Screens',
     rawSubject: true,
-    subject: 'Your ScreenForge payment did not go through',
+    subject: 'Your Kardinal Screens payment did not go through',
     text: failedText(ctx),
     html: failedHtml(ctx),
   });
@@ -282,9 +282,9 @@ async function runDunningSweep({ io = null } = {}) {
     const ctx = { name: displayName(u), planName: planNameOf(u.plan_id), screens: screenCountOf(u.id) };
     const r = await emailSvc.sendEmail({
       to: u.email,
-      fromName: 'Dan at ScreenForge',
+      fromName: 'Dan at Kardinal Screens',
       rawSubject: true,
-      subject: 'Your ScreenForge plan has moved to Free',
+      subject: 'Your Kardinal Screens plan has moved to Free',
       text: lapsedText(ctx),
       html: lapsedHtml(ctx),
     });

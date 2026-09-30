@@ -196,7 +196,7 @@ function weatherFetch(url) {
   try { assertWeatherHost(url); } catch (err) { return Promise.reject(err); }
   return guardedRequest(url, {
     method: 'GET',
-    headers: { accept: 'application/json', 'user-agent': 'ScreenForge-Weather/1.0' },
+    headers: { accept: 'application/json', 'user-agent': 'Kardinal Screens-Weather/1.0' },
     timeoutMs: FETCH_TIMEOUT_MS,
     maxBytes: MAX_RESPONSE_BYTES,
     responseType: 'text',

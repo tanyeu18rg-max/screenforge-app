@@ -229,7 +229,7 @@ export function render(container) {
   });
 
   // IPTV: add a live HLS stream. The screen opens the URL itself (it may be a LAN
-  // address); ScreenForge never pulls the video, so the private-URL error from the
+  // address); Kardinal Screens never pulls the video, so the private-URL error from the
   // server-fetched remote path never applies here.
   document.getElementById('addHlsBtn').addEventListener('click', async () => {
     const url = document.getElementById('hlsUrlInput').value.trim();

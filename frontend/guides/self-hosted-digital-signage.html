@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Self-Hosted Digital Signage Software | ScreenForge</title>
+  <title>Self-Hosted Digital Signage Software | Kardinal Screens</title>
   <meta name="description" content="Why and how to self-host your digital signage CMS. Data privacy, cost control, and no recurring fees. Complete deployment guide.">
   <meta name="keywords" content="self hosted digital signage, on premise digital signage, self hosted signage cms, open source signage server, deploy signage on premise, private digital signage">
   <meta name="robots" content="index, follow">
@@ -15,7 +15,7 @@
   <meta property="og:title" content="Self-Hosted Digital Signage Software">
   <meta property="og:description" content="Why and how to self-host your digital signage CMS. Data privacy, cost control, and no recurring fees. Complete deployment guide.">
   <meta property="og:image" content="https://screenforge-tff9.vercel.app/assets/dashboard-preview.png">
-  <meta property="og:site_name" content="ScreenForge">
+  <meta property="og:site_name" content="Kardinal Screens">
 
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Self-Hosted Digital Signage Software">
@@ -33,7 +33,7 @@
       <div class="nav-logo">
         <a href="/" style="display:flex;align-items:center;gap:10px">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
-          <span class="nav-logo-text">ScreenForge</span>
+          <span class="nav-logo-text">Kardinal Screens</span>
         </a>
       </div>
       <div class="nav-links">
@@ -57,7 +57,7 @@
     </nav>
 
     <h1>Self-Hosted Digital Signage Software: Complete Guide (2026)</h1>
-    <p class="lead">Why you might want to self-host your digital signage CMS, what you need to do it well, and how to deploy ScreenForge on your own server.</p>
+    <p class="lead">Why you might want to self-host your digital signage CMS, what you need to do it well, and how to deploy Kardinal Screens on your own server.</p>
 
     <h2>Why self-host digital signage?</h2>
     <p>Most digital signage products are cloud-only. That works for many businesses, but there are real reasons to keep the server in-house:</p>
@@ -87,7 +87,7 @@
       <li>SSL certificate (Let's Encrypt is free; or self-signed for LAN)</li>
     </ul>
 
-    <h2>Deploying ScreenForge</h2>
+    <h2>Deploying Kardinal Screens</h2>
     <p>Detailed setup is in the <a href="https://github.com/tanyeu18rg-max/screenforge-app" target="_blank" rel="noopener">GitHub README</a>. Quick version:</p>
     <pre><code>git clone https://github.com/tanyeu18rg-max/screenforge-app.git
 cd screenforge/server
@@ -98,7 +98,7 @@ node server.js</code></pre>
     <p>Set <code>SELF_HOSTED=true</code> in the env. This unlocks the enterprise plan for your account, disables subscription expiry checks, and skips Stripe entirely. It is meant for the operator-controlled deployment case.</p>
 
     <h2>Reverse proxy and TLS</h2>
-    <p>ScreenForge listens on HTTP/HTTPS directly, but in production you typically front it with nginx or Caddy for TLS termination, gzip, and rate limiting. A minimal Caddyfile:</p>
+    <p>Kardinal Screens listens on HTTP/HTTPS directly, but in production you typically front it with nginx or Caddy for TLS termination, gzip, and rate limiting. A minimal Caddyfile:</p>
     <pre><code>signage.example.com {
   reverse_proxy localhost:3001
 }</code></pre>
@@ -107,7 +107,7 @@ node server.js</code></pre>
     <h2>Running as a service</h2>
     <p>Use systemd to keep the process alive across reboots. A unit file at <code>/etc/systemd/system/screenforge.service</code>:</p>
     <pre><code>[Unit]
-Description=ScreenForge Digital Signage Server
+Description=Kardinal Screens Digital Signage Server
 After=network.target
 
 [Service]
@@ -133,7 +133,7 @@ WantedBy=multi-user.target</code></pre>
     <div class="compare-table-wrap">
       <table class="compare-table">
         <thead>
-          <tr><th>Concern</th><th>ScreenForge self-hosted</th><th>Cloud-only signage products</th></tr>
+          <tr><th>Concern</th><th>Kardinal Screens self-hosted</th><th>Cloud-only signage products</th></tr>
         </thead>
         <tbody>
           <tr><td>Data location</td><td>Your server</td><td>Vendor's cloud</td></tr>
@@ -150,7 +150,7 @@ WantedBy=multi-user.target</code></pre>
     </div>
 
     <h2>When self-hosting is not the right answer</h2>
-    <p>Self-hosting is not free of cost &mdash; it requires someone who can run a Linux server, monitor it, and apply security updates. If your screen count is small (under ~10) and you do not have IT capacity, a managed hosted signage service may be the better fit. ScreenForge itself is self-hosted software: there is no hosted version of it to buy.</p>
+    <p>Self-hosting is not free of cost &mdash; it requires someone who can run a Linux server, monitor it, and apply security updates. If your screen count is small (under ~10) and you do not have IT capacity, a managed hosted signage service may be the better fit. Kardinal Screens itself is self-hosted software: there is no hosted version of it to buy.</p>
 
     <div class="related">
       <h2>Related guides</h2>
@@ -158,9 +158,9 @@ WantedBy=multi-user.target</code></pre>
         <li><a href="/guides/samsung-tv-digital-signage.html">Digital signage on a Samsung TV (no app, no MagicINFO)</a></li>
         <li><a href="/guides/raspberry-pi-digital-signage.html">How to set up digital signage on a Raspberry Pi</a></li>
         <li><a href="/guides/digital-signage-android-tv.html">Free digital signage for Android TV and Fire TV</a></li>
-        <li><a href="/compare/yodeck-alternative.html">Compare: ScreenForge vs Yodeck</a></li>
-        <li><a href="/compare/screencloud-alternative.html">Compare: ScreenForge vs ScreenCloud</a></li>
-        <li><a href="/compare/optisigns-alternative.html">Compare: ScreenForge vs OptiSigns</a></li>
+        <li><a href="/compare/yodeck-alternative.html">Compare: Kardinal Screens vs Yodeck</a></li>
+        <li><a href="/compare/screencloud-alternative.html">Compare: Kardinal Screens vs ScreenCloud</a></li>
+        <li><a href="/compare/optisigns-alternative.html">Compare: Kardinal Screens vs OptiSigns</a></li>
       </ul>
     </div>
 
@@ -173,7 +173,7 @@ WantedBy=multi-user.target</code></pre>
   </main>
 
   <footer>
-    <div style="color:var(--dim);font-size:13px">&copy; 2026 ScreenForge. All rights reserved.</div>
+    <div style="color:var(--dim);font-size:13px">&copy; 2026 Kardinal Screens. All rights reserved.</div>
     <div class="links">
       <a href="https://github.com/tanyeu18rg-max/screenforge-app" target="_blank" rel="noopener">GitHub</a>
       <a href="https://discord.gg/utTdsrqq4Z" target="_blank" rel="noopener">Discord</a>

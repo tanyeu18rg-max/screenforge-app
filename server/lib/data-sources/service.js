@@ -1,7 +1,7 @@
 'use strict';
 
 /**
- * Universal Data Sources Service for ScreenForge.
+ * Universal Data Sources Service for Kardinal Screens.
  *
  * Handles fetching, caching, refreshing, and evaluating data sources.
  */

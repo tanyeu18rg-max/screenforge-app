@@ -1,8 +1,8 @@
 'use strict';
 /*
- * The media plane: ScreenForge's thin, fail-soft client for an OPTIONAL go2rtc sidecar.
+ * The media plane: Kardinal Screens's thin, fail-soft client for an OPTIONAL go2rtc sidecar.
  *
- * go2rtc does the WebRTC/MSE/HLS restreaming; ScreenForge never becomes an SFU. This module is the
+ * go2rtc does the WebRTC/MSE/HLS restreaming; Kardinal Screens never becomes an SFU. This module is the
  * only thing in the app that talks to go2rtc's admin API, and it exists so three properties hold:
  *
  *   1. OPTIONAL. If GO2RTC_URL is unset or go2rtc is down, every function degrades to "no live
@@ -14,7 +14,7 @@
  *      derived deterministically and sanitised to the charset go2rtc accepts.
  *
  *   3. THE ADMIN PORT STAYS PRIVATE. The browser never gets GO2RTC_URL or a token; it signals
- *      through a ScreenForge route that proxies to go2rtc (routes/devices live endpoints). This
+ *      through a Kardinal Screens route that proxies to go2rtc (routes/devices live endpoints). This
  *      module is server-side only.
  */
 const crypto = require('crypto');
@@ -160,7 +160,7 @@ async function hasActiveProducer(name) {
   return producers.some((pr) => pr && pr.remote_addr);
 }
 
-// Proxy a WebRTC SDP exchange for one stream. A ScreenForge route POSTs the client's offer here
+// Proxy a WebRTC SDP exchange for one stream. A Kardinal Screens route POSTs the client's offer here
 // after checking access; go2rtc answers with the SDP answer.
 //
 //   dir 'sub' (watch)    -> ?src=NAME : go2rtc SENDS this stream's media to the client (a dashboard

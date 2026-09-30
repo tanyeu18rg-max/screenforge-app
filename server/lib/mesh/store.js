@@ -23,7 +23,7 @@ function nodeName(db) {
   try {
     const row = db.prepare('SELECT node_name FROM mesh_node WHERE singleton = 1').get();
     if (row && row.node_name) return row.node_name;
-    const fallback = (os.hostname() || 'ScreenForge').split('.')[0];
+    const fallback = (os.hostname() || 'Kardinal Screens').split('.')[0];
     db.prepare('UPDATE mesh_node SET node_name = ? WHERE singleton = 1').run(fallback);
     return fallback;
   } catch (e) {

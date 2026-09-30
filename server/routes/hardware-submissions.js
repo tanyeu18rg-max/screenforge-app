@@ -37,7 +37,7 @@ function page(res, status, heading, body) {
 <html lang="en"><head><meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="robots" content="noindex">
-<title>${esc(heading)} | ScreenForge</title>
+<title>${esc(heading)} | Kardinal Screens</title>
 <link rel="stylesheet" href="/css/seo-page.css"></head>
 <body><main class="article"><h1>${esc(heading)}</h1>${body}
 <p><a href="/certified-hardware">Back to Certified Hardware</a></p></main></body></html>`);
@@ -63,7 +63,7 @@ router.post('/', async (req, res) => {
   const detail = [
     ['Device', row.name], ['Manufacturer', row.manufacturer], ['Model numbers', row.model_numbers],
     ['Category', row.category], ['OS', row.os], ['Player', row.player],
-    ['Resolution', row.max_resolution], ['ScreenForge version', row.player_version],
+    ['Resolution', row.max_resolution], ['Kardinal Screens version', row.player_version],
     ['Notes', row.notes], ['From', `${row.submitter_name || 'anonymous'} ${row.submitter_email || ''}`],
   ].filter(([, v]) => v).map(([k, v]) => `<tr><td><b>${esc(k)}</b></td><td>${esc(v)}</td></tr>`).join('');
 

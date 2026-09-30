@@ -334,9 +334,9 @@ const WINDOWS_TERMINAL_PRESETS = [
   { label: 'Memory', cmd: 'Get-CimInstance Win32_OperatingSystem | Select FreePhysicalMemory,TotalVisibleMemorySize' },
   { label: 'Storage', cmd: 'Get-PSDrive C' },
   { label: 'Network', cmd: 'Get-NetIPAddress -AddressFamily IPv4 | Select InterfaceAlias,IPAddress' },
-  { label: 'Helper service', cmd: 'Get-Service ScreenForgeHelper' },
-  { label: 'Player process', cmd: 'Get-Process ScreenForge*' },
-  { label: 'Player events', cmd: "Get-WinEvent -LogName Application -MaxEvents 30 | ? ProviderName -like '*ScreenForge*'" },
+  { label: 'Helper service', cmd: 'Get-Service Kardinal ScreensHelper' },
+  { label: 'Player process', cmd: 'Get-Process Kardinal Screens*' },
+  { label: 'Player events', cmd: "Get-WinEvent -LogName Application -MaxEvents 30 | ? ProviderName -like '*Kardinal Screens*'" },
   { label: 'Whoami', cmd: 'whoami /all' },
 ];
 
