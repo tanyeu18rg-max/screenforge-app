@@ -28,7 +28,7 @@ function lookup(key) {
 /*
  * The white-label brand name, available to EVERY string without threading it through call sites.
  *
- * #292: a reseller's customers were shown "ScreenTinker" in a dozen places the white-label settings
+ * #292: a reseller's customers were shown "Kardinal Screens" in a dozen places the white-label settings
  * never touched — setup instructions, the empty-dashboard hint, onboarding, error text. Those are
  * translated strings, so the fix belongs in the translation layer: they say {brandName} and this
  * fills it in. Threading a variable through several hundred t() calls would have been the same fix
@@ -41,8 +41,8 @@ function lookup(key) {
 function brandName() {
   try {
     const n = typeof window !== 'undefined' && window.__ST_BRAND_NAME;
-    return (typeof n === 'string' && n.trim()) ? n.trim() : 'ScreenTinker';
-  } catch (e) { return 'ScreenTinker'; }
+    return (typeof n === 'string' && n.trim()) ? n.trim() : 'Kardinal Screens';
+  } catch (e) { return 'Kardinal Screens'; }
 }
 
 function format(s, vars) {

@@ -6,11 +6,11 @@
 # Prereq: the IndexNow key file (frontend/<KEY>.txt) must be DEPLOYED and reachable at
 # https://<host>/<KEY>.txt — that's how IndexNow verifies ownership.
 #
-#   scripts/indexnow-submit.sh [host]        (default host: screentinker.com)
+#   scripts/indexnow-submit.sh [host]        (default host: screenforge-tff9.vercel.app)
 #   DRY_RUN=1 scripts/indexnow-submit.sh     (print the payload, don't POST)
 set -euo pipefail
 cd "$(dirname "$0")/.."
-HOST="${1:-screentinker.com}"
+HOST="${1:-screenforge-tff9.vercel.app}"
 
 KEY_FILE="$(find frontend -maxdepth 1 -type f -name '*.txt' | grep -E '/[0-9a-f]{16,}\.txt$' | head -1 || true)"
 [ -n "$KEY_FILE" ] || { echo "ERROR: no IndexNow key file (frontend/<hex>.txt) found." >&2; exit 1; }

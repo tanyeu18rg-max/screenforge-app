@@ -97,7 +97,7 @@ test('⚠️ the capability catalogue lists only things we serve', () => {
   assert.match(SERVER_SRC, /ai-catalog\.json[\s\S]{0,240}Access-Control-Allow-Origin/);
   // robots.txt points at it, which is the other way the scanner and a crawler find it.
   const robots = fs.readFileSync(path.join(FRONTEND, 'robots.txt'), 'utf8');
-  assert.match(robots, /^Agentmap: https:\/\/screentinker\.com\/\.well-known\/ai-catalog\.json$/m);
+  assert.match(robots, /^Agentmap: https:\/\/screenforge-tff9\.vercel\.app\/\.well-known\/ai-catalog\.json$/m);
 });
 
 // ───────────────────────────── protected resource metadata ─────────────────────────────
@@ -343,9 +343,9 @@ test('entities are decoded, including the ones this site actually uses', () => {
 test('the homepage renders as prose, not as a script dump', () => {
   const home = md.toMarkdown(fs.readFileSync(path.join(FRONTEND, 'landing.html'), 'utf8'),
     { url: BASE + '/', origin: BASE });
-  assert.match(home, /Flat price, any screen/);
-  assert.match(home, /digital signage CMS/);
-  // The landing page carries JSON-LD and a pricing fetch; neither is prose.
+  assert.match(home, /Digital signage for every screen/);
+  assert.match(home, /digital signage/i);
+  // The landing page carries JSON-LD and inline scripts; neither is prose.
   assert.ok(!/@context|fetch\(|function /.test(home), 'script content leaked into the rendition');
   assert.ok(home.length > 2000 && home.length < 60000, `implausible size: ${home.length}`);
 });
@@ -418,14 +418,14 @@ test('robots.txt declares Content Signals without losing a single existing direc
 
   // The directives that were already there are what keeps crawlers out of the app surfaces.
   for (const d of ['User-agent: *', 'Allow: /', 'Disallow: /api/', 'Disallow: /app',
-                   'Disallow: /player', 'Disallow: /uploads/', 'Sitemap: https://screentinker.com/sitemap.xml']) {
+                   'Disallow: /player', 'Disallow: /uploads/', 'Sitemap: https://screenforge-tff9.vercel.app/sitemap.xml']) {
     assert.ok(robots.includes(d), `robots.txt lost: ${d}`);
   }
 });
 
 test('llms.txt names the guides that exist and no others', () => {
   const llms = fs.readFileSync(path.join(FRONTEND, 'llms.txt'), 'utf8');
-  const guides = (llms.match(/https:\/\/screentinker\.com\/guides\/[a-z0-9-]+\.html/g) || [])
+  const guides = (llms.match(/https:\/\/screenforge-tff9\.vercel\.app\/guides\/[a-z0-9-]+\.html/g) || [])
     .map((u) => u.split('/').pop());
   assert.ok(guides.length >= 9, `expected every guide to be listed, found ${guides.length}`);
   for (const g of new Set(guides)) {

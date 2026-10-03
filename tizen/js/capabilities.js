@@ -1,4 +1,4 @@
-/* ScreenTinker — Tizen capability declaration.
+/* ScreenForge — Tizen capability declaration.
  *
  * The dashboard used to offer every control to every display, so buttons a platform cannot honour
  * did nothing and read as bugs. The player now DECLARES what it can actually do

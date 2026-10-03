@@ -1,4 +1,4 @@
-/* ScreenTinker — Tizen/Samsung fleet control (#125).
+/* ScreenForge — Tizen/Samsung fleet control (#125).
  *
  * Wraps the two Samsung panel-control surfaces behind one Promise-based API so the
  * player can act on device:command (reboot / screen_off / screen_on / shutdown /

@@ -646,7 +646,7 @@ router.post('/totp/setup', requireAuth, asyncRoute(async (req, res) => {
   db.prepare("UPDATE users SET totp_secret_enc = ?, totp_enabled = 0, updated_at = strftime('%s','now') WHERE id = ?")
     .run(totp.encryptSecret(secret), req.user.id);
   // Fold the instance host into the QR label so users with accounts on more than one
-  // ScreenTinker can tell them apart in their authenticator app (#100). trust-proxy is set,
+  // Kardinal Screens can tell them apart in their authenticator app (#100). trust-proxy is set,
   // so req.get('host') is the public host even behind Cloudflare/nginx.
   const host = (req.get('host') || '').replace(/[^A-Za-z0-9.:-]/g, '').slice(0, 60);
   const otpauth_uri = totp.keyuri(u.email, secret, host || undefined);

@@ -3,24 +3,24 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>E-Paper &amp; ESP32 Digital Signage &mdash; Battery Signs | ScreenTinker</title>
+  <title>E-Paper &amp; ESP32 Digital Signage &mdash; Battery Signs | Kardinal Screens</title>
   <meta name="description" content="Run digital signage on e-paper and ESP32 with no browser on the device. The server renders, dithers and packs each frame, and tells the board how long to sleep.">
   <meta name="keywords" content="e-paper digital signage, eink digital signage, esp32 digital signage, epaper sign esp32, battery powered digital sign, waveshare epaper signage, low power signage">
   <meta name="robots" content="index, follow">
-  <link rel="canonical" href="https://screentinker.com/guides/eink-esp32-digital-signage.html">
-  <link rel="alternate" type="text/markdown" href="https://screentinker.com/guides/eink-esp32-digital-signage.md">
+  <link rel="canonical" href="https://screenforge-tff9.vercel.app/guides/eink-esp32-digital-signage.html">
+  <link rel="alternate" type="text/markdown" href="https://screenforge-tff9.vercel.app/guides/eink-esp32-digital-signage.md">
 
   <meta property="og:type" content="article">
-  <meta property="og:url" content="https://screentinker.com/guides/eink-esp32-digital-signage.html">
+  <meta property="og:url" content="https://screenforge-tff9.vercel.app/guides/eink-esp32-digital-signage.html">
   <meta property="og:title" content="E-Paper and ESP32 Digital Signage">
   <meta property="og:description" content="Run digital signage on e-paper and ESP32 with no browser on the device. The server renders, dithers and packs each frame, and tells the board how long to sleep.">
-  <meta property="og:image" content="https://screentinker.com/assets/dashboard-preview.png">
-  <meta property="og:site_name" content="ScreenTinker">
+  <meta property="og:image" content="https://screenforge-tff9.vercel.app/assets/dashboard-preview.png">
+  <meta property="og:site_name" content="Kardinal Screens">
 
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="E-Paper and ESP32 Digital Signage">
   <meta name="twitter:description" content="Run digital signage on e-paper and ESP32 with no browser on the device. The server renders, dithers and packs each frame, and tells the board how long to sleep.">
-  <meta name="twitter:image" content="https://screentinker.com/assets/dashboard-preview.png">
+  <meta name="twitter:image" content="https://screenforge-tff9.vercel.app/assets/dashboard-preview.png">
 
   <meta name="theme-color" content="#111827">
   <link rel="icon" href="/assets/icon-192.png">
@@ -33,7 +33,7 @@
       <div class="nav-logo">
         <a href="/" style="display:flex;align-items:center;gap:10px">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
-          <span class="nav-logo-text">ScreenTinker</span>
+          <span class="nav-logo-text">Kardinal Screens</span>
         </a>
       </div>
       <div class="nav-links">
@@ -63,7 +63,7 @@
     <p>Every other player on this site is a web page: the device runs a browser, fetches your content and
     renders it. A microcontroller cannot do that, and a battery-powered panel should not want to &mdash; a
     browser is the single most expensive thing you could ask a coin cell to run.</p>
-    <p>So the work moves to the server. ScreenTinker resolves which playlist item is due, resizes it to your
+    <p>So the work moves to the server. Kardinal Screens resolves which playlist item is due, resizes it to your
     panel, dithers it to the colours the panel actually has, packs it into the byte layout the controller
     expects, and sends that. The board&rsquo;s entire job is: wake, one HTTP GET, push bytes to the panel,
     sleep.</p>
@@ -138,9 +138,9 @@
     </div>
   </main>
   <footer>
-    <div style="color:var(--dim);font-size:13px">&copy; 2026 ScreenTinker. All rights reserved.</div>
+    <div style="color:var(--dim);font-size:13px">&copy; 2026 Kardinal Screens. All rights reserved.</div>
     <div class="links">
-      <a href="https://github.com/screentinker/screentinker" target="_blank" rel="noopener">GitHub</a>
+      <a href="https://github.com/tanyeu18rg-max/screenforge-app" target="_blank" rel="noopener">GitHub</a>
       <a href="https://discord.gg/utTdsrqq4Z" target="_blank" rel="noopener">Discord</a>
       <a href="/legal/terms.html">Terms</a>
       <a href="/legal/privacy.html">Privacy</a>
@@ -158,19 +158,19 @@
         "@type": "ListItem",
         "position": 1,
         "name": "Home",
-        "item": "https://screentinker.com/"
+        "item": "https://screenforge-tff9.vercel.app/"
       },
       {
         "@type": "ListItem",
         "position": 2,
         "name": "Guides",
-        "item": "https://screentinker.com/"
+        "item": "https://screenforge-tff9.vercel.app/"
       },
       {
         "@type": "ListItem",
         "position": 3,
         "name": "E-Paper &amp; ESP32",
-        "item": "https://screentinker.com/guides/eink-esp32-digital-signage.html"
+        "item": "https://screenforge-tff9.vercel.app/guides/eink-esp32-digital-signage.html"
       }
     ]
   }
@@ -194,7 +194,7 @@
       },
       {
         "@type": "HowToTool",
-        "name": "A ScreenTinker account"
+        "name": "A Kardinal Screens account"
       }
     ],
     "step": [
@@ -203,28 +203,28 @@
         "position": 1,
         "name": "Pair the board",
         "text": "The firmware posts to the embedded pairing endpoint and gets a permanent device id and token, which it stores in flash.",
-        "url": "https://screentinker.com/guides/eink-esp32-digital-signage.html#pair"
+        "url": "https://screenforge-tff9.vercel.app/guides/eink-esp32-digital-signage.html#pair"
       },
       {
         "@type": "HowToStep",
         "position": 2,
         "name": "Pick a panel profile",
         "text": "Choose a preset matching your panel, or give width, height, colour depth and dithering directly.",
-        "url": "https://screentinker.com/guides/eink-esp32-digital-signage.html#profile"
+        "url": "https://screenforge-tff9.vercel.app/guides/eink-esp32-digital-signage.html#profile"
       },
       {
         "@type": "HowToStep",
         "position": 3,
         "name": "Fetch a frame",
         "text": "The board GETs the render endpoint with its token and ETag, and gets back a packed image or 304 Not Modified.",
-        "url": "https://screentinker.com/guides/eink-esp32-digital-signage.html#render"
+        "url": "https://screenforge-tff9.vercel.app/guides/eink-esp32-digital-signage.html#render"
       },
       {
         "@type": "HowToStep",
         "position": 4,
         "name": "Sleep",
         "text": "The response carries a header saying how many seconds to deep sleep before the next frame is due.",
-        "url": "https://screentinker.com/guides/eink-esp32-digital-signage.html#sleep"
+        "url": "https://screenforge-tff9.vercel.app/guides/eink-esp32-digital-signage.html#sleep"
       }
     ]
   }

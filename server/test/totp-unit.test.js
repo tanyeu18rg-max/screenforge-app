@@ -90,11 +90,11 @@ test('keyuri: bare issuer by default; folds the instance host in so multi-instan
 
   const plain = totp.keyuri('user@x.com', secret);
   assert.match(plain, /^otpauth:\/\/totp\//);
-  assert.match(plain, /issuer=ScreenTinker(&|$)/, 'bare "ScreenTinker" issuer when no instance given');
+  assert.match(plain, /issuer=Kardinal%20Screens(&|$)/, 'bare "Kardinal Screens" issuer when no instance given');
 
-  const scoped = totp.keyuri('user@x.com', secret, 'alpha.screentinker.com');
+  const scoped = totp.keyuri('user@x.com', secret, 'alpha.example.com');
   const decoded = decodeURIComponent(scoped);
-  assert.ok(decoded.includes('ScreenTinker (alpha.screentinker.com)'), 'issuer carries the host');
+  assert.ok(decoded.includes('Kardinal Screens (alpha.example.com)'), 'issuer carries the host');
   assert.notEqual(scoped, plain, 'a different instance yields a different label');
 });
 

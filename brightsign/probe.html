@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html><head><meta charset="utf-8"><title>ScreenTinker — BrightSign probe</title>
+<html><head><meta charset="utf-8"><title>ScreenForge — BrightSign probe</title>
 <style>
   body{margin:0;background:#0f1420;color:#e6edf7;font:14px/1.5 -apple-system,Segoe UI,Roboto,sans-serif;padding:24px}
   h1{font-size:22px;margin:0 0 4px} .sub{opacity:.6;margin-bottom:18px}
@@ -10,7 +10,7 @@
   .box{background:#151b2b;border:1px solid #223;border-radius:8px;padding:14px;margin:14px 0;max-width:1100px}
   .big{font-size:17px}
 </style></head><body>
-<h1>ScreenTinker — BrightSign capability probe</h1>
+<h1>ScreenForge — BrightSign capability probe</h1>
 <div class="sub" id="sub">running…</div>
 
 <div class="box big" id="verdict">…</div>
@@ -61,7 +61,7 @@ try { lsBefore = localStorage.getItem(MARK); } catch (e) { add('localStorage rea
 try {
   const Registry = require('@brightsign/registry');
   reg = new Registry();
-  regBefore = reg.read ? reg.read('screentinker', MARK) : null;
+  regBefore = reg.read ? reg.read('screentinker', MARK) : null; // persisted registry key
   if (regBefore && regBefore.then) regBefore = '(async — see console)';
 } catch (e) { add('registry usable', false, e.message); }
 
@@ -72,7 +72,7 @@ try { if (reg && !regBefore) (reg.write ? reg.write('screentinker', MARK, stamp)
 add('localStorage survived', lsBefore !== null ? true : 'first run — reboot & reload', lsBefore || stamp);
 add('registry survived', regBefore ? true : (reg ? 'first run — reboot & reload' : false), regBefore || (reg ? stamp : 'registry unavailable'));
 
-// ---- 4. web-platform features the ScreenTinker player leans on --------------------------
+// ---- 4. web-platform features the ScreenForge player leans on --------------------------
 add('serviceWorker in navigator', 'serviceWorker' in navigator, '');
 add('caches (Cache API)', typeof caches !== 'undefined' && !!caches, '');
 add('indexedDB', typeof indexedDB !== 'undefined' && !!indexedDB, '');
@@ -81,8 +81,9 @@ add('fetch', typeof fetch !== 'undefined', '');
 add('<video> element', !!document.createElement('video').canPlayType, 'h264=' + document.createElement('video').canPlayType('video/mp4; codecs="avc1.42E01E"'));
 add('CSS clamp()', CSS.supports?.('height', 'clamp(1px,1vh,2px)'), 'directory-search keyboard scaling depends on this');
 
-// ---- 5. can it reach the ScreenTinker server at all -------------------------------------
-const ORIGIN = 'https://screentinker.com';
+// ---- 5. can it reach the ScreenForge server at all -------------------------------------
+// Set to the ScreenForge server this player should reach.
+const ORIGIN = 'https://your-server.example.com';
 fetch(ORIGIN + '/api/status', { cache: 'no-store' })
   .then(r => r.json()).then(d => { add('reach ' + ORIGIN, true, 'version ' + d.version); render(); })
   .catch(e => { add('reach ' + ORIGIN, false, e.message); render(); });

@@ -1,6 +1,5 @@
 import { api, assertLocalCallAllowed } from '../api.js';
 import { uploadFilesResumable } from '../lib/chunked-upload.js';
-import * as gettingStarted from '../components/getting-started.js';
 import { showToast } from '../components/toast.js';
 import { esc, hydrateAuthImages } from '../utils.js';
 import { t } from '../i18n.js';
@@ -11,7 +10,7 @@ import { isPdf, renderPdfToPages, baseName } from '../components/pdf-pages.js';
 /* The mime lib/html-bundle.js stamps on an uploaded HTML bundle. Kept as a constant rather than
  * spelled out at each site: it is compared in three places here, and a typo in one of them is a
  * card that renders an <img> pointed at a zip. */
-const BUNDLE_MIME = 'application/vnd.screentinker.bundle+zip';
+const BUNDLE_MIME = 'application/vnd.screenforge.bundle+zip';
 
 // #216: languages offered in the caption/subtitle pickers. Codes are BCP-47 primary tags —
 // enough for signage; extend as needed.
@@ -65,10 +64,6 @@ export function render(container) {
         <div class="subtitle">${t('content.subtitle')}</div>
       </div>
     </div>
-
-    <!-- The checklist follows the user here. Arriving from its "Add content" step and finding
-         nothing that mentions it is how someone loses the thread. -->
-    <div id="gettingStarted"></div>
 
     <div class="content-toolbar" style="display:flex;gap:16px;margin-bottom:24px">
       <div class="upload-area" id="uploadArea" style="flex:1;margin-bottom:0">
@@ -172,21 +167,6 @@ export function render(container) {
   const uploadArea = document.getElementById('uploadArea');
   const fileInput = document.getElementById('fileInput');
 
-  /*
-   * The checklist, if this account still has one. Fire-and-forget: it fetches devices and
-   * playlists (never content — the caller has none to give here and getContent is this page's own
-   * expensive call), and hides itself when there is nothing left to do.
-   */
-  gettingStarted.mount(document.getElementById('gettingStarted'), {
-    // Step 2 points at this page, so its button must DO something here rather than re-navigate to
-    // the page it is already on. Clicking the upload area is the page's own path to the file
-    // picker — and it stays inside the user's click, which is what the browser requires to open one.
-    onAction: (a) => {
-      if (a === 'add-content') { document.getElementById('uploadArea')?.click(); return true; }
-      return false;
-    },
-  }).catch(() => {});
-
   uploadArea.addEventListener('click', () => fileInput.click());
 
   uploadArea.addEventListener('dragover', (e) => {
@@ -249,7 +229,7 @@ export function render(container) {
   });
 
   // IPTV: add a live HLS stream. The screen opens the URL itself (it may be a LAN
-  // address); ScreenTinker never pulls the video, so the private-URL error from the
+  // address); Kardinal Screens never pulls the video, so the private-URL error from the
   // server-fetched remote path never applies here.
   document.getElementById('addHlsBtn').addEventListener('click', async () => {
     const url = document.getElementById('hlsUrlInput').value.trim();
@@ -768,9 +748,6 @@ async function loadContent() {
     grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1"><h3>${t('content.failed_to_load')}</h3><p>${esc(err.message)}</p></div>`;
   }
 
-  // #313/checklist: adding content ticks a step, and this is the one path every add
-  // (file, remote URL, YouTube) already goes through.
-  gettingStarted.refresh().catch(() => {});
 }
 
 // #213: the batch toolbar — shown only when something is selected. `visible` is the current

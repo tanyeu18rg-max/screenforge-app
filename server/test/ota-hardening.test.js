@@ -19,7 +19,7 @@ const apkCache = require('../lib/apk-cache');
 
 test('apk-cache: get() never touches the filesystem (resolution cached at boot/refresh)', () => {
   // seed a fake APK under DATA_DIR and refresh once
-  const apk = path.join(process.env.DATA_DIR, 'ScreenTinker.apk');
+  const apk = path.join(process.env.DATA_DIR, 'Kardinal Screens.apk');
   fs.mkdirSync(process.env.DATA_DIR, { recursive: true });
   fs.writeFileSync(apk, 'FAKEAPKBYTES');
   const c = apkCache.refresh();

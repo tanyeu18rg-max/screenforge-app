@@ -46,40 +46,40 @@ test('both instances are hermetic here — neither searches the real <repo>/nati
 });
 
 test('the Windows installer regex: X.Y.Z and X.Y.Z~rcN / -rcN, nothing else', () => {
-  const ok = { 'ScreenTinker-Setup-1.2.3.exe': '1.2.3', 'ScreenTinker-Setup-1.2.3~rc1.exe': '1.2.3~rc1', 'ScreenTinker-Setup-1.2.3-rc2.exe': '1.2.3-rc2' };
+  const ok = { 'Kardinal Screens-Setup-1.2.3.exe': '1.2.3', 'Kardinal Screens-Setup-1.2.3~rc1.exe': '1.2.3~rc1', 'Kardinal Screens-Setup-1.2.3-rc2.exe': '1.2.3-rc2' };
   for (const [n, v] of Object.entries(ok)) assert.equal(winCache.EXE_RE.exec(n)[1], v, n);
-  for (const n of ['ScreenTinker-Setup-1.2.exe', 'screentinker-setup-1.2.3.exe', 'ScreenTinker-Setup-1.2.3.msi',
-    'ScreenTinker-Setup-1.2.3.exe.part', 'ScreenTinker-Setup-v1.2.3.exe', 'screentinker-pi_1.2.3_all.deb']) {
+  for (const n of ['Kardinal Screens-Setup-1.2.exe', 'screentinker-setup-1.2.3.exe', 'Kardinal Screens-Setup-1.2.3.msi',
+    'Kardinal Screens-Setup-1.2.3.exe.part', 'Kardinal Screens-Setup-v1.2.3.exe', 'screentinker-pi_1.2.3_all.deb']) {
     assert.equal(winCache.EXE_RE.exec(n), null, n);
   }
   // And the two instances do not see each other's packages.
-  assert.equal(debCache.pickNewest(['ScreenTinker-Setup-9.9.9.exe']), null);
+  assert.equal(debCache.pickNewest(['Kardinal Screens-Setup-9.9.9.exe']), null);
   assert.equal(winCache.pickNewest(['screentinker-pi_9.9.9_all.deb']), null);
 });
 
 test('win pickNewest: by version, and ⚠️ a release beats any prerelease', () => {
-  assert.deepEqual(winCache.pickNewest(['ScreenTinker-Setup-1.9.0.exe', 'ScreenTinker-Setup-1.10.0.exe', 'ScreenTinker-Setup-1.2.3.exe']),
-    { name: 'ScreenTinker-Setup-1.10.0.exe', version: '1.10.0' });
-  assert.equal(winCache.pickNewest(['ScreenTinker-Setup-1.2.0.exe', 'ScreenTinker-Setup-1.3.0~rc1.exe']).version, '1.2.0');
-  assert.deepEqual(winCache.pickNewest(['ScreenTinker-Setup-1.3.0~rc2.exe', 'ScreenTinker-Setup-1.3.0~rc10.exe']),
-    { name: 'ScreenTinker-Setup-1.3.0~rc10.exe', version: '1.3.0-rc10' }, '`~` normalised to `-` for the comparison');
+  assert.deepEqual(winCache.pickNewest(['Kardinal Screens-Setup-1.9.0.exe', 'Kardinal Screens-Setup-1.10.0.exe', 'Kardinal Screens-Setup-1.2.3.exe']),
+    { name: 'Kardinal Screens-Setup-1.10.0.exe', version: '1.10.0' });
+  assert.equal(winCache.pickNewest(['Kardinal Screens-Setup-1.2.0.exe', 'Kardinal Screens-Setup-1.3.0~rc1.exe']).version, '1.2.0');
+  assert.deepEqual(winCache.pickNewest(['Kardinal Screens-Setup-1.3.0~rc2.exe', 'Kardinal Screens-Setup-1.3.0~rc10.exe']),
+    { name: 'Kardinal Screens-Setup-1.3.0~rc10.exe', version: '1.3.0-rc10' }, '`~` normalised to `-` for the comparison');
 });
 
 test('win-cache: DATA_DIR beats the override dir, hashes once, and never advertises a stale hash', async () => {
-  const inDist = path.join(WIN_DIST, 'ScreenTinker-Setup-9.0.0.exe');
+  const inDist = path.join(WIN_DIST, 'Kardinal Screens-Setup-9.0.0.exe');
   fs.writeFileSync(inDist, Buffer.from('dist build'));
   winCache.refresh();
   let r = await winCache.ready();
   assert.equal(r.path, inDist, 'the override dir is searched when DATA_DIR has nothing');
   assert.equal(r.sha256, sha('dist build'));
 
-  const f = path.join(DATA_DIR, 'ScreenTinker-Setup-3.0.0.exe');
+  const f = path.join(DATA_DIR, 'Kardinal Screens-Setup-3.0.0.exe');
   fs.writeFileSync(f, Buffer.from('first build'));
   winCache.refresh();
   r = await winCache.ready();
   assert.equal(r.path, f, 'an operator mount wins even over a NEWER version in the build dir');
   assert.equal(r.version, '3.0.0');
-  assert.equal(r.filename, 'ScreenTinker-Setup-3.0.0.exe');
+  assert.equal(r.filename, 'Kardinal Screens-Setup-3.0.0.exe');
   assert.equal(r.sha256, sha('first build'));
   // Hash-once: an unchanged file refreshes straight to the cached hash, no pending state.
   assert.equal(winCache.refresh().sha256, sha('first build'));
@@ -94,11 +94,11 @@ test('win-cache: DATA_DIR beats the override dir, hashes once, and never adverti
 });
 
 test('the two caches are independent instances', async () => {
-  fs.writeFileSync(path.join(DATA_DIR, 'screentinker-pi_4.0.0_all.deb'), Buffer.from('deb'));
+  fs.writeFileSync(path.join(DATA_DIR, 'screenforge-pi_4.0.0_all.deb'), Buffer.from('deb'));
   debCache.refresh(); winCache.refresh();
   await debCache.ready();
   assert.equal(debCache.get().version, '4.0.0');
   assert.equal(winCache.get().exists, false, 'a .deb is not a Windows installer');
-  fs.unlinkSync(path.join(DATA_DIR, 'screentinker-pi_4.0.0_all.deb'));
+  fs.unlinkSync(path.join(DATA_DIR, 'screenforge-pi_4.0.0_all.deb'));
   debCache.refresh();
 });

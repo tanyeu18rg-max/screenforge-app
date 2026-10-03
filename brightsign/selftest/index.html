@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html><head><meta charset="utf-8"><title>ScreenTinker storage self-test</title>
+<html><head><meta charset="utf-8"><title>ScreenForge storage self-test</title>
 <style>
  html,body{margin:0;height:100%;background:#0b3d1f;color:#eaffea;
    font-family:system-ui,sans-serif;display:flex;align-items:center;justify-content:center;text-align:center}
@@ -15,6 +15,8 @@
 </div>
 <script>
   // Each line below removes one suspect from the list, in the order they matter.
+  // Set to the ScreenForge server this player should reach.
+  var SERVER = 'https://your-server.example.com';
   try {
     var ok = [];
     ['messageport','registry','deviceinfo','syncmanager'].forEach(function (m) {
@@ -26,7 +28,7 @@
     document.getElementById('mods').textContent = 'BrightSign JS modules: require() unavailable';
   }
 
-  fetch('https://screentinker.com/api/status', { cache: 'no-store' })
+  fetch(SERVER + '/api/status', { cache: 'no-store' })
     .then(function (r) { document.getElementById('net').textContent = 'Server reachable: YES (HTTP ' + r.status + ')'; })
     .catch(function (e) { document.getElementById('net').textContent = 'Server reachable: NO — ' + e.message; });
 </script>

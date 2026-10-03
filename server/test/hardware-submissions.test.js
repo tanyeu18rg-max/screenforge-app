@@ -59,13 +59,13 @@ test('⚠️ a submission cannot become Certified Hardware, however it is posted
   assert.equal(published.provisioning_url, null, 'nor point our page at their URL');
 });
 
-test('a published report says on its own entry that it is not tested by ScreenTinker', () => {
+test('a published report says on its own entry that it is not tested by Kardinal Screens', () => {
   const db = freshDb();
   const { token } = subs.create(db, { ...VALID, submitter_name: 'Jo', notes: 'Works fine.' }, null);
   subs.decide(db, token, 'approved');
   const [published] = subs.publishedDevices(db);
   // The group heading says it too, but a deep link lands on the card, not the heading.
-  assert.ok(published.notes.some((n) => /not tested by ScreenTinker/i.test(n)),
+  assert.ok(published.notes.some((n) => /not tested by Kardinal Screens/i.test(n)),
     'the disclaimer travels with the card, because deep links skip the heading');
   assert.ok(published.notes.includes('Works fine.'), 'and the submitter\'s own note survives');
 });

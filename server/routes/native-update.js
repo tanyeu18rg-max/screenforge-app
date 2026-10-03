@@ -100,7 +100,7 @@ function createNativeUpdateRoutes(spec) {
 
       /*
        * ANONYMOUS PACKAGE LOOKUP (Windows). The Windows player is split in two: the player runs as the
-       * signed-in user and never installs anything itself; the ScreenTinkerHelper service (SYSTEM)
+       * signed-in user and never installs anything itself; the Kardinal ScreensHelper service (SYSTEM)
        * does. Before running an installer the helper asks THIS endpoint — on the server the ADMIN
        * configured, never one the user-level player names — what the sha256 of the current package
        * is, and refuses any file that does not match. The helper holds no device token and is not the

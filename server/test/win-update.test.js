@@ -41,9 +41,9 @@ const EXE_BYTES = crypto.randomBytes(8192);
 let proc, BASE;
 
 before(async () => {
-  fs.writeFileSync(path.join(SRV_DIR, 'ScreenTinker-Setup-1.1.0.exe'), EXE_BYTES);
-  fs.writeFileSync(path.join(SRV_DIR, 'ScreenTinker-Setup-1.0.0.exe'), Buffer.from('older'));
-  fs.writeFileSync(path.join(SRV_DIR, 'ScreenTinker-Setup-1.2.0~rc1.exe'), Buffer.from('test build'));
+  fs.writeFileSync(path.join(SRV_DIR, 'Kardinal Screens-Setup-1.1.0.exe'), EXE_BYTES);
+  fs.writeFileSync(path.join(SRV_DIR, 'Kardinal Screens-Setup-1.0.0.exe'), Buffer.from('older'));
+  fs.writeFileSync(path.join(SRV_DIR, 'Kardinal Screens-Setup-1.2.0~rc1.exe'), Buffer.from('test build'));
   const PORT = await freePort();
   BASE = `http://127.0.0.1:${PORT}`;
   proc = spawn('node', ['server.js'], {
@@ -78,7 +78,7 @@ test('an older PC is offered the newest RELEASE, with the hash and size of the s
   assert.equal(dl.status, 200);
   const body = Buffer.from(await dl.arrayBuffer());
   assert.equal(sha(body), r.sha256, '⚠️ advertised hash must match the served bytes');
-  assert.match(dl.headers.get('content-disposition') || '', /filename="ScreenTinker-Setup-1\.1\.0\.exe"/);
+  assert.match(dl.headers.get('content-disposition') || '', /filename="Kardinal Screens-Setup-1\.1\.0\.exe"/);
   assert.equal(dl.headers.get('x-package-sha256'), r.sha256);
   assert.equal(dl.headers.get('x-package-version'), '1.1.0');
 });
@@ -163,7 +163,7 @@ test('with no installer hosted: exe-missing (lookup too) and a 404', async () =>
   assert.equal(l.sha256, null);
   const dl = await fetch(BASE + '/download/win');
   assert.equal(dl.status, 404);
-  assert.match(await dl.text(), /ScreenTinker-Setup/);
+  assert.match(await dl.text(), /Kardinal Screens-Setup/);
 });
 
 // ------------------------------------------------------------------------------ in-process
@@ -172,7 +172,7 @@ test('the global OTA kill switch refuses the player poll AND the helper lookup',
   const express = require('express');
   const config = require('../config');
   const winCache = require('../lib/win-cache');
-  fs.writeFileSync(path.join(SRV_DIR, 'ScreenTinker-Setup-5.0.0.exe'), Buffer.from('x'));
+  fs.writeFileSync(path.join(SRV_DIR, 'Kardinal Screens-Setup-5.0.0.exe'), Buffer.from('x'));
   winCache.refresh(); await winCache.ready();
   const saved = config.otaEnabled;
   config.otaEnabled = false;
@@ -192,7 +192,7 @@ test('the global OTA kill switch refuses the player poll AND the helper lookup',
 
 test('the lookup holds while the new installer is still being hashed', async () => {
   const express = require('express');
-  const fake = { get: () => ({ exists: true, version: '6.0.0', sha256: null, size: 10, path: '/nope', filename: 'ScreenTinker-Setup-6.0.0.exe' }) };
+  const fake = { get: () => ({ exists: true, version: '6.0.0', sha256: null, size: 10, path: '/nope', filename: 'Kardinal Screens-Setup-6.0.0.exe' }) };
   const { createNativeUpdateRoutes } = require('../routes/native-update');
   const mount = createNativeUpdateRoutes({ kind: 'wintest', cache: fake, label: 'x', contentType: 'application/octet-stream',
     missingReason: 'exe-missing', hashingReason: 'exe-hashing', anonymousLookup: true });

@@ -45,7 +45,7 @@ const rpcResult = (id, result) => ({ jsonrpc: '2.0', id, result });
 function identity(ctx = {}) {
   return {
     capabilities: { tools: { listChanged: false } },
-    serverInfo: { name: 'screentinker', version: ctx.version || '0.0.0' },
+    serverInfo: { name: 'screenforge', version: ctx.version || '0.0.0' },
   };
 }
 

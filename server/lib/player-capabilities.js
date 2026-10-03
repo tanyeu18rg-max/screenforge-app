@@ -297,7 +297,7 @@ const BASELINE = {
    * running the same player a browser is, and it declares for itself; this list is only the
    * floor for a row whose capabilities column is still NULL.
    *
-   * Same floor as web. playback.transitions belongs here: an AFTCA002 (ScreenTinker 2.1.6,
+   * Same floor as web. playback.transitions belongs here: an AFTCA002 (Kardinal Screens 2.1.6,
    * Kepler 1.2) ran the image wipe and it looked right. Withholding it hid a working control.
    * The page still caps the captured frame on Vega. The binding constraint on that stick was
    * CMA — about 236 MB of contiguous DMA, which fell to about 1 MB while MemFree stayed
@@ -339,7 +339,7 @@ const BASELINE = {
    * capabilities column is NULL for some other reason (a restore from a pre-capability backup, a
    * manual row), and for that row "what the first Pi release ships" is the least-wrong guess.
    *
-   * Once a Pi build has shipped, re-derive this from `git show <tag>:native/screentinker_native/capabilities.py`
+   * Once a Pi build has shipped, re-derive this from `git show <tag>:native/screenforge_native/capabilities.py`
    * the way every other entry here was, and delete this paragraph.
    *
    * ⚠️ NOT system.shell / system.pty / system.time / system.kiosk / system.install_apk, although the
@@ -367,7 +367,7 @@ const BASELINE = {
     'sync.clock', 'offline.cache',
   ],
   /*
-   * The NATIVE Windows player — the same Python + Qt engine as the Pi (native/screentinker_native)
+   * The NATIVE Windows player — the same Python + Qt engine as the Pi (native/screenforge_native)
    * with a Windows OS backend (platform/windows) — client_type 'win', platform 'Windows/<edition>
    * (<model>)'. Not the kiosk-browser shortcut that scripts/windows-setup.bat creates; that one
    * registers as a browser and is BASELINE.web.

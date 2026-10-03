@@ -6,7 +6,8 @@
  * It exists because the guides used to send people to the GitHub releases page for the BrightSign
  * package and the webOS .ipk. That is wrong twice over. A self-hoster's operator has no reason to
  * have a GitHub account, and — the part that actually breaks — the BrightSign package has the
- * server URL stamped into it at build time, so a release asset points at screentinker.com and
+ * server URL stamped into it at build time, so a release asset points at the vendor's hosted
+ * service and
  * provisions the player against the WRONG instance. The copy this route serves is built for the
  * host that served the page. Downloading from your own server is the only version that can be
  * right by construction.
@@ -43,7 +44,7 @@ function entries(state = {}) {
     {
       id: 'android',
       name: 'Android TV, Fire TV, Android tablets',
-      file: 'ScreenTinker.apk',
+      file: 'Kardinal Screens.apk',
       what: 'The native player. Sideload it, or install it from this URL on the device.',
       url: '/download/apk',
       guide: '/guides/digital-signage-android-tv.html',
@@ -72,9 +73,9 @@ function entries(state = {}) {
     {
       id: 'webos',
       name: 'LG webOS Signage',
-      file: 'ScreenTinker.ipk',
+      file: 'Kardinal Screens.ipk',
       what: 'Installed from a USB stick or an SI server. Updates itself against this instance afterwards.',
-      url: '/webos/ScreenTinker.ipk',
+      url: '/webos/Kardinal Screens.ipk',
       guide: '/guides/lg-webos-digital-signage.html',
       available: !!ipk.exists,
       version: ipk.version || null,
@@ -85,9 +86,9 @@ function entries(state = {}) {
     {
       id: 'tizen',
       name: 'Samsung Tizen Signage',
-      file: 'ScreenTinker.wgt',
+      file: 'Kardinal Screens.wgt',
       what: 'Installed by the panel’s URL Launcher. Needs a Samsung partner-signed build to install on a retail panel.',
-      url: '/tizen/ScreenTinker.wgt',
+      url: '/tizen/Kardinal Screens.wgt',
       guide: '/guides/samsung-tv-digital-signage.html',
       available: !!wgt.exists,
       version: wgt.version || null,
@@ -103,7 +104,7 @@ function entries(state = {}) {
        */
       id: 'raspberry-pi-native',
       name: 'Raspberry Pi (native player)',
-      file: deb.filename || 'screentinker-pi_<version>_all.deb',
+      file: deb.filename || 'screenforge-pi_<version>_all.deb',
       what: 'A native player for Raspberry Pi OS (Bookworm). Install with apt; it updates itself against this instance afterwards.',
       url: '/download/pi',
       guide: '/guides/raspberry-pi-digital-signage.html',
@@ -134,7 +135,7 @@ function entries(state = {}) {
        */
       id: 'windows-native',
       name: 'Windows (native player)',
-      file: exe.filename || 'ScreenTinker-Setup-<version>.exe',
+      file: exe.filename || 'Kardinal Screens-Setup-<version>.exe',
       what: 'A native player for Windows 10/11. Run the installer as an administrator; it updates itself against this instance afterwards.',
       url: '/download/win',
       guide: '/guides/windows-digital-signage.html',
@@ -225,7 +226,7 @@ function renderPage(state = {}, base = '') {
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Download a ScreenTinker player</title>
+<title>Download a Kardinal Screens player</title>
 <meta name="robots" content="noindex">
 <style>
 :root{--bg:#111827;--card:#1e293b;--border:#334155;--text:#f1f5f9;--muted:#94a3b8;--accent:#3b82f6}
@@ -264,7 +265,7 @@ footer a{color:var(--accent)}
 ${rows}
 <footer>
   Nothing here needs a GitHub account. Source and release notes:
-  <a href="https://github.com/screentinker/screentinker" rel="noopener">github.com/screentinker/screentinker</a>.
+  <a href="https://github.com/tanyeu18rg-max/screenforge-app" rel="noopener">github.com/tanyeu18rg-max/screenforge-app</a>.
   Choosing hardware? <a href="/certified-hardware">Certified hardware</a>.
 </footer>
 </div>

@@ -404,14 +404,14 @@ test('activate() returning a thenable is an error and rolls back registrations',
   assert.equal(registry.hasWidget('async-activate'), false);
 });
 
-test('screentinker >= constraint refuses an older host', () => {
+test('kardinal >= constraint refuses an older host', () => {
   assert.equal(satisfies('>=99.0.0', '2.0.10'), false);
   assert.equal(satisfies('>=2.0.0', '2.0.10'), true);
   assert.equal(satisfies('', '2.0.10'), true);
   loadPlugins({ config: cfgFor(FIXTURES), db: stubDb(), stateMap: enabledMap('too-new') });
   const p = registry.getPlugin('too-new');
   assert.ok(p && p.error);
-  assert.match(p.error, /requires ScreenTinker/);
+  assert.match(p.error, /requires Kardinal Screens/);
   assert.equal(registry.hasWidget('too-new'), false);
 });
 

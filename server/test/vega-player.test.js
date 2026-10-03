@@ -94,7 +94,7 @@ test('vega: finalize-release.sh ships the .vpkg, and refuses a stale one', () =>
   // It must UPLOAD the package, not merely expect it: an EXPECTED entry nothing uploads turns
   // every future finalize into a failure AFTER the APK has already gone up.
   assert.match(fin, /gh release upload[^\n]*"\$VPKG"/, 'finalize must upload the .vpkg');
-  assert.match(fin, /screentinker-vega_armv7\.vpkg/);
+  assert.match(fin, /screenforge-vega_armv7\.vpkg/);
   // vega/build/ is gitignored and nothing ever clears it, so the file sitting there may belong to
   // an older release. The version comes from vpkg-info.json, and a mismatch has to be fatal.
   assert.match(fin, /vpkg-info\.json/);

@@ -1,17 +1,17 @@
 /*
- * ScreenTinker webOS shell.
+ * ScreenForge webOS shell.
  *
- * The web player (/player on the ScreenTinker server) does the playing. This app gives it what
+ * The web player (/player on the ScreenForge server) does the playing. This app gives it what
  * a page in a browser cannot have on an LG signage panel: an installed launcher that starts on
  * boot, a place to enter the server address with the remote, and a bridge to the panel's power
  * and update services (js/device-control.js). The player runs in an iframe; the two talk over
  * postMessage, and only what the panel can genuinely do is announced to the player, which
  * declares exactly that to the server.
  *
- * Protocol (player -> shell): { source:'screentinker-player', type:'host:hello' }
- *                             { source:'screentinker-player', type:'host:command', action, payload }
- *          (shell -> player): { source:'screentinker-host', type:'host:ready', platform, capabilities, info }
- *                             { source:'screentinker-host', type:'host:result', action, ok, error }
+ * Protocol (player -> shell): { source:'screenforge-player', type:'host:hello' }
+ *                             { source:'screenforge-player', type:'host:command', action, payload }
+ *          (shell -> player): { source:'screenforge-host', type:'host:ready', platform, capabilities, info }
+ *                             { source:'screenforge-host', type:'host:result', action, ok, error }
  */
 (function () {
   'use strict';
@@ -76,7 +76,7 @@
   // ---------------------------------------------------------------- the bridge
   function post(msg) {
     if (!frame || !frame.contentWindow) return;
-    msg.source = 'screentinker-host';
+    msg.source = 'screenforge-host';
     try { frame.contentWindow.postMessage(msg, '*'); } catch (e) {}
   }
 
@@ -92,7 +92,7 @@
   function onCommand(action, payload) {
     if (!window.STWebOS) return post({ type: 'host:result', action: action, ok: false, error: 'unsupported' });
     var p = payload || {};
-    if (action === 'update' && !p.url) p.url = serverUrl + '/webos/ScreenTinker.ipk';
+    if (action === 'update' && !p.url) p.url = serverUrl + '/webos/ScreenForge.ipk';
     STWebOS.run(action, p).then(function () {
       post({ type: 'host:result', action: action, ok: true });
     }, function (e) {
@@ -104,7 +104,7 @@
   window.addEventListener('message', function (ev) {
     if (!frame || ev.source !== frame.contentWindow) return;   // only our own player
     var d = ev.data;
-    if (!d || d.source !== 'screentinker-player') return;
+    if (!d || d.source !== 'screenforge-player') return;
     if (d.type === 'host:hello') announce();
     else if (d.type === 'host:command' && typeof d.action === 'string') onCommand(d.action, d.payload);
   });
@@ -128,7 +128,7 @@
         if (tried === j.version) return;               // one attempt per published version
         try { localStorage.setItem(KEY_UPDATE_TRIED, j.version); } catch (e) {}
         log('update available: ' + j.version + ' (running ' + APP_VERSION_FALLBACK + ')');
-        STWebOS.run('update', { url: serverUrl + '/webos/ScreenTinker.ipk' })
+        STWebOS.run('update', { url: serverUrl + '/webos/ScreenForge.ipk' })
           .then(function () { log('update installed'); }, function (e) { log('update failed: ' + (e && e.message)); });
       })
       .catch(function () {});
@@ -156,7 +156,7 @@
     showSetup(false);
     $('server').disabled = true;
     $('save').disabled = true;
-    $('setupError').textContent = 'This TV browser is too old for ScreenTinker. webOS 4 or newer is required.';
+    $('setupError').textContent = 'This TV browser is too old for ScreenForge. webOS 4 or newer is required.';
     $('setupError').classList.remove('hidden');
   }
 

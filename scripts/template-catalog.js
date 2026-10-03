@@ -3,7 +3,7 @@
 
 /*
  * The template catalog maintainer tool. Everything that touches the catalog's PRIVATE key is here,
- * and this runs on a maintainer's machine — never on a ScreenTinker server, never in CI.
+ * and this runs on a maintainer's machine — never on a ScreenForge server, never in CI.
  *
  *   keygen  <private-key.pem>                     make the catalog key pair (prints only the public key)
  *   pack    <template-dir|template.zip> [-o file]  folder/zip -> unsigned .sttemplate (author + CI)

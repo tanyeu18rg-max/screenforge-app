@@ -156,23 +156,13 @@ test('every step offers a way to act on it', async () => {
  * keeps them that way: adding a step that points somewhere new fails here until that view mounts
  * the checklist too.
  */
-test('the checklist appears on every view its steps link to', async () => {
+test('the checklist lives on the Overview view', async () => {
+  // The rebrand consolidated the checklist: it used to repeat on Displays, Playlists and Content.
+  // Now it lives once on Overview (#/) with a single global dismissal.
   const fs = require('node:fs');
-  const viewFor = { '#/': 'dashboard.js', '#/content': 'content-library.js', '#/playlists': 'playlists.js' };
-
-  const s = GS.computeSteps({ devices: [], content: [], playlists: [] });
-  const targets = [...new Set(s.steps.map((st) => st.href))];
-
-  for (const href of targets) {
-    const view = viewFor[href];
-    assert.ok(view, `a step points at ${href} and no view is mapped for it — mount the checklist there and add it here`);
-
-    const src = fs.readFileSync(path.join(__dirname, '..', '..', 'frontend', 'js', 'views', view), 'utf8');
-    assert.match(src, /id="gettingStarted"/,
-      `${view} has no #gettingStarted host — arriving there from the checklist would lose the thread`);
-    assert.match(src, /gettingStarted\.mount\(/,
-      `${view} never mounts the checklist, so the host stays empty`);
-  }
+  const src = fs.readFileSync(path.join(__dirname, '..', '..', 'frontend', 'js', 'views', 'overview.js'), 'utf8');
+  assert.match(src, /id="ovGettingStarted"/, 'overview needs the checklist host element');
+  assert.match(src, /gettingStarted\.mount\(/, 'and it has to mount the checklist into it');
 });
 
 test('the views mount it through the shared helper, not their own copy', async () => {
@@ -197,22 +187,19 @@ test('the views mount it through the shared helper, not their own copy', async (
  * The invariant: every step declares an action, and the view its href points at handles that
  * action. Add a step without one, or point a step at a view that does not serve it, and this fails.
  */
-test('every step is actionable on the page it sends you to', async () => {
+test('every step points at a real route', async () => {
+  // The checklist lives only on Overview now. Steps navigate to the page where the action happens;
+  // there are no in-page action handlers to keep in sync across views.
   const fs = require('node:fs');
-  const viewFor = { '#/': 'dashboard.js', '#/content': 'content-library.js', '#/playlists': 'playlists.js' };
+  const app = fs.readFileSync(path.join(__dirname, '..', '..', 'frontend', 'js', 'app.js'), 'utf8');
 
   const s = GS.computeSteps({ devices: [], content: [], playlists: [] });
   for (const step of s.steps) {
-    assert.ok(step.action,
-      `step "${step.key}" has no action, so its button is dead once you are on ${step.href}`);
-
-    const view = viewFor[step.href];
-    assert.ok(view, `step "${step.key}" points at ${step.href}, which no view is mapped for`);
-
-    const src = fs.readFileSync(path.join(__dirname, '..', '..', 'frontend', 'js', 'views', view), 'utf8');
-    assert.ok(src.includes(`'${step.action}'`),
-      `${view} does not handle "${step.action}" — step "${step.key}" sends the user there and then ` +
-      `its button does nothing, because setting location.hash to the current page is a no-op`);
+    assert.ok(step.href, `step "${step.key}" has no href`);
+    assert.ok(step.action, `step "${step.key}" has no action`);
+    // The href must be a route the app actually serves.
+    assert.ok(app.includes(`'${step.href}'`) || app.includes(`"${step.href}"`),
+      `step "${step.key}" points at ${step.href}, which the router does not serve`);
   }
 });
 
@@ -250,55 +237,34 @@ test('a playlist shape with no item_count counts as empty, so the checklist nags
   assert.equal(s.steps.find((st) => st.key === 'playlist').done, false);
 });
 
-test('the screen page carries the checklist, with the assign control behind a tab', async () => {
-  // Step 4 lands here and the playlist picker is on a DIFFERENT tab, so arriving is not enough —
-  // the step has to open that tab, or the user is on the right page staring at the wrong one.
+test('the checklist is consolidated on Overview, not repeated per view', async () => {
+  // The rebrand deliberately removed the per-view checklist mounts (Displays, Playlists, Content,
+  // device detail). Repeating it meant four copies of "fetch three lists, decide, hide when
+  // finished" drifting apart. One mount on Overview with a global dismissal is the design.
   const fs = require('node:fs');
-  const src = fs.readFileSync(path.join(__dirname, '..', '..', 'frontend', 'js', 'views', 'device-detail.js'), 'utf8');
-  assert.match(src, /id="gettingStarted"/, 'the screen page needs its own host element');
-  assert.match(src, /gettingStarted\.mount\(/, 'and it has to mount the checklist into it');
-  assert.match(src, /\.tab\[data-tab="playlist"\]/, 'the assign step must open the Playlist tab');
-  assert.match(src, /playlistPicker/, 'and point at the picker once it is open');
-});
-
-test('the playlist detail page carries the checklist too', async () => {
-  // Step 3 creates a playlist and drops the user on its own page. Losing the checklist at that hop
-  // is what made the flow feel like it just ended.
-  const fs = require('node:fs');
-  const src = fs.readFileSync(path.join(__dirname, '..', '..', 'frontend', 'js', 'views', 'playlists.js'), 'utf8');
-  const detail = src.slice(src.indexOf('function renderDetailContent'));
-  assert.match(detail, /id="gettingStarted"/, 'the detail view needs its own host element');
-  assert.match(detail, /gettingStarted\.mount\(/, 'and it has to mount the checklist into it');
-  // Standing inside an empty playlist, "New playlist" is the wrong verb and the wrong dialog.
-  assert.match(detail, /showAddItemModal\(playlist\.id\)/, 'the step must add content to THIS playlist here');
-  assert.match(detail, /ctaFor/, 'and relabel the button for where the user is standing');
+  for (const view of ['dashboard.js', 'content-library.js', 'playlists.js', 'device-detail.js']) {
+    const src = fs.readFileSync(path.join(__dirname, '..', '..', 'frontend', 'js', 'views', view), 'utf8');
+    assert.ok(!/gettingStarted\.mount\(/.test(src),
+      `${view} mounts the checklist — it should live only on Overview now`);
+  }
 });
 
 /*
- * ⚠️ THE CHECKLIST HAS TO RE-READ THE ACCOUNT AFTER A MUTATION, NOT ONLY ON A PAGE LOAD.
+ * The checklist re-reads the account when Overview renders.
  *
- * mount() runs when a VIEW renders, but the actions that tick a step off happen inside a view that
- * is already on screen: uploading a file does not re-render the Content Library, it refreshes a
- * grid. So the checklist sat there still saying "Add some content" after content had been added,
- * and only a reload fixed it — reported exactly that way. A checklist that is wrong about what you
- * have just done is the failure it exists to prevent.
- *
- * The hook is the reload each view already performs, so no individual mutation site has to know
- * the checklist exists.
+ * The checklist lives only on Overview now, so there is no cross-page refresh hook: navigating
+ * back to Overview re-mounts it with fresh data. The component keeps a refresh() entry point for
+ * in-place updates, and it must re-resolve the host by id (a cached node belongs to a view that
+ * has re-rendered).
  */
-test('adding content or a playlist re-reads the checklist without a page reload', async () => {
+test('the checklist re-reads the account when Overview renders', async () => {
   const fs = require('node:fs');
   const gs = fs.readFileSync(path.join(__dirname, '..', '..', 'frontend', 'js', 'components', 'getting-started.js'), 'utf8');
   assert.match(gs, /export async function refresh\(\)/, 'the component needs a refresh entry point');
   assert.match(gs, /getElementById\('gettingStarted'\)/,
     'refresh must re-resolve the host by id — a cached node belongs to a view that has re-rendered');
-
-  for (const [view, reload] of [['content-library.js', 'loadContent'], ['playlists.js', 'loadPlaylists']]) {
-    const src = fs.readFileSync(path.join(__dirname, '..', '..', 'frontend', 'js', 'views', view), 'utf8');
-    const start = src.indexOf(`async function ${reload}(`);
-    assert.ok(start > 0, `${view}: expected ${reload}()`);
-    const body = src.slice(start, src.indexOf('\n}\n', start));
-    assert.match(body, /gettingStarted\.refresh\(\)/,
-      `${view}: ${reload}() must refresh the checklist, or a step stays ticked-off-looking until a reload`);
-  }
+  // Overview mounts it on every render, so returning to #/ always shows current progress.
+  const overview = fs.readFileSync(path.join(__dirname, '..', '..', 'frontend', 'js', 'views', 'overview.js'), 'utf8');
+  assert.match(overview, /gettingStarted\.mount\(/,
+    'Overview must mount the checklist on render, or progress goes stale');
 });

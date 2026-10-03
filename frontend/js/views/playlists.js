@@ -1,5 +1,4 @@
 import { api } from '../api.js';
-import * as gettingStarted from '../components/getting-started.js';
 import { showToast } from '../components/toast.js';
 import { esc, hydrateAuthImages } from '../utils.js';
 import { openContentPicker } from '../components/content-picker.js';
@@ -110,8 +109,6 @@ async function renderList(container) {
         <button class="btn btn-primary" id="createPlaylistBtn">${t('playlist.new_playlist_btn')}</button>
       </div>
     </div>
-    <!-- Same reason as the Content Library: the step that sent you here has to still be here. -->
-    <div id="gettingStarted"></div>
     <div id="playlistGrid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:16px">
       <div style="color:var(--text-muted);padding:40px;text-align:center">${t('common.loading')}</div>
     </div>
@@ -124,20 +121,6 @@ async function renderList(container) {
     if (cachedPlaylists) renderPlaylistGrid(cachedPlaylists);
     else loadPlaylists();
   });
-  /*
-   * The checklist, if this account still has one. Fire-and-forget so the grid never waits on it.
-   *
-   * ⚠️ onAction IS NOT OPTIONAL HERE. Step 3 points at this page, so its button would otherwise
-   * fall through to `location.hash = '#/playlists'` — which does nothing when you are already on
-   * /playlists. Reported as "it just sits there doing nothing" while the New Playlist button at
-   * the top worked. Same modal, same function, one entry point.
-   */
-  gettingStarted.mount(document.getElementById('gettingStarted'), {
-    onAction: (a) => {
-      if (a === 'new-playlist') { showCreateModal(); return true; }
-      return false;
-    },
-  }).catch(() => {});
   loadPlaylists();
 }
 
@@ -150,8 +133,6 @@ async function loadPlaylists() {
     if (grid) grid.innerHTML = `<div style="grid-column:1/-1;color:var(--text-muted);padding:40px;text-align:center">${t('playlist.load_failed', { error: esc(err.message) })}</div>`;
   }
 
-  // #313/checklist: creating a playlist ticks a step, and every create reloads this list.
-  gettingStarted.refresh().catch(() => {});
 }
 
 function renderPlaylistGrid(playlists) {
@@ -321,13 +302,13 @@ function showPlaylistPreview(playlist) {
   // reachable from this page at all, and the preview player itself ignores the message unless it
   // booted with ?preview=1.
   const send = (action) => {
-    try { frame.contentWindow?.postMessage({ source: 'screentinker-preview', action }, window.location.origin); } catch (e) {}
+    try { frame.contentWindow?.postMessage({ source: 'screentinker-preview', action }, window.location.origin); } catch (e) {} // wire protocol with server/player
   };
   const onPlayerMessage = (ev) => {
     if (ev.origin !== window.location.origin) return;
     if (ev.source !== frame.contentWindow) return;   // ignore any other frame on the page
     const d = ev.data;
-    if (!d || d.source !== 'screentinker-player' || d.type !== 'preview:state') return;
+    if (!d || d.source !== 'screentinker-player' || d.type !== 'preview:state') return; // wire protocol with server/player
     // A multi-zone playlist plays all zones at once, so there is no single item to step through —
     // showing a counter there would be a lie and the buttons would appear dead.
     if (d.zoned || !d.total) {
@@ -474,10 +455,6 @@ function renderDetailContent(container, playlist) {
       </div>
     </div>
     <div id="playlistApprovalBar" style="margin:-8px 0 12px"></div>
-
-    <!-- Step 3 sends you here by creating a playlist, and this is where you fill it. Losing the
-         checklist at exactly this hop is what made the flow feel like it ended. -->
-    <div id="gettingStarted"></div>
 
     ${layoutMockup(playlist)}
     
@@ -627,13 +604,6 @@ function renderDetailContent(container, playlist) {
    * add-content modal rather than the new-playlist dialog, and ctaFor relabels the button to match.
    * Same step, same action, the honest verb for where you are standing.
    */
-  gettingStarted.mount(document.getElementById('gettingStarted'), {
-    onAction: (a) => {
-      if (a === 'new-playlist') { showAddItemModal(playlist.id); return true; }
-      return false;
-    },
-    ctaFor: { playlist: t('gs.playlist.cta_here') },
-  }).catch(() => {});
 
   document.getElementById('deletePlaylistBtn').addEventListener('click', async () => {
     if (!confirm(t('playlist.confirm_delete', { name: playlist.name }))) return;

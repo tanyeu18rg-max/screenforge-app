@@ -4,7 +4,6 @@ import { BroadcastTalkClient } from '../lib/talk-client.js';
 import { showToast } from '../components/toast.js';
 import { esc, livenessBadge, isPlatformAdmin, screenshotUrl } from '../utils.js';
 import { t, tn } from '../i18n.js';
-import * as gettingStarted from '../components/getting-started.js';
 import * as whatsNew from '../components/whats-new.js';
 import { showDeviceOwnerQRModal } from '../components/device-owner-qr-modal.js';
 import { openMoveServerModal } from '../components/move-server-modal.js';
@@ -306,7 +305,7 @@ function renderGroupSection(group, devices, playlists) {
           ${group.sync_enabled ? `
           <select class="input group-backend-select" data-group-id="${group.id}" style="width:130px;padding:4px 8px;font-size:12px;background:var(--bg-input)" title="${esc(t('dashboard.group_sync.backend_hint'))}">
             <option value="auto" ${(group.sync_backend || 'auto') === 'auto' ? 'selected' : ''}>${t('dashboard.group_sync.backend_auto')}</option>
-            <option value="screentinker" ${group.sync_backend === 'screentinker' ? 'selected' : ''}>${t('dashboard.group_sync.backend_screentinker')}</option>
+            <option value="screentinker" ${group.sync_backend === 'screentinker' ? 'selected' : ''}>${t('dashboard.group_sync.backend_screenforge')}</option>
             <option value="brightsign" ${group.sync_backend === 'brightsign' ? 'selected' : ''}>${t('dashboard.group_sync.backend_brightsign')}</option>
           </select>
           ${group.sync_effective ? `
@@ -399,13 +398,17 @@ async function renderStatsPrompt(container) {
   let info;
   try { info = await api.adminGetTelemetry(); } catch { return; }
   if (info.state !== 'unasked') return;
+  // No collector configured (TELEMETRY_ENDPOINT unset): there is nothing to
+  // share with, so don't ask. The operator can still use TELEMETRY_EXTRA_ENDPOINT
+  // for their own numbers, which never prompts.
+  if (!info.endpoint) return;
 
   const el = document.createElement('div');
   el.className = 'settings-section';
   el.style.cssText = 'margin-bottom:16px;display:flex;gap:16px;align-items:flex-start;flex-wrap:wrap';
   el.innerHTML = `
     <div style="flex:1;min-width:260px">
-      <strong>Help show how widely ScreenTinker is deployed?</strong>
+      <strong>Help show how widely Kardinal Screens is deployed?</strong>
       <p style="color:var(--text-muted);font-size:13px;margin:6px 0 0">
         Because most installs are private, we can't tell how many screens are out there. Sharing
         sends a random ID, the version, and how many screens you run — nothing else, ever.
@@ -452,7 +455,6 @@ export function render(container) {
       </div>
     </div>
     <div id="whatsNew"></div>
-    <div id="gettingStarted"></div>
       <div id="dashStats" class="dash-stats-row" style="display:flex;gap:12px;margin-bottom:16px"></div>
     <div style="display:flex;gap:12px;margin-bottom:16px;align-items:center">
       <input type="text" id="deviceSearch" class="input" placeholder="${t('dashboard.search')}" style="max-width:300px">
@@ -1011,28 +1013,6 @@ async function loadDashboard() {
         } catch (_) { /* a release note must never break the dashboard */ }
       }
     }
-
-    // Getting started. devices and playlists are already in hand from the load above, so this
-    // still costs exactly the one content request it always did — and it is skipped entirely
-    // once put away or finished.
-    await gettingStarted.mount(document.getElementById('gettingStarted'), {
-      devices,
-      playlists: playlists || [],
-      onAction: (a) => {
-        if (a === 'add-device') { document.getElementById('addDeviceBtn')?.click(); return true; }
-        /*
-         * Step 4 points back at this page, so it needs an in-page answer too or its button is
-         * dead the same way step 3's was. Assigning happens on a display's own page, and step 4
-         * is only ever the next step once a display exists — so open the first one rather than
-         * leaving the operator to work out that "the screen" means clicking a card.
-         */
-        if (a === 'assign') {
-          const first = devices && devices[0];
-          if (first) { window.location.hash = `#/device/${first.id}`; return true; }
-        }
-        return false;
-      },
-    });
 
     // Stats
     const online = devices.filter(d => d.status === 'online').length;

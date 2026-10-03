@@ -1780,7 +1780,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun setKioskMode(enabled: Boolean) {
         try {
-            getSharedPreferences("screentinker", Context.MODE_PRIVATE)
+            getSharedPreferences("screentinker", Context.MODE_PRIVATE) // persisted key: not renamed
                 .edit().putBoolean("kiosk_enabled", enabled).apply()
         } catch (e: Throwable) { Log.w("MainActivity", "kiosk pref: ${e.message}") }
 
@@ -1794,6 +1794,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun kioskModeEnabled(): Boolean = try {
+        // persisted key: not renamed on rebrand
         getSharedPreferences("screentinker", Context.MODE_PRIVATE).getBoolean("kiosk_enabled", false)
     } catch (e: Throwable) { false }
 
@@ -1853,7 +1854,7 @@ class MainActivity : AppCompatActivity() {
         val input = EditText(this).apply {
             setText(currentUrl)
             inputType = android.text.InputType.TYPE_TEXT_VARIATION_URI
-            hint = "https://screentinker.com"
+            hint = "https://your-server.example.com"
             setSingleLine()
         }
         val container = FrameLayout(this).apply {

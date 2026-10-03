@@ -5,7 +5,7 @@
 #   1. build the SIGNED Android APK locally,
 #   2. pull the CI-built unsigned .wgt back down from the release,
 #   3. assemble a COMPLETE source tarball that bundles BOTH binaries
-#      (extract it and ScreenTinker.apk sits at the root, ready for /download/apk),
+#      (extract it and ScreenForge.apk sits at the root, ready for /download/apk),
 #   4. upload the APK + the complete tarball to the release (replacing the
 #      source-only tarball CI uploaded).
 #
@@ -20,23 +20,23 @@ TAG="v$VERSION"
 : "${KEYSTORE_PASSWORD:?set KEYSTORE_PASSWORD}"
 : "${KEY_PASSWORD:?set KEY_PASSWORD}"
 
-cleanup() { rm -f ScreenTinker.apk ScreenTinker.apk.version ScreenTinker.wgt "screentinker-$VERSION.tar.gz"; }
+cleanup() { rm -f ScreenForge.apk ScreenForge.apk.version ScreenForge.wgt "screenforge-$VERSION.tar.gz"; }
 trap cleanup EXIT
 
 echo "==> Building signed APK $VERSION"
 ( cd android && KEYSTORE_PASSWORD="$KEYSTORE_PASSWORD" KEY_PASSWORD="$KEY_PASSWORD" ./gradlew assembleRelease )
-cp android/app/build/outputs/apk/release/app-release.apk ScreenTinker.apk
+cp android/app/build/outputs/apk/release/app-release.apk ScreenForge.apk
 # #341: the APK declares its own version beside it, so a server never advertises a version it
 # cannot actually serve. lib/apk-cache.js reads this; without it the server falls back to its own
 # VERSION, which is only correct while server and APK ship together. An operator who mounts an
-# older APK at /data/ScreenTinker.apk without a sidecar puts their displays in a reinstall loop.
-printf '%s\n' "$VERSION" > ScreenTinker.apk.version
+# older APK at /data/ScreenForge.apk without a sidecar puts their displays in a reinstall loop.
+printf '%s\n' "$VERSION" > ScreenForge.apk.version
 
 echo "==> Pulling the CI-built unsigned .wgt from release $TAG"
-gh release download "$TAG" -p ScreenTinker.wgt --clobber
+gh release download "$TAG" -p ScreenForge.wgt --clobber
 
 echo "==> Assembling complete tarball (source + apk + wgt)"
-OUT="screentinker-$VERSION.tar.gz"
+OUT="screenforge-$VERSION.tar.gz"
 # NOTE: `tar` archives DOTFILES too, so anything secret sitting under server/ ships
 # unless it is excluded by name. server/.env (Graph credentials) is gitignored, which
 # is precisely why it never showed up in a diff - the exclude list is the only thing
@@ -59,7 +59,7 @@ tar cf "$TMPTAR" \
   --exclude='.claude' --exclude='.cc-writes' \
   --exclude='brightsign/*.zip' --exclude='brightsign/server-payload.json' \
   server frontend scripts VERSION README.md LICENSE \
-  ScreenTinker.apk ScreenTinker.apk.version ScreenTinker.wgt
+  ScreenForge.apk ScreenForge.apk.version ScreenForge.wgt
 tar rf "$TMPTAR" .env.example      # the one .env* that is meant to ship
 gzip -f "$TMPTAR"                  # -> $OUT
 
@@ -103,7 +103,7 @@ echo "    clean ($(tar tzf "$OUT" | wc -l) files, .env.example present)"
 # release's - and a .vpkg for the previous version installs happily and then reports the wrong
 # version to the dashboard forever. Trust vpkg-info.json, not the filename or the mtime.
 VPKG_DIR=vega/build/armv7-release
-VPKG="$VPKG_DIR/screentinker-vega_armv7.vpkg"
+VPKG="$VPKG_DIR/screenforge-vega_armv7.vpkg"
 VPKG_INFO="$VPKG_DIR/vpkg-info.json"
 if [ ! -f "$VPKG" ]; then
   echo "ERROR: $VPKG is missing, so $TAG would ship without the Vega package." >&2
@@ -122,7 +122,7 @@ fi
 echo "==> Vega package OK: $(du -h "$VPKG" | cut -f1), declares $VPKG_VERSION"
 
 echo "==> Uploading APK + complete tarball + Vega package to $TAG"
-gh release upload "$TAG" "$OUT" ScreenTinker.apk ScreenTinker.apk.version "$VPKG" --clobber
+gh release upload "$TAG" "$OUT" ScreenForge.apk ScreenForge.apk.version "$VPKG" --clobber
 
 echo "==> Done: $TAG now carries the standalone APK, the Vega .vpkg and a tarball bundling apk + wgt."
 
@@ -145,12 +145,12 @@ autorun.zip
 autorun-server.zip
 server-payload.zip
 server-payload.json
-ScreenTinker.apk
-ScreenTinker.wgt
-ScreenTinker.ipk
-screentinker-$VERSION.tar.gz
-screentinker-sbom-$VERSION.cdx.json
-screentinker-vega_armv7.vpkg
+ScreenForge.apk
+ScreenForge.wgt
+ScreenForge.ipk
+screenforge-$VERSION.tar.gz
+screenforge-sbom-$VERSION.cdx.json
+screenforge-vega_armv7.vpkg
 "
 echo "==> Checking $TAG carries every expected asset"
 PRESENT="$(gh release view "$TAG" --json assets -q '.assets[].name')"

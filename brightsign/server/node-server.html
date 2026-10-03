@@ -1,6 +1,6 @@
 <!doctype html>
 <!--
-  ScreenTinker server diagnostics, displayed on the player.
+  ScreenForge server diagnostics, displayed on the player.
 
   THE SERVER IS NOT IN THIS PAGE. It runs as a separate roNodeJs process; this is only the screen.
 
@@ -18,7 +18,7 @@
   downloading itself - and it does that over HTTP because the two are no longer in one process.
 -->
 <meta charset="utf-8">
-<title>ScreenTinker server</title>
+<title>ScreenForge server</title>
 <style>
   html, body { margin: 0; height: 100%; background: #0b0f1a; color: #e6edf7;
                font: 22px/1.5 ui-monospace, "DejaVu Sans Mono", monospace; }
@@ -41,10 +41,10 @@
          white-space: pre-wrap; }
 </style>
 
-<iframe id="player" title="ScreenTinker player" allow="autoplay; fullscreen"></iframe>
+<iframe id="player" title="ScreenForge player" allow="autoplay; fullscreen"></iframe>
 
 <div class="wrap">
-  <h1>ScreenTinker server</h1>
+  <h1>ScreenForge server</h1>
   <div class="sub" id="sub">starting&hellip;</div>
   <div class="url" id="url">&mdash;</div>
   <table>
@@ -192,7 +192,7 @@
       el('url').textContent = 'set {"server": 1} in st-config.json to enable';
       el('url').className = 'url pending';
       el('log').textContent =
-        'This player is not running a ScreenTinker server.\n\n' +
+        'This player is not running a ScreenForge server.\n\n' +
         'Exactly one device per site should host one. To make it this device, put\n' +
         '  {"server": 1}\n' +
         'in st-config.json on the storage root and reboot.';

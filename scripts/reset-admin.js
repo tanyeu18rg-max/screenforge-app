@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Emergency admin access for self-hosted ScreenTinker.
+ * Emergency admin access for self-hosted ScreenForge.
  * Run this on the server to get a temporary admin login token.
  *
  *   node scripts/reset-admin.js              mint a one-hour, single-use token
@@ -61,7 +61,7 @@ const port = config.port || 3001;
 
 console.log(`
 ╔══════════════════════════════════════════════════╗
-║         ScreenTinker Admin Recovery              ║
+║         ScreenForge Admin Recovery              ║
 ╠══════════════════════════════════════════════════╣
 ║  A single-use admin token has been generated.    ║
 ║  Valid for 1 hour, or until it is used once.     ║

@@ -15,7 +15,7 @@
  * signed bytes are the reviewed bytes (catalog/README.md "Reproducible").
  *
  * Envelope (the file on disk / on the wire):
- *   { "format": "screentinker-template/1", "package": "<base64 canonical bytes>",
+ *   { "format": "screenforge-template/1", "package": "<base64 canonical bytes>",
  *     "signature": { "key_id": "<16 hex>", "sig": "<base64>" } | null }
  * Canonical package bytes: JSON with keys sorted at every depth and no whitespace, of
  *   { "manifest": {...}, "files": { "<path>": "<base64>" } }
@@ -25,7 +25,7 @@
 
 const crypto = require('crypto');
 
-const FORMAT = 'screentinker-template/1';
+const FORMAT = 'screenforge-template/1';
 
 /*
  * Two budgets. Everything a document INLINES (html, css, js, images, fonts) shares the small one,

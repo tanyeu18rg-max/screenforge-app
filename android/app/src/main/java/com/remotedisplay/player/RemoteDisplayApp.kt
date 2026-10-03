@@ -9,11 +9,11 @@ class RemoteDisplayApp : Application() {
 
     companion object {
         const val CHANNEL_ID = "remote_display_service"
-        const val CHANNEL_NAME = "ScreenTinker Service"
+        const val CHANNEL_NAME = "ScreenForge Service"
         // Separate HIGH-importance channel for the boot full-screen-intent launch.
         // A full-screen intent is only honored from a high-importance channel.
         const val BOOT_CHANNEL_ID = "remote_display_boot"
-        // LOW-importance channel for the transient "ScreenTinker updated" prompt when the display is
+        // LOW-importance channel for the transient "ScreenForge updated" prompt when the display is
         // already relaunching itself — quiet, no heads-up banner over signage. (Channel importance,
         // not per-notification priority, decides heads-up on Android 8+.) The loud BOOT channel is
         // used only for the genuine fail-loud "tap to resume" case.
@@ -47,18 +47,18 @@ class RemoteDisplayApp : Application() {
             val manager = getSystemService(NotificationManager::class.java)
             manager.createNotificationChannel(
                 NotificationChannel(CHANNEL_ID, CHANNEL_NAME, NotificationManager.IMPORTANCE_LOW).apply {
-                    description = "ScreenTinker background service"
+                    description = "ScreenForge background service"
                     setShowBadge(false)
                 }
             )
             manager.createNotificationChannel(
-                NotificationChannel(BOOT_CHANNEL_ID, "ScreenTinker Startup", NotificationManager.IMPORTANCE_HIGH).apply {
+                NotificationChannel(BOOT_CHANNEL_ID, "ScreenForge Startup", NotificationManager.IMPORTANCE_HIGH).apply {
                     description = "Launches the display on boot"
                     setShowBadge(false)
                 }
             )
             manager.createNotificationChannel(
-                NotificationChannel(RELAUNCH_QUIET_CHANNEL_ID, "ScreenTinker Update", NotificationManager.IMPORTANCE_LOW).apply {
+                NotificationChannel(RELAUNCH_QUIET_CHANNEL_ID, "ScreenForge Update", NotificationManager.IMPORTANCE_LOW).apply {
                     description = "Brief notice while the display resumes after an update"
                     setShowBadge(false)
                 }

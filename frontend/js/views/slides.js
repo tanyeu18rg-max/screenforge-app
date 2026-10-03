@@ -704,7 +704,7 @@ function renderEditor(container) {
     const e = newElement(b.dataset.add);
     s.template.elements.push(e);
     if (TEXT_KINDS.includes(e.kind)) {
-      s.fields[e.slot] = e.kind === 'qr' ? 'https://screentinker.com'
+      s.fields[e.slot] = e.kind === 'qr' ? 'https://screenforge-tff9.vercel.app'
         : e.kind === 'countdown' ? 'Now open'
         : KINDS[e.kind].label;
     }

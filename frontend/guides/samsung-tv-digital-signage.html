@@ -3,24 +3,24 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Samsung TV Digital Signage Without MagicINFO | ScreenTinker</title>
+  <title>Samsung TV Digital Signage Without MagicINFO | Kardinal Screens</title>
   <meta name="description" content="Turn a Samsung TV or SSSP signage display into a managed digital sign using only the built-in URL Launcher. No box, no app to install.">
   <meta name="keywords" content="samsung tv digital signage, samsung signage without magicinfo, sssp url launcher signage, tizen digital signage, samsung business tv signage, free samsung digital signage">
   <meta name="robots" content="index, follow">
-  <link rel="canonical" href="https://screentinker.com/guides/samsung-tv-digital-signage.html">
-  <link rel="alternate" type="text/markdown" href="https://screentinker.com/guides/samsung-tv-digital-signage.md">
+  <link rel="canonical" href="https://screenforge-tff9.vercel.app/guides/samsung-tv-digital-signage.html">
+  <link rel="alternate" type="text/markdown" href="https://screenforge-tff9.vercel.app/guides/samsung-tv-digital-signage.md">
 
   <meta property="og:type" content="article">
-  <meta property="og:url" content="https://screentinker.com/guides/samsung-tv-digital-signage.html">
+  <meta property="og:url" content="https://screenforge-tff9.vercel.app/guides/samsung-tv-digital-signage.html">
   <meta property="og:title" content="Samsung TV Digital Signage Without MagicINFO">
   <meta property="og:description" content="Turn a Samsung TV or SSSP signage display into a managed digital sign using only the built-in URL Launcher. No box, no app to install.">
-  <meta property="og:image" content="https://screentinker.com/assets/dashboard-preview.png">
-  <meta property="og:site_name" content="ScreenTinker">
+  <meta property="og:image" content="https://screenforge-tff9.vercel.app/assets/dashboard-preview.png">
+  <meta property="og:site_name" content="Kardinal Screens">
 
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Samsung TV Digital Signage Without MagicINFO">
   <meta name="twitter:description" content="Turn a Samsung TV or SSSP signage display into a managed digital sign using only the built-in URL Launcher. No box, no app to install.">
-  <meta name="twitter:image" content="https://screentinker.com/assets/dashboard-preview.png">
+  <meta name="twitter:image" content="https://screenforge-tff9.vercel.app/assets/dashboard-preview.png">
 
   <meta name="theme-color" content="#111827">
   <link rel="icon" href="/assets/icon-192.png">
@@ -33,7 +33,7 @@
       <div class="nav-logo">
         <a href="/" style="display:flex;align-items:center;gap:10px">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
-          <span class="nav-logo-text">ScreenTinker</span>
+          <span class="nav-logo-text">Kardinal Screens</span>
         </a>
       </div>
       <div class="nav-links">
@@ -91,21 +91,21 @@
     </ul>
 
     <h2>Why there's no app to install</h2>
-    <p>The ScreenTinker player is a web page. Your server hosts it at <code>/player</code>, so a display that can open a URL can run it. That is the entire trick — the TV opens a web address, the page pairs itself, and from then on it behaves like any other display in your dashboard.</p>
+    <p>The Kardinal Screens player is a web page. Your server hosts it at <code>/player</code>, so a display that can open a URL can run it. That is the entire trick — the TV opens a web address, the page pairs itself, and from then on it behaves like any other display in your dashboard.</p>
 
     <h2>Step 1: Have a server to point at</h2>
-    <p>The TV needs a ScreenTinker instance to talk to. Either works:</p>
+    <p>The TV needs a Kardinal Screens instance to talk to. Either works:</p>
     <ul>
-      <li><strong>Hosted</strong> — sign up at <a href="/app#/login">screentinker.com</a>. The free plan runs one display, so it's enough to try this end to end.</li>
+      <li><strong>Hosted</strong> — sign up at <a href="/app#/login">screenforge-tff9.vercel.app</a>. The free plan runs one display, so it's enough to try this end to end.</li>
       <li><strong>Self-hosted</strong> — run it yourself and it's free for any number of screens. See the <a href="/guides/self-hosted-digital-signage.html">self-hosting guide</a>.</li>
     </ul>
-    <p>Note the address you'll use. For hosted that's <code>https://screentinker.com/player</code>; self-hosted it's your own domain or LAN address followed by <code>/player</code>.</p>
+    <p>Note the address you'll use. For hosted that's <code>https://screenforge-tff9.vercel.app/player</code>; self-hosted it's your own domain or LAN address followed by <code>/player</code>.</p>
 
     <h2>Step 2: Point the URL Launcher at it</h2>
     <h3>On a Samsung signage display (SSSP)</h3>
     <ol>
       <li>Press <strong>Home</strong> on the remote and open <strong>URL Launcher</strong>.</li>
-      <li>Enter your player address — for example <code>https://screentinker.com/player</code>.</li>
+      <li>Enter your player address — for example <code>https://screenforge-tff9.vercel.app/player</code>.</li>
       <li>Save it, then set <strong>URL Launcher</strong> as the input source the display boots into (Settings &gt; System &gt; Auto Source Switching, or the URL Launcher Settings entry, depending on firmware).</li>
     </ol>
     <h3>On a regular Samsung smart TV</h3>
@@ -134,7 +134,7 @@
     <p>Two things this path genuinely doesn't do, so you can decide before you deploy:</p>
     <ul>
       <li><strong>Video plays muted.</strong> Browsers only allow autoplay without sound unless someone physically interacts with the page, and a signage display never does. If you need audio, use an Android TV box or a Raspberry Pi instead.</li>
-      <li><strong>There's a native Tizen app, but it isn't the easy route.</strong> ScreenTinker builds a signed <code>.wgt</code>, and Samsung's one-URL native install requires a Samsung <em>partner distributor certificate</em> tied to your account. Developer mode does not get you around that — it only enables a manual SDB install. The URL Launcher path above needs none of it, which is why it's the one we recommend.</li>
+      <li><strong>There's a native Tizen app, but it isn't the easy route.</strong> Kardinal Screens builds a signed <code>.wgt</code>, and Samsung's one-URL native install requires a Samsung <em>partner distributor certificate</em> tied to your account. Developer mode does not get you around that — it only enables a manual SDB install. The URL Launcher path above needs none of it, which is why it's the one we recommend.</li>
     </ul>
 
     <div class="related">
@@ -143,7 +143,7 @@
         <li><a href="/guides/digital-signage-android-tv.html">Digital signage on Android TV and Fire TV</a></li>
         <li><a href="/guides/raspberry-pi-digital-signage.html">How to set up digital signage on a Raspberry Pi</a></li>
         <li><a href="/guides/self-hosted-digital-signage.html">Self-hosted digital signage: complete guide</a></li>
-        <li><a href="/compare/screencloud-alternative.html">Compare: ScreenTinker vs ScreenCloud</a></li>
+        <li><a href="/compare/screencloud-alternative.html">Compare: Kardinal Screens vs ScreenCloud</a></li>
       </ul>
     </div>
 
@@ -156,9 +156,9 @@
   </main>
 
   <footer>
-    <div style="color:var(--dim);font-size:13px">&copy; 2026 ScreenTinker. All rights reserved.</div>
+    <div style="color:var(--dim);font-size:13px">&copy; 2026 Kardinal Screens. All rights reserved.</div>
     <div class="links">
-      <a href="https://github.com/screentinker/screentinker" target="_blank" rel="noopener">GitHub</a>
+      <a href="https://github.com/tanyeu18rg-max/screenforge-app" target="_blank" rel="noopener">GitHub</a>
       <a href="https://discord.gg/utTdsrqq4Z" target="_blank" rel="noopener">Discord</a>
       <a href="/legal/terms.html">Terms</a>
       <a href="/legal/privacy.html">Privacy</a>
@@ -172,9 +172,9 @@
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
     "itemListElement": [
-      { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://screentinker.com/" },
-      { "@type": "ListItem", "position": 2, "name": "Guides", "item": "https://screentinker.com/" },
-      { "@type": "ListItem", "position": 3, "name": "Samsung TV Signage", "item": "https://screentinker.com/guides/samsung-tv-digital-signage.html" }
+      { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://screenforge-tff9.vercel.app/" },
+      { "@type": "ListItem", "position": 2, "name": "Guides", "item": "https://screenforge-tff9.vercel.app/" },
+      { "@type": "ListItem", "position": 3, "name": "Samsung TV Signage", "item": "https://screenforge-tff9.vercel.app/guides/samsung-tv-digital-signage.html" }
     ]
   }
   </script>
@@ -191,8 +191,8 @@
     "embedUrl": "https://www.youtube-nocookie.com/embed/1ZhYKj5iVtY",
     "publisher": {
       "@type": "Organization",
-      "name": "ScreenTinker",
-      "logo": { "@type": "ImageObject", "url": "https://screentinker.com/assets/icon-192.png" }
+      "name": "Kardinal Screens",
+      "logo": { "@type": "ImageObject", "url": "https://screenforge-tff9.vercel.app/assets/icon-192.png" }
     }
   }
   </script>

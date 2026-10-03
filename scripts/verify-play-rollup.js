@@ -12,7 +12,7 @@
  *   node scripts/verify-play-rollup.js
  *   node scripts/verify-play-rollup.js --days 14
  *   node scripts/verify-play-rollup.js --start 2026-09-01 --end 2026-09-15
- *   node scripts/verify-play-rollup.js --db /opt/screentinker/server/db/remote_display.db
+ *   node scripts/verify-play-rollup.js --db /opt/screenforge/server/db/remote_display.db
  *
  * Exit 0 = every workspace and device agrees. Exit 1 = a discrepancy (details printed).
  * Exit 2 = nothing comparable (no overlap yet — the rollup has not run, or raw is already gone).

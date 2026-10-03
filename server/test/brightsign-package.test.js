@@ -137,7 +137,7 @@ test('a package fetched from alpha points at alpha, not the committed default', 
   assert.equal(packagedServerUrl(alpha.buffer), 'https://alpha.screentinker.com');
   pkgLib._reset();
   const plain = await pkgLib.getPackage();
-  assert.equal(packagedServerUrl(plain.buffer), 'https://screentinker.com',
+  assert.equal(packagedServerUrl(plain.buffer), 'https://your-server.example.com',
     'with no URL to stamp, the committed default ships unchanged');
 });
 

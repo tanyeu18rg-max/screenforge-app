@@ -5,7 +5,7 @@
 // polling /tizen/sssp_config.xml can never turn into a per-request statSync flood.
 //
 // The SIGNED .wgt is provided out-of-band (like the APK): container operators mount it at
-// /data/ScreenTinker.wgt. The in-repo tizen/ copy (usually unsigned, inspection-only) is a
+// /data/Kardinal Screens.wgt. The in-repo tizen/ copy (usually unsigned, inspection-only) is a
 // last-resort fallback so a dev box still serves *something*.
 //
 // size is the load-bearing field, and its UNIT is the thing that bites: sssp_config.xml reports
@@ -21,9 +21,9 @@ const config = require('../config');
 
 function candidates() {
   return [
-    path.join(config.dataDir, 'ScreenTinker.wgt'),          // operator mount (signed) — wins
-    path.join(__dirname, '..', '..', 'ScreenTinker.wgt'),   // repo root (release artifact)
-    path.join(__dirname, '..', '..', 'tizen', 'ScreenTinker.wgt'), // in-repo build (usually unsigned)
+    path.join(config.dataDir, 'Kardinal Screens.wgt'),          // operator mount (signed) — wins
+    path.join(__dirname, '..', '..', 'Kardinal Screens.wgt'),   // repo root (release artifact)
+    path.join(__dirname, '..', '..', 'tizen', 'Kardinal Screens.wgt'), // in-repo build (usually unsigned)
   ];
 }
 
@@ -93,7 +93,7 @@ function start() {
 
 // The SSSP manifest the panel fetches at <entered-url>/sssp_config.xml. widgetname (no extension)
 // tells the panel to download <widgetname>.wgt from the same directory — we serve it at
-// /tizen/ScreenTinker.wgt. webtype=tizen marks it a Tizen web app.
+// /tizen/Kardinal Screens.wgt. webtype=tizen marks it a Tizen web app.
 // Bytes -> kilobytes for the manifest, rounded UP. Rounding up rather than down on purpose: the
 // value tells the panel how much to expect, and under-reporting a partial last KB is what a
 // truncated download looks like. A file that exists always advertises at least 1.
@@ -108,10 +108,10 @@ function ssspConfigXml(wgt = cache) {
 <widget>
 \t<ver>${wgt.version}</ver>
 \t<size>${sizeKb(wgt.size)}</size>
-\t<widgetname>ScreenTinker</widgetname>
+\t<widgetname>Kardinal Screens</widgetname>
 \t<webtype>tizen</webtype>
 </widget>
 `;
 }
 
-module.exports = { ssspVer, start, refresh, get, ssspConfigXml, sizeKb, WIDGET_NAME: 'ScreenTinker' };
+module.exports = { ssspVer, start, refresh, get, ssspConfigXml, sizeKb, WIDGET_NAME: 'Kardinal Screens' };

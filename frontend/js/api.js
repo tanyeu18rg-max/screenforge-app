@@ -740,6 +740,13 @@ export const api = {
   adminDeleteWorkspace: (id) => request(`/admin/workspaces/${id}`, { method: 'DELETE' }),
   aiGetSettings: () => request('/ai/settings'),
   aiSaveSettings: (data) => request('/ai/settings', { method: 'PUT', body: JSON.stringify(data) }),
+  // Kardinal chat (agentic tool-calling) + Brain knowledge base.
+  aiChat: (message, history) => request('/ai/chat', { method: 'POST', body: JSON.stringify({ message, history }) }),
+  aiBrainList: () => request('/ai/brain'),
+  aiBrainGet: (id) => request(`/ai/brain/${encodeURIComponent(id)}`),
+  aiBrainAdd: (data) => request('/ai/brain', { method: 'POST', body: JSON.stringify(data) }),
+  aiBrainUpdate: (id, data) => request(`/ai/brain/${encodeURIComponent(id)}`, { method: 'PUT', body: JSON.stringify(data) }),
+  aiBrainDelete: (id) => request(`/ai/brain/${encodeURIComponent(id)}`, { method: 'DELETE' }),
   aiGenerateDesign: (prompt) => request('/ai/generate-design', { method: 'POST', body: JSON.stringify({ prompt }) }),
   /* A whole SLIDE from a sentence: {template, fields}, ready to drop onto the editor's canvas.
    * Shaped differently from generate-design because a slide keeps layout and words apart. */

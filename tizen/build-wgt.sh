@@ -1,17 +1,17 @@
 #!/bin/bash
-# Build the ScreenTinker Tizen .wgt.
+# Build the ScreenForge Tizen .wgt.
 #  - If the Tizen CLI is available, sign with a security profile (arg 1, default
-#    "ScreenTinker") and emit a signed, TV-installable .wgt.
+#    "ScreenForge") and emit a signed, TV-installable .wgt.
 #  - Otherwise, emit an UNSIGNED .wgt (plain zip) — fine for inspection / the
 #    URL-Launcher path, but TVs need a signed package.
-#  - `--store` builds ScreenTinker-store.wgt for the Samsung Apps TV Seller Office: the SAME app,
+#  - `--store` builds ScreenForge-store.wgt for the Samsung Apps TV Seller Office: the SAME app,
 #    with the partner-only parts of config.xml stripped at package time (see store_manifest below).
 # Only the app files are packaged (README/build script/.gitignore are excluded).
 set -e
 cd "$(dirname "$0")"
 STORE=0
 if [ "${1:-}" = "--store" ]; then STORE=1; shift; fi
-OUT="ScreenTinker.wgt"; [ "$STORE" = 1 ] && OUT="ScreenTinker-store.wgt"
+OUT="ScreenForge.wgt"; [ "$STORE" = 1 ] && OUT="ScreenForge-store.wgt"
 FILES="config.xml index.html icon.png css js"
 
 # Samsung Apps TV Seller Office pre-test (2026-09-18) rejected the consumer submission on four
@@ -73,12 +73,12 @@ if [ -n "$VER" ]; then
 fi
 
 if command -v tizen >/dev/null 2>&1; then
-  PROFILE="${1:-ScreenTinker}"
+  PROFILE="${1:-ScreenForge}"
   echo "Tizen CLI found — signing with profile '$PROFILE'…"
   STAGE="$(mktemp -d)"
   cp -r $FILES "$STAGE"/
   [ "$STORE" = 1 ] && store_manifest "$STAGE/config.xml"
-  # `tizen package` names its output after <name> in config.xml (ScreenTinker.wgt). Package into a
+  # `tizen package` names its output after <name> in config.xml (ScreenForge.wgt). Package into a
   # private dir and move, so a --store build can never clobber the SSSP package beside it.
   mkdir -p "$STAGE/out"
   tizen package -t wgt -s "$PROFILE" -- "$STAGE" -o "$STAGE/out" >/dev/null
@@ -100,7 +100,7 @@ fi
 
 # SSSP URL-Launcher manifest. Host this + the .wgt in the SAME folder, then enter that folder's
 # URL in a Samsung panel's URL Launcher / Custom App to natively install (the panel fetches
-# <url>/sssp_config.xml, reads size+ver, downloads ScreenTinker.wgt). The ScreenTinker server
+# <url>/sssp_config.xml, reads size+ver, downloads ScreenForge.wgt). The ScreenForge server
 # also generates this dynamically at /tizen/sssp_config.xml — this static copy is for hosting the
 # .wgt on a CDN/bucket instead.
 #
@@ -137,7 +137,7 @@ cat > sssp_config.xml <<EOF
 <widget>
 	<ver>${SSSP_VER}</ver>
 	<size>${WGT_SIZE}</size>
-	<widgetname>ScreenTinker</widgetname>
+	<widgetname>ScreenForge</widgetname>
 	<webtype>tizen</webtype>
 </widget>
 EOF

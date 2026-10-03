@@ -37,7 +37,7 @@ trap 'rm -rf "$STAGE"' EXIT
 cp brightsign/autozip.brs        "$STAGE/"
 cp brightsign/autorun.brs        "$STAGE/"
 cp brightsign/offline.html       "$STAGE/"
-cp brightsign/screentinker.json  "$STAGE/"
+cp brightsign/screenforge.json  "$STAGE/"
 
 # Stamp the version into the host so the script REPORTS the version it actually is. A package that
 # ships reporting the old version is applied, reports the old version, and is offered again on the
@@ -60,7 +60,7 @@ fi
 
 # Point a batch at a specific server without hand-editing each card.
 if [ -n "$SERVER" ]; then
-  python3 - "$STAGE/screentinker.json" "$SERVER" <<'PY'
+  python3 - "$STAGE/screenforge.json" "$SERVER" <<'PY'
 import json, sys
 path, server = sys.argv[1], sys.argv[2]
 cfg = json.load(open(path))

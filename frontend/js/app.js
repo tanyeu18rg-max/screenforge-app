@@ -1,5 +1,6 @@
 import { connectSocket } from './socket.js';
 import * as dashboard from './views/dashboard.js';
+import * as overview from './views/overview.js';
 import * as deviceDetail from './views/device-detail.js';
 import * as contentLibrary from './views/content-library.js';
 import * as settings from './views/settings.js';
@@ -29,6 +30,8 @@ import * as playlists from './views/playlists.js';
 import * as workspaceMembers from './views/workspace-members.js';
 import * as forcePasswordChange from './views/force-password-change.js';
 import * as noWorkspace from './views/no-workspace.js';
+import * as brain from './views/brain.js';
+import { initAiChat } from './components/ai-chat.js';
 import { applyBranding } from './branding.js';
 import { t } from './i18n.js';
 import { isPlatformAdmin } from './utils.js';
@@ -224,6 +227,7 @@ function consumePendingInviteToast() {
 
 // Map nav-link data-view to its translation key.
 const NAV_LABEL_KEYS = {
+  overview: 'nav.overview',
   dashboard: 'nav.displays',
   content: 'nav.content',
   playlists: 'nav.playlists',
@@ -551,10 +555,15 @@ function route() {
   // Update user info in sidebar
   updateSidebarUser();
 
+  // Kardinal AI chat: one floating button + drawer on every authenticated page.
+  // Singleton-guarded inside initAiChat; no-op on repeat route changes.
+  initAiChat();
+
   const navLinks = document.querySelectorAll('.nav-link');
   navLinks.forEach(link => {
     link.classList.remove('active');
-    if (hash === '#/' && link.dataset.view === 'dashboard') link.classList.add('active');
+    if (hash === '#/' && link.dataset.view === 'overview') link.classList.add('active');
+    else if ((hash === '#/displays' || hash.startsWith('#/device/')) && link.dataset.view === 'dashboard') link.classList.add('active');
     else if (hash.startsWith('#/content') && link.dataset.view === 'content') link.classList.add('active');
     else if (hash.startsWith('#/settings') && link.dataset.view === 'settings') link.classList.add('active');
     else if (hash.startsWith('#/billing') && link.dataset.view === 'billing') link.classList.add('active');
@@ -571,7 +580,7 @@ function route() {
     else if ((hash === '#/designer' || hash.startsWith('#/designer/')) && link.dataset.view === 'designer') link.classList.add('active');
     else if ((hash === '#/kiosk' || hash.startsWith('#/kiosk/')) && link.dataset.view === 'kiosk') link.classList.add('active');
     else if (hash === '#/help' && link.dataset.view === 'help') link.classList.add('active');
-    else if (hash.startsWith('#/device/') && link.dataset.view === 'dashboard') link.classList.add('active');
+    else if (hash === '#/brain' && link.dataset.view === 'brain') link.classList.add('active');
     else if (hash.startsWith('#/platform/') && link.dataset.view === 'platform-' + hash.slice(11).split(/[/?]/)[0]) link.classList.add('active');
     else if (hash.startsWith('#/admin/player-debug') && link.dataset.view === 'platform-system') link.classList.add('active');
     else if ((hash === '#/members' || (hash.startsWith('#/workspace/') && hash.includes('/members'))) && link.dataset.view === 'members') link.classList.add('active');
@@ -579,6 +588,9 @@ function route() {
 
   // Route to view
   if (hash === '#/' || hash === '#' || hash === '') {
+    currentView = overview;
+    overview.render(app);
+  } else if (hash === '#/displays') {
     currentView = dashboard;
     dashboard.render(app);
   } else if (hash.startsWith('#/device/')) {
@@ -606,6 +618,11 @@ function route() {
   } else if (hash === '#/data-sources' || hash.startsWith('#/data-sources/')) {
     currentView = dataSources;
     dataSources.render(app);
+  } else if (hash === '#/brain') {
+    // Brain: the workspace knowledge base behind Kardinal AI (editors+; the
+    // view itself bounces read-only users and the server enforces it).
+    currentView = brain;
+    brain.render(app);
   } else if (hash === '#/reviews') {
     currentView = reviews;
     reviews.render(app);
@@ -716,6 +733,16 @@ function updateSidebarUser() {
   // Runs at boot from the cached user (no flash on warm loads) and again after /me.
   const billingNav = document.getElementById('billingNavItem');
   if (billingNav) billingNav.style.display = user.hide_billing ? 'none' : '';
+
+  // Brain (AI knowledge base): editors and up. Starts hidden in the markup and
+  // is revealed here, so viewers never see a flash of a section they cannot use.
+  // (The view and the API both enforce the gate server-side too.)
+  const brainNav = document.getElementById('brainNavItem');
+  if (brainNav) {
+    const canEditWs = isPlatformAdmin(user)
+      || ['workspace_admin', 'workspace_editor'].includes(user.current_workspace_role);
+    brainNav.style.display = canEditWs ? '' : 'none';
+  }
 
   /*
    * Servers appears only when this node is actually a hub.

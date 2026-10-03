@@ -11,13 +11,13 @@ const secretbox = require('./secretbox');
 const { hashToken } = require('../middleware/apiToken');
 
 const STEP_SEC = 30;
-const ISSUER = 'ScreenTinker';
+const ISSUER = 'Kardinal Screens';
 authenticator.options = { window: 1 }; // accept ±1 step (±30s) for clock skew
 
 function generateSecret() { return authenticator.generateSecret(); }            // base32 plaintext
-// otpauth:// URI for the QR. `instance` (the dashboard host, e.g. alpha.screentinker.com)
+// otpauth:// URI for the QR. `instance` (the dashboard host, e.g. your-server.example.com)
 // is folded into the issuer so an authenticator app can tell apart accounts on more than
-// one ScreenTinker — it shows "ScreenTinker (host)" instead of a bare, ambiguous "ScreenTinker".
+// one Kardinal Screens — it shows "Kardinal Screens (host)" instead of a bare, ambiguous "Kardinal Screens".
 function keyuri(email, secret, instance) {
   const issuer = instance ? `${ISSUER} (${instance})` : ISSUER;
   return authenticator.keyuri(email, issuer, secret);

@@ -805,7 +805,7 @@ export default {
   'dashboard.device_ota_stuck': '有可用更新（v{version}），但已连续 {n} 次安装失败，需要手动更新',
   'dashboard.group_sync.label': '同步播放', 'dashboard.group_sync.hint': '让组内显示屏严格同步播放共享播放列表——内容同时开始和结束；即使没有互联网，也会通过共享时钟和排程保持一致。需要先为该组分配播放列表；使用其他播放列表的显示屏会被忽略。',
   'dashboard.group_sync.resync': '立即重新同步', 'dashboard.group_sync.resync_hint': '立即让此组中的每块显示屏重新对齐共享排程。', 'dashboard.group_sync.toast_on': '已启用同步播放', 'dashboard.group_sync.toast_off': '已停用同步播放', 'dashboard.group_sync.toast_resync': '已向该组发送重新同步指令',
-  'dashboard.group_sync.backend_auto': '同步：自动', 'dashboard.group_sync.backend_screentinker': '同步：标准', 'dashboard.group_sync.backend_brightsign': '同步：BrightSign',
+  'dashboard.group_sync.backend_auto': '同步：自动', 'dashboard.group_sync.backend_screenforge': '同步：标准', 'dashboard.group_sync.backend_brightsign': '同步：BrightSign',
   'dashboard.group_sync.backend_hint': '选择该组使用的同步协议。标准协议适用于所有播放器，能将显示屏精确到秒地保持一致，无需指定主屏，也不需要互联网。BrightSign 可实现逐帧同步，但仅适用于同一网络中的 BrightSign 显示屏，并且只同步视频。自动模式会在条件满足时选择 BrightSign，否则使用标准协议。',
   'dashboard.group_sync.toast_backend': '同步协议已更新', 'dashboard.group_sync.toast_downgraded': '已保存，但此组无法使用该同步协议：',
   'content.remote_url_placeholder': 'https://example.com/video.mp4', 'content.youtube_url_placeholder': 'https://youtube.com/watch?v=...',

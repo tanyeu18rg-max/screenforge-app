@@ -1,7 +1,7 @@
 'use strict';
 
 /*
- * The Node half of "ScreenTinker server, running on the player it serves".
+ * The Node half of "ScreenForge server, running on the player it serves".
  *
  * BrightScript launches this with roNodeJs: a REAL Node process, not an roHtmlWidget. That
  * distinction is the whole reason this file got simpler. Inside a widget the server is a Node
@@ -414,7 +414,7 @@ const SERVER_ENTRY = path.join(__dirname, 'server', 'server.js');
  * fully static, linking nothing of theirs. ffprobe carries no decoders at all: durations and stream
  * geometry come from the container, which is why it is 1.8MB against ffmpeg's 5MB.
  */
-const MEDIA_BIN_DIR = '/tmp/screentinker-bin';
+const MEDIA_BIN_DIR = '/tmp/screenforge-bin';
 
 function stageMediaTools() {
   const zlib = require('zlib');
@@ -496,8 +496,10 @@ function stConfig() {
 }
 
 const ST_CFG = stConfig();
-const PAYLOAD_URL = process.env.ST_PAYLOAD_URL || ST_CFG.payloadUrl
-  || 'https://alpha.screentinker.com/scripts/server-payload.zip';
+// No vendor payload host in the fork: the operator must point ST_PAYLOAD_URL (or
+// payloadUrl in st-config.json) at their own server package. Empty = no update
+// checks; the installed server (if any) just runs.
+const PAYLOAD_URL = process.env.ST_PAYLOAD_URL || ST_CFG.payloadUrl || '';
 const MANIFEST_URL = String(PAYLOAD_URL).replace(/\.zip$/, '.json');
 // Set "autoUpdate": false to pin a box to what it has. Absent means updates are on.
 const AUTO_UPDATE = ST_CFG.autoUpdate !== false && ST_CFG.autoUpdate !== 0;
@@ -744,6 +746,7 @@ function checkForUpdate() {
 
 function scheduleUpdateChecks() {
   if (!AUTO_UPDATE || !(UPDATE_CHECK_HOURS > 0)) return;
+  if (!PAYLOAD_URL) { console.log('[update] no payload URL configured — update checks disabled'); return; }
   const everyMs = UPDATE_CHECK_HOURS * 3600 * 1000;
   /*
    * ⚠️ JITTERED. Boxes in a fleet are provisioned together and therefore boot together, so a fixed
@@ -765,6 +768,12 @@ function scheduleUpdateChecks() {
 if (fs.existsSync(SERVER_ENTRY) && !AUTO_UPDATE) {
   installState = { phase: 'installed', detail: 'already present (updates off)', pct: 100 };
   startServer();
+} else if (fs.existsSync(SERVER_ENTRY) && !PAYLOAD_URL) {
+  // No payload host configured: skip update checks entirely rather than asking a
+  // nonexistent default. The installed server just runs.
+  console.log('[update] no payload URL configured (ST_PAYLOAD_URL / st-config.json payloadUrl) — skipping update checks');
+  installState = { phase: 'installed', detail: 'already present (no update source configured)', pct: 100 };
+  startServer();
 } else if (fs.existsSync(SERVER_ENTRY)) {
   const have = installedVersion();
   installState = { phase: 'checking', detail: 'checking for a newer server', pct: null };
@@ -780,6 +789,13 @@ if (fs.existsSync(SERVER_ENTRY) && !AUTO_UPDATE) {
     remember('log', ['payload ' + m.version + ' published, have ' + (have || 'none')]);
     runInstall(m);
   });
+} else if (!PAYLOAD_URL) {
+  // First boot with no server installed and nowhere to download one from: say so
+  // plainly instead of failing obscurely inside the installer.
+  fatalMessage = 'no server payload installed and no payload URL configured — set ST_PAYLOAD_URL or payloadUrl in st-config.json';
+  console.error('[boot] ' + fatalMessage);
+  remember('error', [fatalMessage]);
+  installState = { phase: 'failed', detail: fatalMessage, pct: null };
 } else {
   /*
    * ⚠️ THE FIRST INSTALL ASKS FOR THE MANIFEST TOO, and it did not — which quietly cost two things.

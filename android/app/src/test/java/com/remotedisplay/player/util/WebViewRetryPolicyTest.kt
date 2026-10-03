@@ -104,6 +104,6 @@ class WebViewRetryPolicyTest {
 
     @Test fun `a real widget URL is retryable`() {
         assertTrue(WebViewRetryPolicy.isRetryableUrl("http://192.168.1.50:3001/api/widgets/render/abc"))
-        assertTrue(WebViewRetryPolicy.isRetryableUrl("https://screentinker.com/api/widgets/render/abc"))
+        assertTrue(WebViewRetryPolicy.isRetryableUrl("https://screenforge.com/api/widgets/render/abc"))
     }
 }

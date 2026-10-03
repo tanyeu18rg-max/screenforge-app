@@ -1,8 +1,8 @@
 {
-  "name": "screentinker-shared",
+  "name": "screenforge-shared",
   "version": "0.0.0",
   "private": true,
-  "description": "Cross-cutting tooling for ScreenTinker shared assets (transition shader library, etc.)",
+  "description": "Cross-cutting tooling for ScreenForge shared assets (transition shader library, etc.)",
   "license": "MIT",
   "scripts": {
     "build:manifest": "node shared/Transitions/generate-manifest.js",

@@ -320,7 +320,7 @@ class UpdateChecker(private val context: Context) {
      * internal storage works, which is nearly always — the download landed somewhere cleanup never
      * looked, so nothing was ever reclaimed: one whole APK stranded per superseded version, forever.
      * Confirmed on-device 2026-09-12: after a clean 2.0.8 -> 2.0.9 OTA, the app logged "OTA
-     * complete ... clearing update state" and the 29.6MB ScreenTinker-2.0.9.apk was still sitting in
+     * complete ... clearing update state" and the 29.6MB ScreenForge-2.0.9.apk was still sitting in
      * filesDir/Download while the external dir it swept was empty. Invisible at 9MB, not at 29.6MB,
      * and the leak lands in the same internal storage apkDirProblem() then refuses to stage into.
      *
@@ -329,13 +329,13 @@ class UpdateChecker(private val context: Context) {
      * automatically swept, which is the property that was missing.
      */
     private fun cleanupApks(keep: String?) {
-        val keepName = keep?.let { "ScreenTinker-$it.apk" }
+        val keepName = keep?.let { "ScreenForge-$it.apk" }
         var removed = 0
         var freed = 0L
         for ((where, dir) in apkStagingCandidates()) {
             try {
                 dir.listFiles { f ->
-                    f.name.startsWith("ScreenTinker-") && f.name.endsWith(".apk") && f.name != keepName
+                    f.name.startsWith("ScreenForge-") && f.name.endsWith(".apk") && f.name != keepName
                 }?.forEach {
                     val size = it.length()
                     if (it.delete()) { removed++; freed += size }
@@ -361,7 +361,7 @@ class UpdateChecker(private val context: Context) {
      *
      * The bug this replaces: `File(context.getExternalFilesDir(...), name)`. Java's File(File,String)
      * treats a NULL parent as "no parent" and silently produces a RELATIVE path, so the download
-     * targeted `ScreenTinker-x.y.z.apk` in the process working directory — `/` — which is not
+     * targeted `ScreenForge-x.y.z.apk` in the process working directory — `/` — which is not
      * writable. The write threw, the generic catch swallowed it, and the caller reported only
      * "failed to download or failed signature verification". Nothing was ever written, so there was
      * no partial file to find and nothing in the message pointed at storage. It fails on EVERY
@@ -453,7 +453,7 @@ class UpdateChecker(private val context: Context) {
                 Log.e(TAG, "APK staging unavailable: $whereOrWhy")
                 return false
             }
-            val apkFile = File(dir, "ScreenTinker-$version.apk")
+            val apkFile = File(dir, "ScreenForge-$version.apk")
 
             // #139: reuse a previously-downloaded, verified APK for this version instead of
             // re-pulling ~8.7 MB every cycle. The file also stays on disk as the artifact for a
@@ -612,7 +612,7 @@ class UpdateChecker(private val context: Context) {
                 val session = installer.openSession(sessionId)
 
                 apkFile.inputStream().use { input ->
-                    session.openWrite("ScreenTinker", 0, apkFile.length()).use { output ->
+                    session.openWrite("ScreenForge", 0, apkFile.length()).use { output ->
                         input.copyTo(output)
                         session.fsync(output)
                     }
@@ -651,7 +651,7 @@ class UpdateChecker(private val context: Context) {
      * Is this file actually the version we mean to install?
      *
      * The cache is keyed by FILENAME, and the filename is built from the version the server
-     * advertised — so a file called ScreenTinker-1.9.34.apk containing 1.9.33 passes a signature
+     * advertised — so a file called ScreenForge-1.9.34.apk containing 1.9.33 passes a signature
      * check (same key), gets reused on every attempt, and installs as a no-op forever. Fixing the
      * server does not clear it; only deleting the file does. Checking the version inside makes that
      * self-healing instead of needing a hand on the device.

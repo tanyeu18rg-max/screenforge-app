@@ -177,7 +177,7 @@ body {
 .member-avatar {
   flex-shrink: 0;
   width: 32px; height: 32px; border-radius: 50%;
-  background: var(--accent); color: white;
+  background: var(--accent); color: var(--on-accent);
   display: flex; align-items: center; justify-content: center;
   font-size: 13px; font-weight: 600;
 }
@@ -260,7 +260,7 @@ body {
 
 .nav-link.active {
   background: var(--accent);
-  color: white;
+  color: var(--on-accent);
 }
 
 /* ---- Sidebar groups (components/nav-groups.js) ---- */
@@ -409,7 +409,7 @@ body {
 
 .btn-primary {
   background: var(--accent);
-  color: white;
+  color: var(--on-accent);
 }
 
 .btn-primary:hover {
@@ -815,7 +815,7 @@ body {
   width: 10px;
   height: 10px;
   background: #fff;
-  border: 1px solid #1d4ed8;
+  border: 1px solid var(--accent-dim);
   border-radius: 2px;
   z-index: 4;
 }
@@ -2229,7 +2229,7 @@ body {
 .promo-note { font-size: 12px; color: var(--text-secondary); margin: 0; line-height: 1.5; }
 .billing-sale { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin: 0 0 14px; padding: 12px 14px; border-radius: var(--radius-lg);
   background: linear-gradient(135deg, rgba(139,92,246,.18), rgba(34,197,94,.10)); border: 1px solid rgba(139,92,246,.4); font-size: 14px; }
-.billing-sale-tag { background: #8b5cf6; color: #fff; font-size: 11px; font-weight: 800; letter-spacing: .05em; text-transform: uppercase; padding: 3px 9px; border-radius: 999px; }
+.billing-sale-tag { background: var(--accent); color: var(--on-accent); font-size: 11px; font-weight: 800; letter-spacing: .05em; text-transform: uppercase; padding: 3px 9px; border-radius: 999px; }
 .billing-sale-end { margin-left: auto; color: var(--text-secondary); font-size: 12.5px; }
 .billing-was { color: var(--text-muted); font-weight: 500; font-size: .7em; margin-right: 4px; }
 .promo-form .btn:disabled { opacity: .5; cursor: not-allowed; }
@@ -2237,7 +2237,7 @@ body {
    The platform group is instance-wide administration; a violet accent keeps it visually apart
    from the org- and workspace-scoped groups above it. */
 .nav-group-platform > .nav-group-toggle .nav-group-label { color: #c4b5fd; }
-.nav-group-platform .nav-link.active { box-shadow: inset 3px 0 0 #8b5cf6; }
+.nav-group-platform .nav-link.active { box-shadow: inset 3px 0 0 var(--accent); }
 .platform-tabs { display: flex; gap: 4px; flex-wrap: wrap; margin: -6px 0 20px; padding-bottom: 10px; border-bottom: 1px solid var(--border); }
 .platform-tab { padding: 7px 14px; border-radius: 8px; font-size: 13px; font-weight: 600; color: var(--text-secondary); text-decoration: none; }
 .platform-tab:hover { color: var(--text-primary); background: var(--bg-card); }
@@ -2245,7 +2245,7 @@ body {
 .platform-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; margin-bottom: 20px; }
 .platform-stat { display: flex; flex-direction: column; gap: 2px; padding: 18px; border-radius: var(--radius-lg); background: var(--bg-card); border: 1px solid var(--border);
   text-decoration: none; color: inherit; position: relative; overflow: hidden; transition: border-color .2s, transform .2s; }
-.platform-stat::before { content: ''; position: absolute; inset: 0 0 auto 0; height: 3px; background: linear-gradient(90deg, #8b5cf6, #22c55e); }
+.platform-stat::before { content: ''; position: absolute; inset: 0 0 auto 0; height: 3px; background: linear-gradient(90deg, var(--accent-2), var(--accent-3)); }
 .platform-stat:hover { border-color: rgba(139,92,246,.5); transform: translateY(-1px); }
 .platform-stat-n { font-size: 30px; font-weight: 800; font-variant-numeric: tabular-nums; color: var(--text-primary); }
 .platform-stat-l { font-size: 13px; font-weight: 600; color: var(--text-secondary); }
@@ -2329,7 +2329,7 @@ tr[hidden] { display: none; }
 
 /* ═══ The release palette, dashboard-wide ═══════════════════════════════════════════════════════
    What made the Platform pages feel different, applied to the shared components every page is built
-   from: gradient primary actions and active nav, a thin gradient bar on cards, and violet focus and
+   from: gradient primary actions and active nav, a thin gradient bar on cards, and lime focus and
    hover states. Colours come from tokens (css/variables.css), so a white-label brand colour replaces
    all of it. Decoration only: no layout or copy changes. */
 
@@ -2368,3 +2368,36 @@ tr[hidden] { display: none; }
 .platform-tab.active { background: var(--grad-accent); }
 
 @media (prefers-reduced-motion: reduce) { .device-card:hover { transform: none; } }
+
+/* Overview */
+.ov-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 16px;
+  margin-bottom: 20px;
+}
+.ov-stat { padding: 18px 20px; }
+.ov-stat-num {
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.1;
+}
+.ov-stat-total { font-size: 18px; color: var(--text-secondary); font-weight: 400; }
+.ov-stat-label { color: var(--text-secondary); font-size: 13px; margin-top: 4px; }
+.ov-stat-warn { color: #f87171; font-size: 12px; margin-top: 6px; font-weight: 600; }
+.ov-stat-alert .ov-stat-num { color: #f87171; }
+.ov-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+@media (max-width: 900px) { .ov-grid { grid-template-columns: 1fr; } }
+.ov-grid .card h2 { font-size: 15px; font-weight: 600; margin-bottom: 12px; }
+.ov-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
+.ov-list li { display: flex; align-items: center; gap: 8px; font-size: 14px; flex-wrap: wrap; }
+.ov-list a { color: var(--accent); }
+.ov-alerts li { align-items: flex-start; }
+.ov-alert-offline::before { content: "●"; color: #f87171; }
+.ov-alert-empty::before { content: "●"; color: #fbbf24; }
+.ov-alert-unpublished::before { content: "●"; color: var(--accent); }

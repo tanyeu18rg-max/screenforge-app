@@ -1,5 +1,39 @@
 # Changelog
 
+## Unreleased (Kardinal Screens)
+
+The Kardinal product layer, on top of upstream 2.3.0: rebrand, AI operator,
+and the engineering foundations below. Not yet released — this section
+becomes the release notes when the `rebrand/screenforge` branch ships.
+
+### Added
+- **Kardinal Screens rebrand.** Product renamed from ScreenTinker/ScreenForge
+  to Kardinal Screens; cardinal-red (#d92038) identity, light marketing
+  surfaces, SaaS landing page (trial CTAs, pricing, FAQ). The
+  `screentinker-*` player-protocol wire identifiers are unchanged, so existing
+  players keep working.
+- **Kardinal AI operator.** AI chat drawer with agentic tool-calling against
+  the workspace's own data (`server/lib/ai-agent.js`, `server/lib/ai-tools.js`):
+  tool schemas are filtered by the caller's permission (viewers only ever see
+  the read-only half), every mutating executor re-checks workspace scope, and
+  every mutation is audit-logged. **Brain**: dependency-free keyword-retrieval
+  knowledge base (`getBrainContext`) — no vector DB, no embeddings endpoint.
+  BYO OpenAI-compatible endpoint (OpenAI cloud or self-hosted); SSRF-guarded
+  via the existing `endpointAllowed` check in `routes/ai`.
+- **Engineering foundations.** ESLint + Prettier (Kardinal layer), `npm run
+  lint` / `npm run format:check`, CI lint + dependency-audit jobs, 16 unit
+  tests for the AI layer (`server/test/ai-agent.test.js`), optional Sentry
+  error tracking (no-op without `SENTRY_DSN`; see `docs/sentry-setup.md`),
+  ADRs in `docs/adr/`, VPS deploy script (`deploy-vps.sh`).
+- `/api/status` documented as the liveness probe (already existed; now the
+  documented health endpoint).
+
+### Changed
+- `server/server.js` initialises the Sentry wrapper at boot (no-op without
+  `SENTRY_DSN`).
+- `server/package.json`: added `@sentry/node` (optional, MIT); dev tools
+  `eslint`, `prettier`, `globals`.
+
 ## 2.3.0 (2026-09-30)
 
 A feature release: live data sources, a signed template library, native players for Raspberry Pi

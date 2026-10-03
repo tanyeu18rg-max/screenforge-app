@@ -10,7 +10,7 @@
  * of the ones we happened to think of.
  *
  * It also matters commercially, which is why it exists at all (#292): a partner reselling this
- * platform had every download land on their customer's disk as "ScreenTinker.apk", naming the
+ * platform had every download land on their customer's disk as "Kardinal Screens.apk", naming the
  * upstream product to the very people they were selling to.
  */
 
@@ -19,7 +19,7 @@
  * @param {string} fallback used when the brand is empty or sanitises away to nothing
  * @returns {string} a bare filename stem — no extension, no separators, no quotes
  */
-function brandToFilenameStem(brand, fallback = 'ScreenTinker') {
+function brandToFilenameStem(brand, fallback = 'Kardinal Screens') {
   const stripped = String(brand == null ? '' : brand)
     // Decompose accents so "Café" yields "Cafe" rather than "Caf".
     .normalize('NFKD')

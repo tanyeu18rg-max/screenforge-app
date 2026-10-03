@@ -78,7 +78,7 @@ if (SBOM_OUT) {
     metadata: {
       component: {
         type: 'application',
-        name: 'screentinker-android-player',
+        name: 'screenforge-android-player',
         version: fs.readFileSync(path.join(ROOT, 'VERSION'), 'utf8').trim(),
         licenses: [{ license: { id: 'MIT' } }],
       },

@@ -1,6 +1,6 @@
-# ScreenTinker — Tizen TV Player (`.wgt`)
+# ScreenForge — Tizen TV Player (`.wgt`)
 
-A Samsung **Tizen TV / signage** web port of the ScreenTinker player. It speaks the
+A Samsung **Tizen TV / signage** web port of the ScreenForge player. It speaks the
 **exact same `/device` socket.io protocol** as the Android player, so a Tizen
 display pairs and plays from the same dashboard with no server changes.
 
@@ -40,7 +40,7 @@ build-wgt.sh        package (signed if Tizen CLI present, else unsigned)
 
 ## Build
 ```bash
-./build-wgt.sh            # -> ScreenTinker.wgt
+./build-wgt.sh            # -> ScreenForge.wgt
 ```
 Without the Tizen CLI this is an **unsigned** `.wgt`.
 
@@ -52,7 +52,7 @@ Without the Tizen CLI this is an **unsigned** `.wgt`.
 
 ### Samsung Apps TV (Seller Office) package
 ```bash
-./build-wgt.sh --store    # -> ScreenTinker-store.wgt
+./build-wgt.sh --store    # -> ScreenForge-store.wgt
 ```
 Same app, one difference: the manifest inside is rewritten for the **consumer** store. The
 Seller Office pre-test (2026-09-18) refuses the SSSP manifest on four counts that are all one thing —
@@ -68,7 +68,7 @@ Manager → Samsung, signed in with the seller account). A package signed with t
 *Tizen Public Distributor Signer* (test CA) will not be accepted. Re-sign on the machine that holds
 that profile:
 ```bash
-tizen package -t wgt -s <SamsungProfile> -- ScreenTinker-store.wgt
+tizen package -t wgt -s <SamsungProfile> -- ScreenForge-store.wgt
 ```
 Bump `version` in `config.xml` before each upload — Seller Office rejects a version it has seen.
 
@@ -83,7 +83,7 @@ and point the URL Launcher at `…/index.html` for the Tizen-specific build.)
 
 ### B) Signed `.wgt` (installed app)
 A signing profile is already set up on the build box (Tizen Studio CLI 6.1):
-- **Profile `ScreenTinker`** = a self-signed **author** cert
+- **Profile `ScreenForge`** = a self-signed **author** cert
   (`~/tizen-studio-data/keystore/author/st_author.p12`) + the default Tizen
   **distributor** cert. `./build-wgt.sh` auto-detects the CLI and signs with it,
   producing a `.wgt` with `author-signature.xml` + `signature1.xml`.
@@ -94,26 +94,26 @@ A signing profile is already set up on the build box (Tizen Studio CLI 6.1):
 Install onto a dev-mode TV:
 ```bash
 sdb connect <tv-ip>
-tizen install -n ScreenTinker.wgt -t <tv-device>
+tizen install -n ScreenForge.wgt -t <tv-device>
 ```
 
 **Production / retail (no developer mode):** re-sign with a Samsung **Partner**
 or **Public** distributor certificate from the Tizen **Certificate Manager**
 (free Samsung account; distributor cert tied to each TV's **DUID**), then
 `./build-wgt.sh <thatProfile>`. The self-signed author cert is not committed (it
-lives in `~/tizen-studio-data`, password `screentinker`).
+lives in `~/tizen-studio-data`, password `screenforge`).
 
 ### C) SSSP URL-Launcher native install (one URL, like Fusion `fus.app/tizen`)
 The slick "add the screen to Wi-Fi → **URL Launcher / Custom App** → type a URL → you're in"
 flow. The panel fetches `<url>/sssp_config.xml`, reads the version + byte size, downloads
-`ScreenTinker.wgt` from the same folder, and **installs it as a native app** — auto-reinstalling
+`ScreenForge.wgt` from the same folder, and **installs it as a native app** — auto-reinstalling
 whenever `<ver>` bumps on the next release.
 
-**The ScreenTinker server hosts this for you.** Drop a signed build at `/data/ScreenTinker.wgt`
-(same convention as `/data/ScreenTinker.apk`) and it's served at:
+**The ScreenForge server hosts this for you.** Drop a signed build at `/data/ScreenForge.wgt`
+(same convention as `/data/ScreenForge.apk`) and it's served at:
 - `GET /tizen/sssp_config.xml` — manifest, generated dynamically so `<size>` always matches the
   exact `.wgt` bytes (a mismatch fails the install).
-- `GET /tizen/ScreenTinker.wgt` — the package.
+- `GET /tizen/ScreenForge.wgt` — the package.
 - `GET /tizen` — a human landing page with the install steps.
 
 On the panel, under **URL Launcher / Custom App**, enter: `https://<your-instance>/tizen`
@@ -190,7 +190,7 @@ the panel:
 - **URL Launcher path (A):** set the URL Launcher as the boot app (it relaunches on
   power-up automatically) — the recommended signage setup.
 - **Signed-app path (B):** use the TV's **kiosk / auto-start app** setting (B2B/SSSP
-  firmware) to launch ScreenTinker on boot; on dev-mode consumer TVs there's no
+  firmware) to launch ScreenForge on boot; on dev-mode consumer TVs there's no
   guaranteed boot-launch, so the URL Launcher path is preferred for unattended screens.
 
 ## Version reporting (#119)

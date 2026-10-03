@@ -1,16 +1,16 @@
 #!/bin/bash
-# ScreenTinker - Raspberry Pi Setup Script
+# ScreenForge - Raspberry Pi Setup Script
 #
-# All-in-One: runs the ScreenTinker server AND kiosk player on one Pi
-# Player-Only: connects to an existing ScreenTinker server
+# All-in-One: runs the ScreenForge server AND kiosk player on one Pi
+# Player-Only: connects to an existing ScreenForge server
 #
 # Usage:
-#   All-in-One:   curl -sSL https://screentinker.com/scripts/raspberry-pi-setup.sh | sudo bash
-#   Player-Only:  curl -sSL https://screentinker.com/scripts/raspberry-pi-setup.sh | sudo bash -s -- --player-only https://screentinker.com
+#   All-in-One:   curl -sSL https://raw.githubusercontent.com/tanyeu18rg-max/screenforge-app/main/scripts/raspberry-pi-setup.sh | sudo bash
+#   Player-Only:  curl -sSL https://raw.githubusercontent.com/tanyeu18rg-max/screenforge-app/main/scripts/raspberry-pi-setup.sh | sudo bash -s -- --player-only https://your-server.example.com
 #
 # Or clone and run:
-#   git clone https://github.com/screentinker/screentinker.git
-#   cd screentinker/scripts && sudo ./raspberry-pi-setup.sh
+#   git clone https://github.com/tanyeu18rg-max/screenforge-app.git
+#   cd screenforge/scripts && sudo ./raspberry-pi-setup.sh
 #
 # Works on Raspberry Pi OS Lite or Desktop (Bookworm / Bullseye)
 # Tested on Pi 3B+, Pi 4, Pi 5
@@ -18,10 +18,10 @@
 set -euo pipefail
 
 # -- Configuration --
-SCREENTINKER_DIR="/opt/screentinker"
-SCREENTINKER_PORT=3001
+SCREENFORGE_DIR="/opt/screenforge"
+SCREENFORGE_PORT=3001
 NODE_MAJOR=20
-LOG_FILE="/var/log/screentinker-setup.log"
+LOG_FILE="/var/log/screenforge-setup.log"
 
 # -- Colors --
 RED='\033[0;31m'
@@ -30,7 +30,7 @@ YELLOW='\033[1;33m'
 BLUE='\033[0;34m'
 NC='\033[0m'
 
-log()  { echo -e "${GREEN}[ScreenTinker]${NC} $1"; }
+log()  { echo -e "${GREEN}[ScreenForge]${NC} $1"; }
 warn() { echo -e "${YELLOW}[WARNING]${NC} $1"; }
 err()  { echo -e "${RED}[ERROR]${NC} $1"; exit 1; }
 
@@ -53,8 +53,8 @@ while [[ $# -gt 0 ]]; do
             echo ""
             echo "Examples:"
             echo "  sudo ./raspberry-pi-setup.sh                                    # All-in-One (interactive)"
-            echo "  sudo ./raspberry-pi-setup.sh --player-only https://screentinker.com"
-            echo "  sudo ./raspberry-pi-setup.sh --native https://screentinker.com"
+            echo "  sudo ./raspberry-pi-setup.sh --player-only https://your-server.example.com"
+            echo "  sudo ./raspberry-pi-setup.sh --native https://your-server.example.com"
             exit 0
             ;;
         http*) SERVER_URL="$1"; shift ;;
@@ -94,7 +94,7 @@ ask() {
 
 # -- Root check --
 if [ "$(id -u)" -ne 0 ]; then
-    err "This script must be run as root. Try:  curl -sL https://screentinker.com/scripts/raspberry-pi-setup.sh | sudo bash"
+    err "This script must be run as root. Try:  curl -sL https://raw.githubusercontent.com/tanyeu18rg-max/screenforge-app/main/scripts/raspberry-pi-setup.sh | sudo bash"
 fi
 
 # -- Architecture check --
@@ -113,7 +113,7 @@ fi
 if [ "$PLAYER_ONLY" = false ] && [ "$NATIVE" = false ] && [ -z "$SERVER_URL" ]; then
     echo ""
     echo -e "${BLUE}======================================${NC}"
-    echo -e "${BLUE}   ScreenTinker Raspberry Pi Setup${NC}"
+    echo -e "${BLUE}   ScreenForge Raspberry Pi Setup${NC}"
     echo -e "${BLUE}======================================${NC}"
     echo ""
     echo "  1) All-in-One  (recommended)"
@@ -121,11 +121,11 @@ if [ "$PLAYER_ONLY" = false ] && [ "$NATIVE" = false ] && [ -z "$SERVER_URL" ]; 
     echo "     Manage everything from your phone."
     echo ""
     echo "  2) Player Only"
-    echo "     Connects to an existing ScreenTinker server."
+    echo "     Connects to an existing ScreenForge server."
     echo "     This Pi just displays content (web player in Chromium)."
     echo ""
     echo "  3) Native Player"
-    echo "     Connects to an existing ScreenTinker server with the native"
+    echo "     Connects to an existing ScreenForge server with the native"
     echo "     player: reboot, remote terminal, screen power, self-update."
     echo ""
     if [ "$HAVE_TTY" = false ]; then
@@ -139,14 +139,14 @@ if [ "$PLAYER_ONLY" = false ] && [ "$NATIVE" = false ] && [ -z "$SERVER_URL" ]; 
             3)
                 NATIVE=true
                 while [ -z "$SERVER_URL" ]; do
-                    ask SERVER_URL "Server URL (e.g., https://screentinker.com): "
+                    ask SERVER_URL "Server URL (e.g., https://your-server.example.com): "
                     [ -z "$SERVER_URL" ] && warn "The native player needs a server URL."
                 done
                 ;;
             2)
                 PLAYER_ONLY=true
                 while [ -z "$SERVER_URL" ]; do
-                    ask SERVER_URL "Server URL (e.g., https://screentinker.com): "
+                    ask SERVER_URL "Server URL (e.g., https://your-server.example.com): "
                     [ -z "$SERVER_URL" ] && warn "Player-Only needs a server URL."
                 done
                 ;;
@@ -165,7 +165,7 @@ SERVER_URL="${SERVER_URL%/}"
 # with. apt resolves the dependencies (PyQt6, QtWebEngine, GStreamer) from Pi OS's own archive.
 if [ "$NATIVE" = true ]; then
     [ -z "$SERVER_URL" ] && err "The native player requires a server URL:  --native https://your-server"
-    # The native player is built on PySide6 (LGPL — ScreenTinker ships no GPL), which Debian packages
+    # The native player is built on PySide6 (LGPL — ScreenForge ships no GPL), which Debian packages
     # from 13 "trixie" on. Say so here rather than letting apt fail on an unmet dependency.
     OS_VER=$(. /etc/os-release 2>/dev/null; echo "${VERSION_ID:-0}")
     if [ "${OS_VER%%.*}" -lt 13 ] 2>/dev/null; then
@@ -187,10 +187,10 @@ if [ "$NATIVE" = true ]; then
     fi
     DESKTOP_USER="${SUDO_USER:-$(getent passwd 1000 | cut -d: -f1)}"
     if [ "$NATIVE_MODE" = desktop ]; then
-        screentinker-pi setup "$SERVER_URL" --mode desktop --user "$DESKTOP_USER"
+        screenforge-pi setup "$SERVER_URL" --mode desktop --user "$DESKTOP_USER"
     else
         systemctl disable getty@tty1.service 2>/dev/null || true
-        screentinker-pi setup "$SERVER_URL" --mode lite
+        screenforge-pi setup "$SERVER_URL" --mode lite
     fi
     log "Done. The pairing code is on the display; enter it in the dashboard."
     [ "$NATIVE_MODE" = desktop ] && log "Log out and back in (or reboot) to start the player in the desktop."
@@ -203,7 +203,7 @@ if [ "$PLAYER_ONLY" = true ]; then
     KIOSK_URL="${SERVER_URL}/player"
     log "Player-only mode: $SERVER_URL"
 else
-    KIOSK_URL="http://localhost:${SCREENTINKER_PORT}/player"
+    KIOSK_URL="http://localhost:${SCREENFORGE_PORT}/player"
     log "All-in-One mode: server + player"
 fi
 
@@ -255,24 +255,24 @@ if [ "$PLAYER_ONLY" = false ]; then
 fi
 
 # ============================================================
-# 3. Clone / update ScreenTinker (all-in-one only)
+# 3. Clone / update ScreenForge (all-in-one only)
 # ============================================================
 if [ "$PLAYER_ONLY" = false ]; then
-    if [ -d "$SCREENTINKER_DIR/.git" ]; then
-        log "Repo exists at $SCREENTINKER_DIR, pulling latest..."
-        cd "$SCREENTINKER_DIR" && git pull origin main >> "$LOG_FILE" 2>&1
+    if [ -d "$SCREENFORGE_DIR/.git" ]; then
+        log "Repo exists at $SCREENFORGE_DIR, pulling latest..."
+        cd "$SCREENFORGE_DIR" && git pull origin main >> "$LOG_FILE" 2>&1
     else
-        log "Cloning ScreenTinker..."
-        git clone https://github.com/screentinker/screentinker.git "$SCREENTINKER_DIR" >> "$LOG_FILE" 2>&1
+        log "Cloning ScreenForge..."
+        git clone https://github.com/tanyeu18rg-max/screenforge-app.git "$SCREENFORGE_DIR" >> "$LOG_FILE" 2>&1
     fi
 
     log "Installing Node.js dependencies..."
-    cd "$SCREENTINKER_DIR/server"
+    cd "$SCREENFORGE_DIR/server"
     npm install --production >> "$LOG_FILE" 2>&1
 
     # Data directories
-    mkdir -p "$SCREENTINKER_DIR/server/db"
-    mkdir -p "$SCREENTINKER_DIR/server/uploads"
+    mkdir -p "$SCREENFORGE_DIR/server/db"
+    mkdir -p "$SCREENFORGE_DIR/server/uploads"
 fi
 
 # Determine the runtime user
@@ -281,24 +281,24 @@ PI_HOME=$(eval echo "~$PI_USER")
 
 # Set ownership (all-in-one only)
 if [ "$PLAYER_ONLY" = false ]; then
-    chown -R "$PI_USER":"$PI_USER" "$SCREENTINKER_DIR"
+    chown -R "$PI_USER":"$PI_USER" "$SCREENFORGE_DIR"
 fi
 
 # ============================================================
 # 4. Server systemd service (all-in-one only)
 # ============================================================
 if [ "$PLAYER_ONLY" = false ]; then
-    log "Creating screentinker-server service..."
-    cat > /etc/systemd/system/screentinker-server.service << EOF
+    log "Creating screenforge-server service..."
+    cat > /etc/systemd/system/screenforge-server.service << EOF
 [Unit]
-Description=ScreenTinker Digital Signage Server
+Description=ScreenForge Digital Signage Server
 After=network-online.target
 Wants=network-online.target
 
 [Service]
 Type=simple
 User=${PI_USER}
-WorkingDirectory=${SCREENTINKER_DIR}/server
+WorkingDirectory=${SCREENFORGE_DIR}/server
 ExecStart=/usr/bin/node server.js
 Restart=always
 RestartSec=5
@@ -306,20 +306,20 @@ StartLimitBurst=5
 StartLimitIntervalSec=60
 
 Environment=NODE_ENV=production
-Environment=PORT=${SCREENTINKER_PORT}
+Environment=PORT=${SCREENFORGE_PORT}
 Environment=SELF_HOSTED=true
 Environment=HOST=0.0.0.0
 
 StandardOutput=journal
 StandardError=journal
-SyslogIdentifier=screentinker-server
+SyslogIdentifier=screenforge-server
 
 [Install]
 WantedBy=multi-user.target
 EOF
 
     systemctl daemon-reload
-    systemctl enable screentinker-server.service
+    systemctl enable screenforge-server.service
     log "Server service enabled"
 fi
 
@@ -358,15 +358,15 @@ CHROMIUM_BIN=$(command -v chromium-browser 2>/dev/null || command -v chromium 2>
 # 6. Kiosk launcher script
 # ============================================================
 log "Creating kiosk launcher..."
-cat > "$PI_HOME/screentinker-kiosk.sh" << KIOSKEOF
+cat > "$PI_HOME/screenforge-kiosk.sh" << KIOSKEOF
 #!/bin/bash
-# ScreenTinker Kiosk - launches Chromium in fullscreen player mode
+# ScreenForge Kiosk - launches Chromium in fullscreen player mode
 KIOSK_URL="${KIOSK_URL}"
 
 # Under systemd (Lite) stdout is the journal and JOURNAL_STREAM is set. Under the desktop
-# autostart entry there is no journal at all, so keep a log file — screentinker-logs reads it.
+# autostart entry there is no journal at all, so keep a log file — screenforge-logs reads it.
 if [ -z "\${JOURNAL_STREAM:-}" ]; then
-    KLOG="\$HOME/screentinker-kiosk.log"
+    KLOG="\$HOME/screenforge-kiosk.log"
     [ -f "\$KLOG" ] && [ "\$(stat -c %s "\$KLOG" 2>/dev/null || echo 0)" -gt 1048576 ] && : > "\$KLOG"
     exec >> "\$KLOG" 2>&1
     echo "=== \$(date '+%F %T') kiosk launcher start ==="
@@ -429,9 +429,9 @@ clean_crash_flags
 
 # Wait for local server if running all-in-one
 if echo "\$KIOSK_URL" | grep -q "localhost"; then
-    echo "Waiting for ScreenTinker server..."
+    echo "Waiting for ScreenForge server..."
     for i in \$(seq 1 30); do
-        if curl -sf "http://localhost:${SCREENTINKER_PORT}/api/status" >/dev/null 2>&1; then
+        if curl -sf "http://localhost:${SCREENFORGE_PORT}/api/status" >/dev/null 2>&1; then
             echo "Server ready"
             break
         fi
@@ -511,8 +511,8 @@ while :; do
 done
 KIOSKEOF
 
-chmod +x "$PI_HOME/screentinker-kiosk.sh"
-chown "$PI_USER":"$PI_USER" "$PI_HOME/screentinker-kiosk.sh"
+chmod +x "$PI_HOME/screenforge-kiosk.sh"
+chown "$PI_USER":"$PI_USER" "$PI_HOME/screenforge-kiosk.sh"
 
 # ============================================================
 # 7. Xinitrc (Pi OS Lite - starts kiosk from console)
@@ -520,7 +520,7 @@ chown "$PI_USER":"$PI_USER" "$PI_HOME/screentinker-kiosk.sh"
 if [ "$HAS_DESKTOP" = false ]; then
     cat > "$PI_HOME/.xinitrc" << 'EOF'
 #!/bin/bash
-exec ~/screentinker-kiosk.sh
+exec ~/screenforge-kiosk.sh
 EOF
     chmod +x "$PI_HOME/.xinitrc"
     chown "$PI_USER":"$PI_USER" "$PI_HOME/.xinitrc"
@@ -547,16 +547,16 @@ log "Configuring kiosk launch..."
 if [ "$HAS_DESKTOP" = false ]; then
     # Lite: start X ourselves
     if [ "$PLAYER_ONLY" = false ]; then
-        KIOSK_AFTER="After=screentinker-server.service"
-        KIOSK_REQ="Requires=screentinker-server.service"
+        KIOSK_AFTER="After=screenforge-server.service"
+        KIOSK_REQ="Requires=screenforge-server.service"
     else
         KIOSK_AFTER="After=network-online.target"
         KIOSK_REQ="Wants=network-online.target"
     fi
 
-    cat > /etc/systemd/system/screentinker-kiosk.service << EOF
+    cat > /etc/systemd/system/screenforge-kiosk.service << EOF
 [Unit]
-Description=ScreenTinker Kiosk Display
+Description=ScreenForge Kiosk Display
 ${KIOSK_AFTER}
 ${KIOSK_REQ}
 
@@ -574,29 +574,29 @@ TTYPath=/dev/tty1
 StandardInput=tty
 StandardOutput=journal
 StandardError=journal
-SyslogIdentifier=screentinker-kiosk
+SyslogIdentifier=screenforge-kiosk
 
 [Install]
 WantedBy=multi-user.target
 EOF
     systemctl daemon-reload
-    systemctl enable screentinker-kiosk.service
+    systemctl enable screenforge-kiosk.service
     log "Kiosk service enabled (Lite: starts X on tty1)"
 else
     # Desktop: the autostart entry is THE launcher. Remove the unit an earlier install wrote.
-    if [ -f /etc/systemd/system/screentinker-kiosk.service ]; then
+    if [ -f /etc/systemd/system/screenforge-kiosk.service ]; then
         log "Removing the redundant kiosk systemd unit (the desktop autostart is the launcher)..."
-        systemctl disable --now screentinker-kiosk.service 2>/dev/null || true
-        rm -f /etc/systemd/system/screentinker-kiosk.service
+        systemctl disable --now screenforge-kiosk.service 2>/dev/null || true
+        rm -f /etc/systemd/system/screenforge-kiosk.service
         systemctl daemon-reload
     fi
     AUTOSTART_DIR="$PI_HOME/.config/autostart"
     mkdir -p "$AUTOSTART_DIR"
-    cat > "$AUTOSTART_DIR/screentinker.desktop" << EOF
+    cat > "$AUTOSTART_DIR/screenforge.desktop" << EOF
 [Desktop Entry]
 Type=Application
-Name=ScreenTinker Player
-Exec=${PI_HOME}/screentinker-kiosk.sh
+Name=ScreenForge Player
+Exec=${PI_HOME}/screenforge-kiosk.sh
 X-GNOME-Autostart-enabled=true
 EOF
     chown -R "$PI_USER":"$PI_USER" "$AUTOSTART_DIR"
@@ -631,7 +631,7 @@ fi
 if [ -f "$PI_HOME/.config/wayfire.ini" ]; then
     log "Configuring wayfire to hide the cursor..."
     WF="$PI_HOME/.config/wayfire.ini"
-    [ -f "${WF}.screentinker-bak" ] || cp "$WF" "${WF}.screentinker-bak"
+    [ -f "${WF}.screenforge-bak" ] || cp "$WF" "${WF}.screenforge-bak"
 
     if grep -q '^\[hide-cursor\]' "$WF"; then
         log "  wayfire.ini already has [hide-cursor] — leaving it alone"
@@ -684,7 +684,7 @@ LABWCEOF
             write_labwc_rc
             log "  labwc: bound Super+H to HideCursor (the launcher presses it at session start)"
         else
-            [ -f "${LABWC_RC}.screentinker-bak" ] || cp "$LABWC_RC" "${LABWC_RC}.screentinker-bak"
+            [ -f "${LABWC_RC}.screenforge-bak" ] || cp "$LABWC_RC" "${LABWC_RC}.screenforge-bak"
             if grep -q 'HideCursor' "$LABWC_RC"; then
                 log "  labwc rc.xml already binds HideCursor — leaving it alone"
             elif grep -q '<openbox_config' "$LABWC_RC" && ! grep -q '<keybind' "$LABWC_RC"; then
@@ -694,7 +694,7 @@ LABWCEOF
                 # to touch it is what makes the cursor never hide on a stock image. Replace it;
                 # the backup taken above is the way back.
                 write_labwc_rc
-                log "  labwc: replaced the stock <openbox_config/> rc.xml — backup at ${LABWC_RC}.screentinker-bak"
+                log "  labwc: replaced the stock <openbox_config/> rc.xml — backup at ${LABWC_RC}.screenforge-bak"
             elif grep -q '<labwc_config' "$LABWC_RC"; then
                 # A real labwc config. Merge rather than replace, exactly like wayfire.ini above:
                 # insert into the existing <keyboard> block, or add one before the closing tag.
@@ -735,7 +735,7 @@ done
 if [ -n "$CONFIG_FILE" ]; then
     # GPU memory for video playback
     if ! grep -q "^gpu_mem=" "$CONFIG_FILE"; then
-        echo -e "\n# ScreenTinker: GPU memory for smooth video" >> "$CONFIG_FILE"
+        echo -e "\n# ScreenForge: GPU memory for smooth video" >> "$CONFIG_FILE"
         echo "gpu_mem=128" >> "$CONFIG_FILE"
         log "GPU memory: 128MB"
     fi
@@ -775,69 +775,69 @@ fi
 if [ "$PLAYER_ONLY" = false ]; then
     log "Creating management scripts..."
 
-    cat > /usr/local/bin/screentinker-update << 'UPDATEEOF'
+    cat > /usr/local/bin/screenforge-update << 'UPDATEEOF'
 #!/bin/bash
 KIOSK_UNIT=false
-systemctl list-unit-files 2>/dev/null | grep -q '^screentinker-kiosk.service' && KIOSK_UNIT=true
+systemctl list-unit-files 2>/dev/null | grep -q '^screenforge-kiosk.service' && KIOSK_UNIT=true
 
 echo "Stopping services..."
-[ "$KIOSK_UNIT" = true ] && sudo systemctl stop screentinker-kiosk.service 2>/dev/null || true
-sudo systemctl stop screentinker-server.service 2>/dev/null || true
+[ "$KIOSK_UNIT" = true ] && sudo systemctl stop screenforge-kiosk.service 2>/dev/null || true
+sudo systemctl stop screenforge-server.service 2>/dev/null || true
 
 echo "Pulling latest..."
-cd /opt/screentinker && git pull origin main
+cd /opt/screenforge && git pull origin main
 
 echo "Installing dependencies..."
 cd server && npm install --production
 
 echo "Starting services..."
-sudo systemctl start screentinker-server.service
+sudo systemctl start screenforge-server.service
 sleep 3
 if [ "$KIOSK_UNIT" = true ]; then
-    sudo systemctl start screentinker-kiosk.service
-    KIOSK_STATE=$(systemctl is-active screentinker-kiosk.service)
+    sudo systemctl start screenforge-kiosk.service
+    KIOSK_STATE=$(systemctl is-active screenforge-kiosk.service)
 else
     # Desktop: the kiosk is a session app. The player reconnects on its own once the server is up.
     KIOSK_STATE="desktop autostart (reconnects on its own)"
 fi
 
 echo ""
-echo "Done! Server: $(systemctl is-active screentinker-server.service)"
+echo "Done! Server: $(systemctl is-active screenforge-server.service)"
 echo "      Kiosk:  $KIOSK_STATE"
 UPDATEEOF
-    chmod +x /usr/local/bin/screentinker-update
+    chmod +x /usr/local/bin/screenforge-update
 
-    cat > /usr/local/bin/screentinker-status << 'STATUSEOF'
+    cat > /usr/local/bin/screenforge-status << 'STATUSEOF'
 #!/bin/bash
 echo ""
-echo "=== ScreenTinker Status ==="
+echo "=== ScreenForge Status ==="
 echo ""
 IP=$(hostname -I | awk '{print $1}')
 
-if systemctl is-active screentinker-server.service &>/dev/null; then
-    echo "Server:    RUNNING (PID $(systemctl show screentinker-server.service -p MainPID --value))"
+if systemctl is-active screenforge-server.service &>/dev/null; then
+    echo "Server:    RUNNING (PID $(systemctl show screenforge-server.service -p MainPID --value))"
 else
     echo "Server:    STOPPED"
 fi
 
 # Lite runs the kiosk as a unit; Desktop runs it from the session autostart, where the only
 # evidence is the browser process itself.
-if systemctl list-unit-files 2>/dev/null | grep -q '^screentinker-kiosk.service'; then
-    if systemctl is-active screentinker-kiosk.service &>/dev/null; then
+if systemctl list-unit-files 2>/dev/null | grep -q '^screenforge-kiosk.service'; then
+    if systemctl is-active screenforge-kiosk.service &>/dev/null; then
         echo "Kiosk:     RUNNING"
     else
-        echo "Kiosk:     STOPPED   (screentinker-logs kiosk to see why)"
+        echo "Kiosk:     STOPPED   (screenforge-logs kiosk to see why)"
     fi
 elif pgrep -f -- '--kiosk' >/dev/null 2>&1; then
     echo "Kiosk:     RUNNING   (desktop autostart)"
 else
-    echo "Kiosk:     STOPPED   (desktop autostart: starts at login; screentinker-logs kiosk)"
+    echo "Kiosk:     STOPPED   (desktop autostart: starts at login; screenforge-logs kiosk)"
 fi
 
 echo ""
 echo "Uptime:    $(uptime -p)"
 echo "CPU Temp:  $(vcgencmd measure_temp 2>/dev/null | cut -d= -f2 || echo 'n/a')"
-echo "Disk:      $(df -h /opt/screentinker 2>/dev/null | tail -1 | awk '{print $3 "/" $2 " (" $5 " used)"}')"
+echo "Disk:      $(df -h /opt/screenforge 2>/dev/null | tail -1 | awk '{print $3 "/" $2 " (" $5 " used)"}')"
 echo "Memory:    $(free -h | awk '/Mem:/ {print $3 " / " $2}')"
 echo ""
 echo "Dashboard: http://${IP}:3001"
@@ -845,56 +845,56 @@ echo "Player:    http://${IP}:3001/player"
 echo "mDNS:      http://$(hostname).local:3001"
 echo ""
 STATUSEOF
-    chmod +x /usr/local/bin/screentinker-status
+    chmod +x /usr/local/bin/screenforge-status
 
-    cat > /usr/local/bin/screentinker-logs << LOGSEOF
+    cat > /usr/local/bin/screenforge-logs << LOGSEOF
 #!/bin/bash
 # The kiosk logs to the journal under its unit on Lite, and to a file on Desktop (a session
 # autostart has no journal of its own).
-KIOSK_LOG="${PI_HOME}/screentinker-kiosk.log"
+KIOSK_LOG="${PI_HOME}/screenforge-kiosk.log"
 kiosk_logs() {
-    if systemctl list-unit-files 2>/dev/null | grep -q '^screentinker-kiosk.service'; then
-        journalctl -u screentinker-kiosk.service -f --no-hostname
+    if systemctl list-unit-files 2>/dev/null | grep -q '^screenforge-kiosk.service'; then
+        journalctl -u screenforge-kiosk.service -f --no-hostname
     else
         tail -n 200 -F "\$KIOSK_LOG"
     fi
 }
 case "\${1:-server}" in
-    server) journalctl -u screentinker-server.service -f --no-hostname ;;
+    server) journalctl -u screenforge-server.service -f --no-hostname ;;
     kiosk)  kiosk_logs ;;
-    all)    if systemctl list-unit-files 2>/dev/null | grep -q '^screentinker-kiosk.service'; then
-                journalctl -u screentinker-server.service -u screentinker-kiosk.service -f --no-hostname
+    all)    if systemctl list-unit-files 2>/dev/null | grep -q '^screenforge-kiosk.service'; then
+                journalctl -u screenforge-server.service -u screenforge-kiosk.service -f --no-hostname
             else
                 echo "(kiosk log is a file on Desktop installs: \$KIOSK_LOG)"
-                journalctl -u screentinker-server.service -f --no-hostname
+                journalctl -u screenforge-server.service -f --no-hostname
             fi ;;
-    *)      echo "Usage: screentinker-logs [server|kiosk|all]" ;;
+    *)      echo "Usage: screenforge-logs [server|kiosk|all]" ;;
 esac
 LOGSEOF
-    chmod +x /usr/local/bin/screentinker-logs
+    chmod +x /usr/local/bin/screenforge-logs
 else
     # Player-Only gets its own pair. It used to get NONE, while section 12 below wrote an MOTD
     # advertising all three to every install — so a player Pi greeted its operator at each SSH
     # login with three commands that were never on it (#245). There is no server here to update,
-    # so screentinker-update is genuinely not applicable and is not offered; status and logs are,
+    # so screenforge-update is genuinely not applicable and is not offered; status and logs are,
     # and a player with no way to answer "is it running?" is the harder machine to support.
     log "Creating management scripts (player)..."
 
-    cat > /usr/local/bin/screentinker-status << PSTATUSEOF
+    cat > /usr/local/bin/screenforge-status << PSTATUSEOF
 #!/bin/bash
 echo ""
-echo "=== ScreenTinker Player Status ==="
+echo "=== ScreenForge Player Status ==="
 echo ""
-if systemctl list-unit-files 2>/dev/null | grep -q '^screentinker-kiosk.service'; then
-    if systemctl is-active screentinker-kiosk.service &>/dev/null; then
+if systemctl list-unit-files 2>/dev/null | grep -q '^screenforge-kiosk.service'; then
+    if systemctl is-active screenforge-kiosk.service &>/dev/null; then
         echo "Kiosk:     RUNNING"
     else
-        echo "Kiosk:     STOPPED   (screentinker-logs to see why)"
+        echo "Kiosk:     STOPPED   (screenforge-logs to see why)"
     fi
 elif pgrep -f -- '--kiosk' >/dev/null 2>&1; then
     echo "Kiosk:     RUNNING   (desktop autostart)"
 else
-    echo "Kiosk:     STOPPED   (desktop autostart: starts at login; screentinker-logs to see why)"
+    echo "Kiosk:     STOPPED   (desktop autostart: starts at login; screenforge-logs to see why)"
 fi
 echo "Server:    ${SERVER_URL}"
 # Whether this player can actually reach the server it was pointed at — the first question worth
@@ -911,25 +911,25 @@ echo "Disk:      \$(df -h / 2>/dev/null | tail -1 | awk '{print \$3 "/" \$2 " ("
 echo "Memory:    \$(free -h | awk '/Mem:/ {print \$3 " / " \$2}')"
 echo ""
 PSTATUSEOF
-    chmod +x /usr/local/bin/screentinker-status
+    chmod +x /usr/local/bin/screenforge-status
 
-    cat > /usr/local/bin/screentinker-logs << PLOGSEOF
+    cat > /usr/local/bin/screenforge-logs << PLOGSEOF
 #!/bin/bash
 # Only the kiosk exists on a player, so it is the default AND the only target. Accepting
 # "server" here and following an empty unit would be a worse answer than saying so.
 # Lite logs to the journal under the unit; Desktop logs to a file (no journal for a session app).
-KIOSK_LOG="${PI_HOME}/screentinker-kiosk.log"
+KIOSK_LOG="${PI_HOME}/screenforge-kiosk.log"
 case "\${1:-kiosk}" in
-    kiosk|all) if systemctl list-unit-files 2>/dev/null | grep -q '^screentinker-kiosk.service'; then
-                   journalctl -u screentinker-kiosk.service -f --no-hostname
+    kiosk|all) if systemctl list-unit-files 2>/dev/null | grep -q '^screenforge-kiosk.service'; then
+                   journalctl -u screenforge-kiosk.service -f --no-hostname
                else
                    tail -n 200 -F "\$KIOSK_LOG"
                fi ;;
     server)    echo "This is a player-only install — there is no local server. Point at your server's logs instead." ;;
-    *)         echo "Usage: screentinker-logs [kiosk]" ;;
+    *)         echo "Usage: screenforge-logs [kiosk]" ;;
 esac
 PLOGSEOF
-    chmod +x /usr/local/bin/screentinker-logs
+    chmod +x /usr/local/bin/screenforge-logs
 fi
 
 # ============================================================
@@ -948,23 +948,23 @@ cat > /etc/motd << 'MOTDEOF'
 MOTDEOF
 
 # The command list is appended SEPARATELY and per-mode, because section 11 creates
-# screentinker-update on an All-in-One install only. A single hard-coded list here is what made a
+# screenforge-update on an All-in-One install only. A single hard-coded list here is what made a
 # Player-Only Pi advertise three commands it did not have, at every SSH login (#245). The MOTD is
 # the first thing an operator reads on a machine that is misbehaving, which makes it the worst
 # place in the system to be confidently wrong.
 if [ "$PLAYER_ONLY" = false ]; then
     cat >> /etc/motd << 'MOTDCMDEOF'
  Commands:
-   screentinker-status   Show system info and URLs
-   screentinker-update   Pull latest and restart
-   screentinker-logs     Follow logs (server|kiosk|all)
+   screenforge-status   Show system info and URLs
+   screenforge-update   Pull latest and restart
+   screenforge-logs     Follow logs (server|kiosk|all)
 
 MOTDCMDEOF
 else
     cat >> /etc/motd << 'MOTDCMDEOF'
  Commands:
-   screentinker-status   Kiosk state, server URL, and whether it is reachable
-   screentinker-logs     Follow the kiosk log
+   screenforge-status   Kiosk state, server URL, and whether it is reachable
+   screenforge-logs     Follow the kiosk log
 
 MOTDCMDEOF
 fi
@@ -987,7 +987,7 @@ fi
 # ============================================================
 echo ""
 echo -e "${GREEN}======================================${NC}"
-echo -e "${GREEN}   ScreenTinker Setup Complete!${NC}"
+echo -e "${GREEN}   ScreenForge Setup Complete!${NC}"
 echo -e "${GREEN}======================================${NC}"
 echo ""
 
@@ -997,21 +997,21 @@ if [ "$PLAYER_ONLY" = false ]; then
     echo "Mode: All-in-One (server + player)"
     echo ""
     echo "After reboot this Pi will:"
-    echo "  - Start the ScreenTinker server on port $SCREENTINKER_PORT"
+    echo "  - Start the ScreenForge server on port $SCREENFORGE_PORT"
     echo "  - Display the player fullscreen on the connected screen"
     echo ""
     echo "First steps:"
     echo "  1. Reboot:  sudo reboot"
-    echo "  2. From your phone, go to http://${IP}:${SCREENTINKER_PORT}"
-    echo "     (or http://$(hostname).local:${SCREENTINKER_PORT})"
+    echo "  2. From your phone, go to http://${IP}:${SCREENFORGE_PORT}"
+    echo "     (or http://$(hostname).local:${SCREENFORGE_PORT})"
     echo "  3. Register - first user gets full admin access"
     echo "  4. Add a display and enter the pairing code from the TV"
     echo "  5. Upload content and push it to the screen"
     echo ""
     echo "Management:"
-    echo "  screentinker-status   Check everything is running"
-    echo "  screentinker-update   Update to latest version"
-    echo "  screentinker-logs     Watch server logs"
+    echo "  screenforge-status   Check everything is running"
+    echo "  screenforge-update   Update to latest version"
+    echo "  screenforge-logs     Watch server logs"
 else
     echo "Mode: Player Only"
     echo "Server: $SERVER_URL"
@@ -1023,19 +1023,19 @@ else
     echo "To pair:"
     echo "  1. Reboot:  sudo reboot"
     echo "  2. The pairing screen will appear on the TV"
-    echo "  3. Enter the code in your ScreenTinker dashboard"
+    echo "  3. Enter the code in your ScreenForge dashboard"
 fi
 
 echo ""
 echo "Services:"
 if [ "$PLAYER_ONLY" = false ]; then
-    echo "  sudo systemctl [start|stop|restart] screentinker-server"
+    echo "  sudo systemctl [start|stop|restart] screenforge-server"
 fi
 if [ "$HAS_DESKTOP" = false ]; then
-    echo "  sudo systemctl [start|stop|restart] screentinker-kiosk"
+    echo "  sudo systemctl [start|stop|restart] screenforge-kiosk"
 else
-    echo "  Kiosk: launched at desktop login from ~/.config/autostart/screentinker.desktop"
-    echo "         (restarts itself if Chromium crashes; log in ~/screentinker-kiosk.log)"
+    echo "  Kiosk: launched at desktop login from ~/.config/autostart/screenforge.desktop"
+    echo "         (restarts itself if Chromium crashes; log in ~/screenforge-kiosk.log)"
 fi
 echo ""
 echo -e "${YELLOW}Reboot to start:  sudo reboot${NC}"

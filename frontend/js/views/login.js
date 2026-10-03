@@ -41,7 +41,7 @@ async function loadAuthConfig() {
 }
 
 // #15: resolve instance/default branding for the (pre-login) login page.
-// Public endpoint: custom-domain match -> platform default -> ScreenTinker.
+// Public endpoint: custom-domain match -> platform default -> Kardinal Screens.
 async function loadLoginBranding() {
   try {
     const res = await fetch('/api/branding?domain=' + encodeURIComponent(location.hostname));
@@ -77,8 +77,8 @@ export async function render(container) {
   const canRegister = config.registration_enabled !== false;
 
   applyLoginBrandingDoc(branding);
-  const brandName = branding.brand_name || 'ScreenTinker';
-  // Branded logo if set, else the default ScreenTinker glyph.
+  const brandName = branding.brand_name || 'Kardinal Screens';
+  // Branded logo if set, else the default Kardinal Screens glyph.
   const logoHtml = branding.logo_url
     ? `<img src="${brandEsc(branding.logo_url)}" alt="${brandEsc(brandName)}" style="max-height:48px;max-width:200px;margin:0 auto 12px;display:block">`
     : `<svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2" style="margin:0 auto 12px">

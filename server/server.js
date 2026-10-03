@@ -9,6 +9,10 @@
  */
 require('./lib/preflight-deps').preflight();
 
+// Optional error tracking (Sentry). Strict no-op unless SENTRY_DSN is set;
+// see server/lib/sentry.js and docs/sentry-setup.md.
+require('./lib/sentry').init();
+
 const express = require('express');
 const http = require('http');
 const https = require('https');
@@ -178,15 +182,14 @@ app.use((req, res, next) => {
 });
 // CORS policy.
 // - SELF_HOSTED=true: allow all origins (operator controls their own deployment).
-// - production:       allowlist screentinker.com (+ subdomains) and localhost dev.
+// - production:       allowlist the project site and localhost dev.
 // - development:      open (default).
 // Auth is JWT in Authorization header — credentials:true is kept for any cookie-based
 // future flows but the JWT stays in localStorage and is sent via fetch() explicitly,
 // so an attacker origin can't ride a session.
 const isProd = process.env.NODE_ENV === 'production';
 const allowedHostsProd = [
-  'screentinker.com',
-  'www.screentinker.com',
+  'screenforge-tff9.vercel.app',
   'localhost',
   '127.0.0.1',
 ];
@@ -207,7 +210,7 @@ function corsOriginCheck(origin, callback) {
 /*
  * ⚠️ FRAMING, WHEN THIS SERVER IS THE DISPLAY IT SERVES.
  *
- * A BrightSign hosting ScreenTinker shows a local page from `file:///ssd:/node-server.html` which
+ * A BrightSign hosting Kardinal Screens shows a local page from `file:///ssd:/node-server.html` which
  * layers the player in an iframe — an iframe rather than a navigation, because navigating would
  * replace the document and kill the poller that notices the server dying, and an unexplained black
  * screen is the exact failure that page exists to prevent.
@@ -319,13 +322,13 @@ app.get('/api', (req, res) => {
   res.setHeader('Cache-Control', 'public, max-age=3600');
   res.setHeader('Link', aiSurface.linkHeader(base));
   res.json({
-    name: 'ScreenTinker Public API',
+    name: 'Kardinal Screens Public API',
     description: 'Token-scoped REST API for digital signage: displays, content, playlists, layouts, schedules and reports.',
     openapi: `${base}/openapi.yaml`,
     documentation: `${base}/docs`,
     authentication: `${base}/auth.md`,
     catalog: `${base}/.well-known/api-catalog`,
-    source: 'https://github.com/screentinker/screentinker',
+    source: 'https://github.com/tanyeu18rg-max/screenforge-app',
   });
 });
 
@@ -381,7 +384,7 @@ app.get('/.well-known/mcp/server-card.json', (req, res) => {
     endpoint: `${base}/mcp`,
     authentication: {
       type: 'bearer',
-      description: 'A scoped ScreenTinker API token, issued by a human in the dashboard. '
+      description: 'A scoped Kardinal Screens API token, issued by a human in the dashboard. '
         + 'There is no programmatic registration.',
       documentation: `${base}/auth.md`,
     },
@@ -495,7 +498,7 @@ app.get('/', (req, res) => {
 
 // Dashboard app. Inject the resolved instance / custom-domain branding into the
 // shell as a <meta> (#76) so brand-prime can apply it before first paint when the
-// per-workspace brand is not cached yet - no ScreenTinker flash on a never-visited
+// per-workspace brand is not cached yet - no Kardinal Screens flash on a never-visited
 // org. CSP blocks inline <script>, so the brand rides in a <meta> that brand-prime
 // reads. Falls back to a plain send of the shell if anything goes wrong.
 app.get('/app', (req, res) => {
@@ -1304,7 +1307,7 @@ app.use('/api/player-debug', require('./routes/player-debug'));
 
 // Public branding resolver (#15). Pre-login / pre-workspace contexts (the login
 // page especially) need branding without a token. Resolves custom-domain match
-// -> platform default -> hardcoded ScreenTinker. Domain comes from ?domain= or
+// -> platform default -> hardcoded Kardinal Screens. Domain comes from ?domain= or
 // the request hostname (trust-proxy resolves the forwarded Host behind CF/Nginx).
 app.get('/api/branding', (req, res) => {
   const { db } = require('./db/database');
@@ -1937,12 +1940,12 @@ const ipkCache = require('./lib/ipk-cache');
 wgtCache.start();                                    // Tizen SSSP URL-Launcher: resolve .wgt path/size/mtime once + refresh on interval
 ipkCache.start();                                    // LG webOS Signage: same for the .ipk
 const debCache = require('./lib/deb-cache');
-debCache.start();                                    // native Raspberry Pi player: newest screentinker-pi_<ver>_all.deb + its sha256
+debCache.start();                                    // native Raspberry Pi player: newest screenforge-pi_<ver>_all.deb + its sha256
 // /api/pi/update/check + /download/pi. Same kill switches, breaker and download guard as the APK
 // path below — see the header of routes/pi-update.js for why they are shared rather than copied.
 require('./routes/pi-update')(app);
 const winCache = require('./lib/win-cache');
-winCache.start();                                    // native Windows player: newest ScreenTinker-Setup-<ver>.exe + its sha256
+winCache.start();                                    // native Windows player: newest Kardinal Screens-Setup-<ver>.exe + its sha256
 // /api/win/update/check + /download/win — the same factory as the Pi route (routes/native-update.js),
 // plus the device-less sha256 lookup the SYSTEM helper service makes before running an installer.
 require('./routes/win-update')(app);
@@ -2641,7 +2644,7 @@ const otaDownloadState = otaDownloadGuard.prodState();   // #146 P3.8: shared si
  * What a downloaded APK is called on the recipient's disk.
  *
  * ⚠️ THIS IS A COMMERCIAL LEAK, not a cosmetic one (#292). Partners resell this platform under
- * their own brand; a file that saves as "ScreenTinker.apk" tells their customer exactly what the
+ * their own brand; a file that saves as "Kardinal Screens.apk" tells their customer exactly what the
  * upstream product is and where to get it directly.
  *
  * Resolved by DOMAIN rather than by workspace, because /download/apk is unauthenticated — there is
@@ -2653,11 +2656,11 @@ const otaDownloadState = otaDownloadGuard.prodState();   // #146 P3.8: shared si
  * another one. Only characters that are safe in both a filename and a header survive.
  */
 function apkDownloadName(req) {
-  let brand = 'ScreenTinker';
+  let brand = 'Kardinal Screens';
   try {
     // ⚠️ Required HERE, matching the other call sites in this file — it is not a module-scope
     // import. Referencing it as a free variable throws a ReferenceError that this very try/catch
-    // would swallow, leaving the download named "ScreenTinker.apk" forever with nothing logged:
+    // would swallow, leaving the download named "Kardinal Screens.apk" forever with nothing logged:
     // a feature that looks implemented and silently does nothing.
     const { resolveBranding } = require('./lib/branding');
     const row = resolveBranding(db, { domain: (req.hostname || '').toString() });
@@ -2670,7 +2673,7 @@ function apkDownloadName(req) {
 // The human-facing index of every player THIS instance can hand out. The guides link here instead
 // of at the GitHub releases page: an operator has no reason to have a GitHub account, and the
 // BrightSign archive has the server URL stamped into its bytes, so a release asset would point a
-// freshly imaged player at screentinker.com instead of at the instance the operator runs.
+// freshly imaged player at screenforge.com instead of at the instance the operator runs.
 //
 // Deliberately noindex (lib/download-index.js sets the meta tag): the marketing guides are the
 // pages that should rank, and a self-hosted instance's download index has no business in a search
@@ -2711,7 +2714,7 @@ app.get('/download/apk', (req, res) => {
   // the channel the same way, and both fall back to stable identically.
   const apk = apkCache.forChannel(req.query.channel === 'beta' ? 'beta' : 'stable');
   if (!apk.exists) {
-    return res.status(404).send(`<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>APK Not Available</title><style>body{font-family:-apple-system,system-ui,sans-serif;display:flex;justify-content:center;align-items:center;min-height:100vh;margin:0;background:#0f172a;color:#e2e8f0}div{text-align:center;max-width:480px;padding:32px 24px}h1{color:#f87171;font-size:22px;margin:0 0 8px}p{line-height:1.6;color:#94a3b8;font-size:14px;margin:0 0 20px}code{background:#1e293b;padding:2px 6px;border-radius:4px;font-size:13px}a{color:#3b82f6;text-decoration:none}a:hover{text-decoration:underline}.btn{display:inline-block;background:#2563eb;color:#fff;padding:10px 20px;border-radius:6px;font-size:14px;font-weight:500;text-decoration:none;margin-bottom:24px}.btn:hover{background:#1d4ed8;text-decoration:none}.muted{font-size:12px;color:#64748b}</style></head><body><div><h1>APK Not Available</h1><p>The Android APK has not been compiled yet.</p><a class="btn" href="https://github.com/screentinker/screentinker/releases/latest" target="_blank" rel="noopener">&#128230; Download from GitHub Releases</a><p class="muted">Self-hosting? Mount a built APK at <code>/data/ScreenTinker.apk</code> to serve it from this instance. Or use the <a href="/player">web player</a> instead.</p></div></body></html>`);
+    return res.status(404).send(`<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>APK Not Available</title><style>body{font-family:-apple-system,system-ui,sans-serif;display:flex;justify-content:center;align-items:center;min-height:100vh;margin:0;background:#0f172a;color:#e2e8f0}div{text-align:center;max-width:480px;padding:32px 24px}h1{color:#f87171;font-size:22px;margin:0 0 8px}p{line-height:1.6;color:#94a3b8;font-size:14px;margin:0 0 20px}code{background:#1e293b;padding:2px 6px;border-radius:4px;font-size:13px}a{color:#3b82f6;text-decoration:none}a:hover{text-decoration:underline}.btn{display:inline-block;background:#2563eb;color:#fff;padding:10px 20px;border-radius:6px;font-size:14px;font-weight:500;text-decoration:none;margin-bottom:24px}.btn:hover{background:#1d4ed8;text-decoration:none}.muted{font-size:12px;color:#64748b}</style></head><body><div><h1>APK Not Available</h1><p>The Android APK has not been compiled yet.</p><a class="btn" href="https://github.com/tanyeu18rg-max/screenforge-app/releases/latest" target="_blank" rel="noopener">&#128230; Download from GitHub Releases</a><p class="muted">Self-hosting? Mount a built APK at <code>/data/Kardinal Screens.apk</code> to serve it from this instance. Or use the <a href="/player">web player</a> instead.</p></div></body></html>`);
   }
 
   const verdict = otaDownloadGuard.admit(otaDownloadState, getBand());
@@ -2735,16 +2738,16 @@ app.get('/download/apk', (req, res) => {
 // ==================== Tizen SSSP URL-Launcher install ====================
 // One-URL native install for Samsung signage panels (SSSP), the same flow Fusion/OptiSigns
 // use: on the panel, enter this server's /tizen URL under URL Launcher / Custom App. The panel
-// fetches /tizen/sssp_config.xml, reads the version + size, downloads /tizen/ScreenTinker.wgt,
+// fetches /tizen/sssp_config.xml, reads the version + size, downloads /tizen/Kardinal Screens.wgt,
 // and installs it as a native app (auto-updating when <ver> bumps on the next release).
 //
 // The served .wgt must be signed with a Samsung PARTNER distributor certificate to install on
-// retail/commercial panels — mount the signed build at /data/ScreenTinker.wgt. A dev-mode panel
+// retail/commercial panels — mount the signed build at /data/Kardinal Screens.wgt. A dev-mode panel
 // accepts a self-signed build. See tizen/README.md.
 function tizenNotAvailable(res) {
   return res.status(404).send('<!DOCTYPE html><html><head><title>Tizen Player Not Available</title>'
     + '<style>body{font-family:-apple-system,system-ui,sans-serif;display:flex;justify-content:center;align-items:center;min-height:100vh;margin:0;background:#0f172a;color:#e2e8f0}div{text-align:center;max-width:520px;padding:24px}h1{color:#f87171;font-size:24px}code{background:#1e293b;padding:2px 8px;border-radius:4px;font-size:14px}p{line-height:1.6;color:#94a3b8}</style></head>'
-    + '<body><div><h1>Tizen App Not Available</h1><p>No signed <code>ScreenTinker.wgt</code> is hosted on this instance. Mount one at <code>/data/ScreenTinker.wgt</code>, or point the panel’s URL Launcher at the web player: <a href="/player" style="color:#3b82f6">/player</a>.</p></div></body></html>');
+    + '<body><div><h1>Tizen App Not Available</h1><p>No signed <code>Kardinal Screens.wgt</code> is hosted on this instance. Mount one at <code>/data/Kardinal Screens.wgt</code>, or point the panel’s URL Launcher at the web player: <a href="/player" style="color:#3b82f6">/player</a>.</p></div></body></html>');
 }
 
 // The manifest the panel fetches. Dynamic so <size> always matches the exact bytes we serve.
@@ -2757,11 +2760,11 @@ app.get('/tizen/sssp_config.xml', (req, res) => {
 });
 
 // The widget package. Named <widgetname>.wgt from the manifest so the panel resolves it here.
-app.get('/tizen/ScreenTinker.wgt', (req, res) => {
+app.get('/tizen/Kardinal Screens.wgt', (req, res) => {
   const wgt = wgtCache.get();
   if (!wgt.exists) return tizenNotAvailable(res);
   res.setHeader('Content-Type', 'application/octet-stream');
-  res.setHeader('Content-Disposition', 'attachment; filename="ScreenTinker.wgt"');
+  res.setHeader('Content-Disposition', 'attachment; filename="Kardinal Screens.wgt"');
   res.setHeader('Cache-Control', 'no-cache');
   res.sendFile(wgt.path);
 });
@@ -2773,7 +2776,7 @@ app.get('/tizen/ScreenTinker.wgt', (req, res) => {
 function webosNotAvailable(res) {
   return res.status(404).send('<!DOCTYPE html><html><head><title>webOS Player Not Available</title>'
     + '<style>body{font-family:-apple-system,system-ui,sans-serif;display:flex;justify-content:center;align-items:center;min-height:100vh;margin:0;background:#0f172a;color:#e2e8f0}div{text-align:center;max-width:520px;padding:24px}h1{color:#f87171;font-size:24px}code{background:#1e293b;padding:2px 8px;border-radius:4px;font-size:14px}p{line-height:1.6;color:#94a3b8}</style></head>'
-    + '<body><div><h1>webOS App Not Available</h1><p>No <code>ScreenTinker.ipk</code> is hosted on this instance. Mount one at <code>/data/ScreenTinker.ipk</code> or build it with <code>webos/build-ipk.sh</code>. The panel\u2019s browser can run the web player meanwhile: <a href="/player" style="color:#3b82f6">/player</a>.</p></div></body></html>');
+    + '<body><div><h1>webOS App Not Available</h1><p>No <code>Kardinal Screens.ipk</code> is hosted on this instance. Mount one at <code>/data/Kardinal Screens.ipk</code> or build it with <code>webos/build-ipk.sh</code>. The panel\u2019s browser can run the web player meanwhile: <a href="/player" style="color:#3b82f6">/player</a>.</p></div></body></html>');
 }
 
 app.get('/webos/version.json', (req, res) => {
@@ -2781,11 +2784,11 @@ app.get('/webos/version.json', (req, res) => {
   res.json(ipkCache.versionJson());
 });
 
-app.get('/webos/ScreenTinker.ipk', (req, res) => {
+app.get('/webos/Kardinal Screens.ipk', (req, res) => {
   const ipk = ipkCache.get();
   if (!ipk.exists) return webosNotAvailable(res);
   res.setHeader('Content-Type', 'application/octet-stream');
-  res.setHeader('Content-Disposition', 'attachment; filename="ScreenTinker.ipk"');
+  res.setHeader('Content-Disposition', 'attachment; filename="Kardinal Screens.ipk"');
   res.setHeader('Cache-Control', 'no-cache');
   res.sendFile(ipk.path);
 });
@@ -2794,17 +2797,17 @@ app.get(['/webos', '/webos/'], (req, res) => {
   const ipk = ipkCache.get();
   const base = process.env.APP_URL || `${req.protocol}://${req.get('host')}`;
   res.setHeader('Content-Type', 'text/html; charset=utf-8');
-  res.send('<!DOCTYPE html><html><head><meta charset="utf-8"><title>ScreenTinker on LG webOS Signage</title>'
+  res.send('<!DOCTYPE html><html><head><meta charset="utf-8"><title>Kardinal Screens on LG webOS Signage</title>'
     + '<meta name="viewport" content="width=device-width,initial-scale=1">'
     + '<style>body{font-family:-apple-system,system-ui,sans-serif;background:#0f172a;color:#e2e8f0;margin:0;padding:40px 20px;line-height:1.6}'
     + '.w{max-width:640px;margin:0 auto}h1{color:#34d399}code{background:#1e293b;padding:2px 8px;border-radius:4px;font-size:14px}'
     + 'ol{padding-left:20px}li{margin:8px 0}.mut{color:#94a3b8;font-size:14px}.pill{display:inline-block;background:#1e293b;border-radius:20px;padding:4px 12px;font-size:13px;color:#94a3b8}a{color:#3b82f6}</style></head>'
-    + '<body><div class="w"><h1>ScreenTinker \u2014 LG webOS Signage</h1>'
+    + '<body><div class="w"><h1>Kardinal Screens \u2014 LG webOS Signage</h1>'
     + (ipk.exists ? `<p class="pill">Ready \u00b7 v${ipk.version} \u00b7 ${(ipk.size / 1024 / 1024).toFixed(2)} MB</p>` : '<p class="pill">No .ipk hosted yet</p>')
-    + `<p>Download <a href="${base}/webos/ScreenTinker.ipk">ScreenTinker.ipk</a> and install it on the panel:</p>`
+    + `<p>Download <a href="${base}/webos/Kardinal Screens.ipk">Kardinal Screens.ipk</a> and install it on the panel:</p>`
     + '<ol><li><b>USB:</b> copy the file to a USB stick, plug it into the panel, open <b>Settings \u2192 General \u2192 Install App</b> (the exact path varies by webOS version), and pick it.</li>'
     + '<li><b>SI server:</b> host the file and point the panel\u2019s SI Server setting at it.</li>'
-    + `<li>Launch ScreenTinker, enter <code>${base}</code>, and claim the pairing code in your dashboard.</li></ol>`
+    + `<li>Launch Kardinal Screens, enter <code>${base}</code>, and claim the pairing code in your dashboard.</li></ol>`
     + `<p class="mut">The app checks <code>${base}/webos/version.json</code> and installs a newer build itself when the panel\u2019s SCAP library is present. Without it (or from a browser) the web player runs at <a href="${base}/player">${base}/player</a>.</p>`
     + '</div></body></html>');
 });
@@ -2815,16 +2818,16 @@ app.get(['/tizen', '/tizen/'], (req, res) => {
   const base = process.env.APP_URL || `${req.protocol}://${req.get('host')}`;
   const ready = wgt.exists;
   res.setHeader('Content-Type', 'text/html; charset=utf-8');
-  res.send('<!DOCTYPE html><html><head><meta charset="utf-8"><title>ScreenTinker on Samsung (Tizen)</title>'
+  res.send('<!DOCTYPE html><html><head><meta charset="utf-8"><title>Kardinal Screens on Samsung (Tizen)</title>'
     + '<meta name="viewport" content="width=device-width,initial-scale=1">'
     + '<style>body{font-family:-apple-system,system-ui,sans-serif;background:#0f172a;color:#e2e8f0;margin:0;padding:40px 20px;line-height:1.6}'
     + '.w{max-width:640px;margin:0 auto}h1{color:#34d399}code{background:#1e293b;padding:2px 8px;border-radius:4px;font-size:14px}'
     + 'ol{padding-left:20px}li{margin:8px 0}.mut{color:#94a3b8;font-size:14px}.pill{display:inline-block;background:#1e293b;border-radius:20px;padding:4px 12px;font-size:13px;color:#94a3b8}</style></head>'
-    + '<body><div class="w"><h1>ScreenTinker — Samsung Signage (Tizen)</h1>'
+    + '<body><div class="w"><h1>Kardinal Screens — Samsung Signage (Tizen)</h1>'
     + (ready ? `<p class="pill">Ready · v${wgt.version} · ${(wgt.size/1024/1024).toFixed(2)} MB</p>` : '<p class="pill">No signed .wgt hosted yet</p>')
     + '<p>On the Samsung signage panel, go to <b>URL Launcher / Custom App</b> and enter:</p>'
     + `<p><code>${base}/tizen</code></p>`
-    + '<p>The panel installs the ScreenTinker player as a native app, then shows a 6-digit pairing code to claim in your dashboard.</p>'
+    + '<p>The panel installs the Kardinal Screens player as a native app, then shows a 6-digit pairing code to claim in your dashboard.</p>'
     + '<p class="mut">Requires a Samsung Partner-signed build on retail panels. No signed build? Point URL Launcher at '
     + `<code>${base}/player</code> to run the web player instead.</p>`
     + '</div></body></html>');
@@ -2846,7 +2849,7 @@ const CONTENT_PREFIXES = ['/guides/', '/integrations/'];
 const NOT_FOUND_PAGE = '<!DOCTYPE html><html lang="en"><head><meta charset="utf-8">'
   + '<meta name="viewport" content="width=device-width,initial-scale=1">'
   + '<meta name="robots" content="noindex">'
-  + '<title>Page not found | ScreenTinker</title>'
+  + '<title>Page not found | Kardinal Screens</title>'
   + '<style>body{font-family:-apple-system,system-ui,sans-serif;display:flex;justify-content:center;'
   + 'align-items:center;min-height:100vh;margin:0;background:#0f172a;color:#e2e8f0}'
   + 'div{text-align:center;max-width:460px;padding:32px 24px}h1{font-size:22px;margin:0 0 8px}'
@@ -2941,7 +2944,7 @@ if (hasSsl) {
 server.listen(listenPort, '0.0.0.0', () => {
   console.log(`
 ╔══════════════════════════════════════════════════╗
-║       ScreenTinker Server v${VERSION.padEnd(22).slice(0, 22)}║
+║       Kardinal Screens Server v${VERSION.padEnd(22).slice(0, 22)}║
 ║──────────────────────────────────────────────────║
 ║  Dashboard: ${protocol}://localhost:${String(listenPort).padEnd(5)}              ║
 ║  API:       ${protocol}://localhost:${String(listenPort).padEnd(5)}/api          ║

@@ -12,12 +12,12 @@ failure and a review of the app against Samsung's certification checklist. The c
 ## 1. The package
 
 ```bash
-./build-wgt.sh --store          # -> ScreenTinker-store.wgt (consumer manifest, see README)
-tizen package -t wgt -s <SamsungProfile> -- ScreenTinker-store.wgt   # re-sign with the Samsung cert
+./build-wgt.sh --store          # -> ScreenForge-store.wgt (consumer manifest, see README)
+tizen package -t wgt -s <SamsungProfile> -- ScreenForge-store.wgt   # re-sign with the Samsung cert
 ```
 
 - Bump `version` in `config.xml` for every upload; Seller Office refuses a version it has seen.
-- `<name>ScreenTinker</name>` must equal the store's default-language title character for character.
+- `<name>ScreenForge</name>` must equal the store's default-language title character for character.
 - The package is signed with the SDK test distributor until a Samsung author + distributor
   certificate exists (Tizen Studio → Certificate Manager → Samsung, seller account). The pre-test
   passes the manifest either way; the store will not accept the test signature.
@@ -25,31 +25,31 @@ tizen package -t wgt -s <SamsungProfile> -- ScreenTinker-store.wgt   # re-sign w
 ## 2. The tester cannot pair without an account — solve it in Verification Info
 
 Samsung's certification FAQ names missing test credentials as the leading cause of rejection. The
-app's first screen is a pairing code that only a ScreenTinker dashboard can consume, so the tester
+app's first screen is a pairing code that only a ScreenForge dashboard can consume, so the tester
 needs, per model group requested:
 
-- A **test account on the hosted server** (`https://screentinker.com`): e-mail already verified
+- A **test account on the hosted server** (`https://screenforge.com`): e-mail already verified
   (hosted sign-up hard-blocks otherwise), **not a trial** (the trial-expiry sweep would downgrade it
   mid-certification), device quota ≥ 5, no geo restriction.
 - A playlist named **"Samsung QA"** already published in the account: 3 images + 1 MP4 with audio,
   10 s each. There is no "default playlist for new displays" — the tester assigns it once after
   pairing (step 3 below), which is one click on the display's page.
 
-Created 2026-09-18 on the hosted server: `qa@screentinker.com` (Enterprise = unlimited displays, no trial, e-mail verified),
+Created 2026-09-18 on the hosted server: `qa@screenforge.com` (Enterprise = unlimited displays, no trial, e-mail verified),
 playlist `6320764a-7358-4212-b702-3afa6e3cca7e`. The password is held by the owner, not in the repo.
 
 Put in the *Verification Info* comment and the UI Description "Use Cases":
 
-1. Launch the app. The Server URL screen is pre-filled with `https://screentinker.com`; press OK on
+1. Launch the app. The Server URL screen is pre-filled with `https://screenforge.com`; press OK on
    **Connect** (or Enter in the field).
 2. The pairing screen shows a 6-digit code. In a PC browser sign in at
-   `https://screentinker.com` with the test account → **Displays → "+ Add Display"** (right-hand
+   `https://screenforge.com` with the test account → **Displays → "+ Add Display"** (right-hand
    side) → enter the code. The TV leaves the pairing screen within about five seconds.
 3. Open the new display in the dashboard, select the **Playlist** tab, and assign the
    **"Samsung QA"** playlist. Playback starts on the TV within seconds.
 4. Playback is full-screen and loops indefinitely — this is a digital-signage player; the screen
    saver is disabled by design while content plays.
-5. **Return** during playback opens "Exit ScreenTinker?" (Exit / Change server / Cancel).
+5. **Return** during playback opens "Exit ScreenForge?" (Exit / Change server / Cancel).
    Return on the Server URL screen exits the app. The **Exit** key exits from anywhere.
 6. Unplug the network: a status message appears; cached content keeps playing. Re-plug: the message
    clears and playback continues.
@@ -72,7 +72,7 @@ Put in the *Verification Info* comment and the UI Description "Use Cases":
 - Logo 1920×1080 (32-bit PNG, transparent) + background 1920×1080 (24-bit PNG/JPG)
 - Icon 512×423 PNG
 - Four 1920×1080 JPG screenshots ≤ 500 kB: setup, pairing, image playback, video playback
-- Privacy-policy URL; support e-mail `support@screentinker.com` (must match `config.xml`)
+- Privacy-policy URL; support e-mail (must match `config.xml` — set a real address you monitor before submitting; the placeholder in the repo is not submittable)
 
 ## 5. Known gaps still open after 2026-09-18
 

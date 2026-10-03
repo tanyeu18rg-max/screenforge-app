@@ -66,7 +66,8 @@ function packageServerUrl(req) {
 }
 
 /*
- * Rewrite server_url in screentinker.json.
+ * Rewrite server_url in screentinker.json (compatibility-sensitive filename: the
+ * BrightScript player reads this exact name at boot).
  *
  * Parsed and re-serialised rather than string-replaced so a malformed URL cannot inject structure
  * into the config the player reads. Returns the ORIGINAL text on any failure: shipping the

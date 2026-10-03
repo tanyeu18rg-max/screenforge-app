@@ -17,17 +17,17 @@ const crypto = require('node:crypto');
 const SKILLS = [
   {
     name: 'manage-digital-signage',
-    description: 'Inspect and control ScreenTinker screens: which are online, what they are playing, '
+    description: 'Inspect and control Kardinal Screens screens: which are online, what they are playing, '
       + 'and send them commands.',
-    body: (base) => `# Manage digital signage with ScreenTinker
+    body: (base) => `# Manage digital signage with Kardinal Screens
 
-Inspect and control a ScreenTinker screen estate — which displays are online, what each is playing,
+Inspect and control a Kardinal Screens screen estate — which displays are online, what each is playing,
 and the commands a display accepts.
 
 ## Connect
 
-ScreenTinker serves a Model Context Protocol endpoint at \`${base}/mcp\`. Point an MCP client at it
-with a ScreenTinker API token:
+Kardinal Screens serves a Model Context Protocol endpoint at \`${base}/mcp\`. Point an MCP client at it
+with a Kardinal Screens API token:
 
     Authorization: Bearer st_...
 
@@ -71,9 +71,9 @@ again will not reveal it.
 `,
   },
   {
-    name: 'screentinker-player-setup',
-    description: 'Choose hardware for a ScreenTinker screen and get the right player onto it.',
-    body: (base) => `# Set up a ScreenTinker player
+    name: 'screenforge-player-setup',
+    description: 'Choose hardware for a Kardinal Screens screen and get the right player onto it.',
+    body: (base) => `# Set up a Kardinal Screens player
 
 Getting a screen playing: which device to use, and which player it needs.
 

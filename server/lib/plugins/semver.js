@@ -1,7 +1,7 @@
 'use strict';
 
 /*
- * Tiny constraint check for plugin.json "screentinker". Only `>=x.y.z` is
+ * Tiny constraint check for plugin.json "screenforge". Only `>=x.y.z` is
  * understood — that is the one operators actually write. Anything else is a
  * warning and a pass, so a future `^2` does not refuse to load on a parser
  * that was never taught it.

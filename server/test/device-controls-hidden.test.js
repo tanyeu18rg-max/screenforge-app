@@ -792,5 +792,5 @@ test('the shipped isWindowsDevice / terminalPresets agree with the harness stubs
   assert.deepEqual(ctx.p(ANDROID_FULL), ['A']);
   // And the real Windows presets are PowerShell, including the helper-service check.
   const presets = SRC.slice(SRC.indexOf('const WINDOWS_TERMINAL_PRESETS'), SRC.indexOf('];', SRC.indexOf('const WINDOWS_TERMINAL_PRESETS')));
-  for (const cmd of ['Get-ComputerInfo', 'Get-PSDrive C', 'Get-Service ScreenTinkerHelper', 'Get-WinEvent']) assert.ok(presets.includes(cmd), cmd);
+  for (const cmd of ['Get-ComputerInfo', 'Get-PSDrive C', 'Get-Service Kardinal ScreensHelper', 'Get-WinEvent']) assert.ok(presets.includes(cmd), cmd);
 });

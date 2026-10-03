@@ -482,7 +482,7 @@ CREATE INDEX IF NOT EXISTS idx_activity_log_user ON activity_log(user_id, create
 CREATE TABLE IF NOT EXISTS white_labels (
     id              TEXT PRIMARY KEY,
     user_id         TEXT NOT NULL REFERENCES users(id),
-    brand_name      TEXT NOT NULL DEFAULT 'ScreenTinker',
+    brand_name      TEXT NOT NULL DEFAULT 'ScreenForge',
     logo_url        TEXT,
     favicon_url     TEXT,
     primary_color   TEXT DEFAULT '#3B82F6',
@@ -511,6 +511,20 @@ CREATE TABLE IF NOT EXISTS ai_settings (
     image_api_key_enc TEXT,
     updated_at      INTEGER NOT NULL DEFAULT (strftime('%s','now'))
 );
+
+-- Kardinal AI layer: the Brain knowledge base. Workspace-scoped facts the AI
+-- operator injects into chat; retrieval is keyword overlap (lib/ai-agent.js),
+-- no vector DB. Mirrors the migration in db/database.js for existing DBs.
+CREATE TABLE IF NOT EXISTS ai_brain (
+    id              TEXT PRIMARY KEY,
+    workspace_id    TEXT NOT NULL REFERENCES workspaces(id) ON DELETE CASCADE,
+    title           TEXT NOT NULL,
+    content         TEXT NOT NULL,
+    tags            TEXT NOT NULL DEFAULT '',
+    created_at      INTEGER NOT NULL DEFAULT (strftime('%s','now')),
+    updated_at      INTEGER
+);
+CREATE INDEX IF NOT EXISTS idx_ai_brain_ws ON ai_brain(workspace_id);
 
 -- ===================== KIOSK PAGES =====================
 

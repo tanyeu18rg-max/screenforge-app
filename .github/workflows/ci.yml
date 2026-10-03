@@ -7,9 +7,11 @@ on:
     # been bitten twice by that shape: a green local run on one Node version while CI runs another,
     # and a config-gated code path no test exercised taking production down. A branch nobody tests
     # is a branch nobody can trust to merge.
-    branches: [main, 2.0.0]
+    # Kardinal addition: the product ships from rebrand/screenforge (PR #1, unmerged), so that
+    # branch gets the same gates — otherwise the branch we actually release from is untested.
+    branches: [main, 2.0.0, rebrand/screenforge]
   pull_request:
-    branches: [main, 2.0.0]
+    branches: [main, 2.0.0, rebrand/screenforge]
   workflow_dispatch:
 
 permissions:
@@ -406,6 +408,55 @@ jobs:
       - name: Stop the mesh server
         if: always()
         run: kill "$(cat "$RUNNER_TEMP/server-mesh.pid")" 2>/dev/null || true
+
+  # ── Kardinal layer gates ──────────────────────────────────────────────
+  # Upstream never adopted a linter or a dependency audit; the Kardinal layer
+  # holds its own code to both. The lint scope is documented in
+  # server/eslint.config.mjs (Kardinal files only — the upstream tree has
+  # ~500 pre-existing findings we deliberately do not churn).
+  lint:
+    name: Lint + format check (Kardinal layer)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: server
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '20'
+          cache: npm
+          cache-dependency-path: server/package-lock.json
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run format:check
+
+  # Dependency audit: REPORT-ONLY for now (continue-on-error). The production
+  # tree carries 7 pre-existing HIGH advisories in UPSTREAM's pinned
+  # dependencies (none introduced by the Kardinal layer — verified 2026-10-03):
+  #   basic-ftp<=6.2.0 (ReDoS, via puppeteer-core chain), brace-expansion
+  #   2.0.0-2.1.6 (ReDoS), engine.io 6.6.0-6.6.9 (DoS, via socket.io),
+  #   extract-zip (via @puppeteer/browsers), ip-address<=10.7.0,
+  #   nodemailer<=10.0.5, qs 2.2.5-6.15.3 (via express).
+  # Fixing them means upgrading socket.io / nodemailer / express — a dedicated
+  # dependency-upgrade PR with the full suite behind it, not a drive-by in a
+  # foundations change. Until then this job reports; it does not gate.
+  audit:
+    name: Dependency audit (high+, report-only)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: server
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '20'
+          cache: npm
+          cache-dependency-path: server/package-lock.json
+      # No install needed: npm audit reads the lockfile.
+      - run: npm audit --omit=dev --audit-level=high
+        continue-on-error: true
 
   # TODO (deferred - needs a tag earlier than HEAD, so meaningful from v1.8.0 on):
   # upgrade-path job. Restore a db created by the previous tagged release, boot

@@ -6,7 +6,7 @@
 //
 // Unlike the Tizen .wgt, an .ipk needs no vendor signature to install from USB or an SI server,
 // so the CI-built artifact at the repo root is normally the one served. An operator can still
-// mount their own at /data/ScreenTinker.ipk (say, one built with LG's ares-package and the SCAP
+// mount their own at /data/Kardinal Screens.ipk (say, one built with LG's ares-package and the SCAP
 // library included), and that wins.
 
 const fs = require('fs');
@@ -15,9 +15,9 @@ const config = require('../config');
 
 function candidates() {
   return [
-    path.join(config.dataDir, 'ScreenTinker.ipk'),          // operator mount — wins
-    path.join(__dirname, '..', '..', 'ScreenTinker.ipk'),   // repo root (release artifact)
-    path.join(__dirname, '..', '..', 'webos', 'ScreenTinker.ipk'), // in-repo build
+    path.join(config.dataDir, 'Kardinal Screens.ipk'),          // operator mount — wins
+    path.join(__dirname, '..', '..', 'Kardinal Screens.ipk'),   // repo root (release artifact)
+    path.join(__dirname, '..', '..', 'webos', 'Kardinal Screens.ipk'), // in-repo build
   ];
 }
 
@@ -56,7 +56,7 @@ function start() {
 // What the shell polls. `available` is the load-bearing field: a version with no file behind it
 // must not send a panel off to download nothing.
 function versionJson(ipk = cache) {
-  return { version: ipk.version, available: !!ipk.exists, size: ipk.size, url: '/webos/ScreenTinker.ipk' };
+  return { version: ipk.version, available: !!ipk.exists, size: ipk.size, url: '/webos/Kardinal Screens.ipk' };
 }
 
-module.exports = { start, refresh, get, versionJson, APP_ID: 'com.screentinker.player' };
+module.exports = { start, refresh, get, versionJson, APP_ID: 'com.screenforge.player' };

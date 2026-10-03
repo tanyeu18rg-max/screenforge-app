@@ -15,7 +15,7 @@ const { newNodeId } = require('./node-identity');
  * This server's own friendly name, as declared to peers when pairing.
  *
  * ⚠️ Defaults to the host name rather than to the node id. An operator pairing two servers is
- * looking at a screen that has to distinguish them, and "screentinker-hq" does that while
+ * looking at a screen that has to distinguish them, and "screenforge-hq" does that while
  * "bd5f5179-49dd-…" does not — the id is what the machines use, and it is not what anybody calls
  * the box. Stored once so a later hostname change cannot silently rename an existing relationship.
  */
@@ -23,7 +23,7 @@ function nodeName(db) {
   try {
     const row = db.prepare('SELECT node_name FROM mesh_node WHERE singleton = 1').get();
     if (row && row.node_name) return row.node_name;
-    const fallback = (os.hostname() || 'ScreenTinker').split('.')[0];
+    const fallback = (os.hostname() || 'Kardinal Screens').split('.')[0];
     db.prepare('UPDATE mesh_node SET node_name = ? WHERE singleton = 1').run(fallback);
     return fallback;
   } catch (e) {

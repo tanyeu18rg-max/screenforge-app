@@ -1,7 +1,7 @@
 // Applies the current user's saved white-label config to the DOM.
 // Runs once after login/route bootstrap. Without this, saved values in the
 // white_labels table are read into the Settings form but never applied to
-// the actual page — so users see "ScreenTinker" and default colors after
+// the actual page — so users see "Kardinal Screens" and default colors after
 // every reload, as if their save reverted.
 
 let applied = false;
@@ -82,7 +82,7 @@ export function resetBranding() {
 export function applyAccent(root, color) {
   if (!color) return;
   root.style.setProperty('--accent', color);
-  const custom = String(color).trim().toLowerCase() !== '#3b82f6';
+  const custom = String(color).trim().toLowerCase() !== '#d92038';
   for (const v of ['--accent-2', '--accent-3']) {
     if (custom) root.style.setProperty(v, color); else root.style.removeProperty(v);
   }

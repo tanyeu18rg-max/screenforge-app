@@ -118,7 +118,7 @@ test('T-3 email: sent once to a trial with <=3 days left, never to one with 10 d
   // ⚠️ /app#/billing, not /#/billing. This assertion used to pin the broken address: `/` is the
   // marketing page and throws the hash away, so the one call to action in this email — the whole
   // point of sending it — landed on the front door.
-  assert.match(m[0].text, /screentinker\.com\/app#\/billing/);
+  assert.match(m[0].text, /screenforge\.com\/app#\/billing/);
   assert.equal(mailsTo(later).length, 0);
   assert.ok(row(soon).trial_ending_email_sent_at, 'stamped');
   assert.equal(row(soon).plan_id, 'pro', 'still on the trial — not downgraded early');
@@ -146,7 +146,7 @@ test('expiry email: sent once after the downgrade, says which screens stopped', 
   assert.ok(r.expiredSent >= 1);
   const m = mailsTo(id);
   assert.equal(m.length, 1);
-  assert.equal(m[0].subject, 'Your ScreenTinker Pro trial has ended');
+  assert.equal(m[0].subject, 'Your Kardinal Screens Pro trial has ended');
   assert.match(m[0].text, /1 of your 2 screens is now showing a "Trial Expired" card/);
   assert.match(m[0].text, /Nothing was deleted/);
   assert.ok(row(id).trial_expired_email_sent_at);

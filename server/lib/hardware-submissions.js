@@ -176,7 +176,7 @@ function publishedDevices(db) {
       provisioning_url: null,
       notes: [
         ...(r.notes ? [r.notes] : []),
-        `Reported by ${r.submitter_name || 'a user'}. Not tested by ScreenTinker, and not Certified Hardware.`,
+        `Reported by ${r.submitter_name || 'a user'}. Not tested by Kardinal Screens, and not Certified Hardware.`,
       ],
       eol: null,
     };

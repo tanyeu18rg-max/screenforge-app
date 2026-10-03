@@ -354,7 +354,7 @@ export default {
   'dashboard.group_sync.toast_off': "Lecture synchronisée désactivée",
   'dashboard.group_sync.toast_resync': "Resync envoyée au groupe",
   'dashboard.group_sync.backend_auto': "Sync : Auto",
-  'dashboard.group_sync.backend_screentinker': "Sync : Standard",
+  'dashboard.group_sync.backend_screenforge': "Sync : Standard",
   'dashboard.group_sync.backend_brightsign': "Sync : BrightSign",
   'dashboard.group_sync.backend_hint': "Quel protocole de synchronisation ce groupe utilise. Standard fonctionne sur tous les types de joueurs et maintient les affichages alignés à la seconde près, sans leader ni Internet nécessaire. BrightSign est précis à l'image près, mais ne fonctionne que lorsque chaque écran du groupe est un BrightSign sur le même réseau, et il synchronise uniquement la vidéo. Sélectionne automatiquement BrightSign lorsque le groupe peut réellement l'exécuter, et Standard dans le cas contraire.",
   'dashboard.group_sync.toast_backend': "Protocole de synchronisation mis à jour",

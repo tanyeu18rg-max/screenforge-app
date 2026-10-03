@@ -1,5 +1,5 @@
 /*
- * ScreenTinker webOS shell - device control through LG's SCAP library.
+ * ScreenForge webOS shell - device control through LG's SCAP library.
  *
  * Everything the web player cannot do from a page: reboot the panel, cut the display, install
  * the app's own update. SCAP (Signage Common Application Platform) is LG's JavaScript layer over
@@ -83,11 +83,11 @@
    * location, which is why the copy lands where it does; the exact path convention is the one
    * thing in this file that only a panel can confirm.
    */
-  var UPDATE_PATH = 'file://internal/screentinker/ScreenTinker.ipk';
+  var UPDATE_PATH = 'file://internal/screenforge/ScreenForge.ipk';
   function update(ipkUrl) {
     var S = Storage();
     if (!S || !ipkUrl) return Promise.reject(new Error('unsupported'));
-    return call(S, 'mkdir', { path: 'file://internal/screentinker' }).catch(function () {})
+    return call(S, 'mkdir', { path: 'file://internal/screenforge' }).catch(function () {})
       .then(function () { return call(S, 'removeFile', { file: UPDATE_PATH, recursive: false }).catch(function () {}); })
       .then(function () { return call(S, 'copyFile', { source: ipkUrl, destination: UPDATE_PATH, ftpOption: {}, httpOption: {} }); })
       .then(function () { return call(S, 'upgradeApplication', { to: 'local', recovery: false }); });

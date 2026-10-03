@@ -9,7 +9,7 @@ import org.json.JSONObject
  * Parts 1 and 2 point outward — the panel calls the PLC. This points inward: the PLC, the Crestron
  * processor or the Home Assistant box calls the panel. The two exist for the same reason and it is
  * not symmetry for its own sake: an AV control system on the customer's LAN cannot reach the
- * ScreenTinker server (it is in another country, behind an outbound-only firewall, and frequently
+ * ScreenForge server (it is in another country, behind an outbound-only firewall, and frequently
  * has no credentials the installer is allowed to hold), but it can reach the screen in the same
  * rack. Today an installer's only option is to drive the dashboard, which means a browser, a login
  * and the WAN — three things a room-control system does not have.
