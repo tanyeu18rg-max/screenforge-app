@@ -9,6 +9,10 @@
  */
 require('./lib/preflight-deps').preflight();
 
+// Optional error tracking (Sentry). Strict no-op unless SENTRY_DSN is set;
+// see server/lib/sentry.js and docs/sentry-setup.md.
+require('./lib/sentry').init();
+
 const express = require('express');
 const http = require('http');
 const https = require('https');

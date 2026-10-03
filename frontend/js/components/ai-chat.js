@@ -12,15 +12,14 @@ import { esc } from '../utils.js';
  * exactly one button and one drawer in the DOM.
  */
 
-const CHAT_SVG = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>';
-const CLOSE_SVG = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>';
-const SEND_SVG = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>';
+const CHAT_SVG =
+  '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>';
+const CLOSE_SVG =
+  '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>';
+const SEND_SVG =
+  '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>';
 
-const SUGGESTIONS = [
-  'Which screens are offline?',
-  'Create a playlist for the lobby',
-  'Summarize my network',
-];
+const SUGGESTIONS = ['Which screens are offline?', 'Create a playlist for the lobby', 'Summarize my network'];
 
 const styles = `
 #kchatFab{position:fixed;right:22px;bottom:22px;width:56px;height:56px;border-radius:50%;
@@ -110,7 +109,9 @@ export function initAiChat() {
   let configured = null;
   let busy = false;
 
-  const scrollDown = () => { msgs.scrollTop = msgs.scrollHeight; };
+  const scrollDown = () => {
+    msgs.scrollTop = msgs.scrollHeight;
+  };
   const addMsg = (role, text) => {
     const d = document.createElement('div');
     d.className = 'kchat-msg ' + role;
@@ -130,7 +131,8 @@ export function initAiChat() {
       wrap.appendChild(d);
     }
     const last = msgs.lastElementChild;
-    if (last && last.classList.contains('ai')) last.appendChild(wrap); else msgs.appendChild(wrap);
+    if (last && last.classList.contains('ai')) last.appendChild(wrap);
+    else msgs.appendChild(wrap);
     scrollDown();
   };
 
@@ -139,7 +141,10 @@ export function initAiChat() {
     b.className = 'kchat-chip';
     b.type = 'button';
     b.textContent = s;
-    b.addEventListener('click', () => { openDrawer(); send(s); });
+    b.addEventListener('click', () => {
+      openDrawer();
+      send(s);
+    });
     chipsBox.appendChild(b);
   }
 
@@ -148,7 +153,9 @@ export function initAiChat() {
     try {
       const s = await api.aiGetSettings();
       configured = !!(s && s.configured);
-    } catch { configured = false; }
+    } catch {
+      configured = false;
+    }
     if (!configured) showNotConfigured();
     return configured;
   }
@@ -168,7 +175,10 @@ export function initAiChat() {
     b.className = 'btn btn-primary btn-sm';
     b.type = 'button';
     b.textContent = 'Open AI settings';
-    b.addEventListener('click', () => { closeDrawer(); window.location.hash = '#/settings'; });
+    b.addEventListener('click', () => {
+      closeDrawer();
+      window.location.hash = '#/settings';
+    });
     d.append(h, p, b);
     msgs.appendChild(d);
   }
@@ -209,13 +219,18 @@ export function initAiChat() {
     checkConfigured();
     setTimeout(() => input.focus(), 260);
   }
-  function closeDrawer() { drawer.classList.remove('open'); }
+  function closeDrawer() {
+    drawer.classList.remove('open');
+  }
 
   fab.addEventListener('click', () => (drawer.classList.contains('open') ? closeDrawer() : openDrawer()));
   drawer.querySelector('.kchat-close').addEventListener('click', closeDrawer);
   sendBtn.addEventListener('click', () => send(input.value));
   input.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); send(input.value); }
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      send(input.value);
+    }
   });
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape' && drawer.classList.contains('open')) closeDrawer();

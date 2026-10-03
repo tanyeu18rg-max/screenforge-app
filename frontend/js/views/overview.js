@@ -13,7 +13,11 @@ import * as gettingStarted from '../components/getting-started.js';
 let cleanupFns = [];
 
 export function cleanup() {
-  cleanupFns.forEach((fn) => { try { fn(); } catch (_) {} });
+  cleanupFns.forEach((fn) => {
+    try {
+      fn();
+    } catch (_) {}
+  });
   cleanupFns = [];
 }
 
@@ -22,7 +26,10 @@ function fmtBytes(n) {
   const units = ['B', 'KB', 'MB', 'GB', 'TB'];
   let i = 0;
   let v = n;
-  while (v >= 1024 && i < units.length - 1) { v /= 1024; i++; }
+  while (v >= 1024 && i < units.length - 1) {
+    v /= 1024;
+    i++;
+  }
   return `${v >= 100 ? Math.round(v) : v.toFixed(1)} ${units[i]}`;
 }
 
@@ -56,7 +63,9 @@ export async function render(app) {
       devices: devices0 || [],
       playlists: playlists0 || [],
     });
-  } catch (_) { /* onboarding must never break the overview */ }
+  } catch (_) {
+    /* onboarding must never break the overview */
+  }
 
   let devices = [];
   let playlists = [];
@@ -70,7 +79,7 @@ export async function render(app) {
     devices = Array.isArray(d) ? d : [];
     playlists = Array.isArray(pl) ? pl : [];
     // getAllContent resolves { items, truncated }, not a bare array.
-    content = Array.isArray(contentRes) ? contentRes : (contentRes.items || []);
+    content = Array.isArray(contentRes) ? contentRes : contentRes.items || [];
   } catch (_) {}
 
   const seen = new Map();
@@ -136,23 +145,27 @@ export async function render(app) {
   const npEl = document.getElementById('ovNowPlaying');
   if (npEl) {
     npEl.innerHTML = playing.length
-      ? `<ul class="ov-list">${playing.map((d) => {
-        const p = playlistById.get(d.playlist_id);
-        const b = livenessBadge(d, { short: true });
-        return `<li>
+      ? `<ul class="ov-list">${playing
+          .map((d) => {
+            const p = playlistById.get(d.playlist_id);
+            const b = livenessBadge(d, { short: true });
+            return `<li>
           <span class="device-status-badge ${b.state}">${esc(b.label)}</span>
           <a href="#/device/${esc(d.id)}"><strong>${esc(d.device_name || d.name || t('overview.unnamed_screen'))}</strong></a>
           <span class="muted">— ${esc(p ? p.name : t('overview.unknown_playlist'))}</span>
         </li>`;
-      }).join('')}</ul>`
+          })
+          .join('')}</ul>`
       : `<p class="muted">${esc(t('overview.nothing_playing'))}</p>`;
   }
 
   const alEl = document.getElementById('ovAlerts');
   if (alEl) {
     alEl.innerHTML = alerts.length
-      ? `<ul class="ov-list ov-alerts">${alerts.slice(0, 12).map((a) =>
-        `<li class="ov-alert-${a.kind}">${a.html}</li>`).join('')}</ul>
+      ? `<ul class="ov-list ov-alerts">${alerts
+          .slice(0, 12)
+          .map((a) => `<li class="ov-alert-${a.kind}">${a.html}</li>`)
+          .join('')}</ul>
         ${alerts.length > 12 ? `<p class="muted">+${alerts.length - 12} ${esc(t('overview.more'))}</p>` : ''}`
       : `<p class="muted">${esc(t('overview.all_clear'))}</p>`;
   }
