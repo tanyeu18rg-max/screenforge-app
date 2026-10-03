@@ -7,9 +7,11 @@ on:
     # been bitten twice by that shape: a green local run on one Node version while CI runs another,
     # and a config-gated code path no test exercised taking production down. A branch nobody tests
     # is a branch nobody can trust to merge.
-    branches: [main, 2.0.0]
+    # Kardinal addition: the product ships from rebrand/screenforge (PR #1, unmerged), so that
+    # branch gets the same gates — otherwise the branch we actually release from is untested.
+    branches: [main, 2.0.0, rebrand/screenforge]
   pull_request:
-    branches: [main, 2.0.0]
+    branches: [main, 2.0.0, rebrand/screenforge]
   workflow_dispatch:
 
 permissions:
