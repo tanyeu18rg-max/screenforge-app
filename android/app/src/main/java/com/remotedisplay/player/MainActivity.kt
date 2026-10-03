@@ -1794,7 +1794,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun kioskModeEnabled(): Boolean = try {
-        getSharedPreferences("screentinker", Context.MODE_PRIVATE) // persisted key: not renamed.getBoolean("kiosk_enabled", false)
+        // persisted key: not renamed on rebrand
+        getSharedPreferences("screentinker", Context.MODE_PRIVATE).getBoolean("kiosk_enabled", false)
     } catch (e: Throwable) { false }
 
     /** Re-enter lock task after a restart, if that is the state the operator left it in. */

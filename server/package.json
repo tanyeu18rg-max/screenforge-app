@@ -37,7 +37,7 @@
     "stripe": "^20.4.1",
     "unzipper": "^0.12.3",
     "uuid": "^14.0.0",
-    "@sentry/node": "^11.4.0"
+    "@sentry/node": "^9.44.0"
   },
   "optionalDependencies": {
     "better-sqlite3": "12.9.0",
