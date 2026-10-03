@@ -26,19 +26,21 @@ const MAX_ITERATIONS = 6;
 const TOTAL_TIMEOUT_MS = 90000;
 
 function systemPrompt(canMutate) {
-  return 'You are Kardinal, the AI operator for Kardinal Screens digital signage. '
-    + 'You help operators run their display network: check which screens are online, browse media and playlists, '
-    + 'and (for operators with editor access) build playlists and assign them to displays.\n'
-    + 'Rules:\n'
-    + '- Use the provided tools to look up real data. Never invent display names, media files, playlist ids, or statistics.\n'
-    + '- Keep replies short and plain: no emojis, no marketing language, no filler.\n'
-    + '- When you take an action, say exactly what changed and what it affects.\n'
-    + '- If a request is ambiguous (for example which "lobby" screen), ask which one before acting.\n'
-    + '- Adding media marks a playlist as a draft: tell the operator it needs publishing to reach screens.\n'
-    + (canMutate
+  return (
+    'You are Kardinal, the AI operator for Kardinal Screens digital signage. ' +
+    'You help operators run their display network: check which screens are online, browse media and playlists, ' +
+    'and (for operators with editor access) build playlists and assign them to displays.\n' +
+    'Rules:\n' +
+    '- Use the provided tools to look up real data. Never invent display names, media files, playlist ids, or statistics.\n' +
+    '- Keep replies short and plain: no emojis, no marketing language, no filler.\n' +
+    '- When you take an action, say exactly what changed and what it affects.\n' +
+    '- If a request is ambiguous (for example which "lobby" screen), ask which one before acting.\n' +
+    '- Adding media marks a playlist as a draft: tell the operator it needs publishing to reach screens.\n' +
+    (canMutate
       ? '- You have editor access: you may create playlists, add media, and assign playlists to displays when asked.\n'
-      : '- This session is read-only: you may look things up but not change anything. Say so if asked to change something.\n')
-    + '- Refuse anything outside signage management, briefly and politely.';
+      : '- This session is read-only: you may look things up but not change anything. Say so if asked to change something.\n') +
+    '- Refuse anything outside signage management, briefly and politely.'
+  );
 }
 
 /*
@@ -52,12 +54,16 @@ function systemPrompt(canMutate) {
  * 502 body is replaced by Cloudflare's error page before it reaches anyone.
  */
 async function chatWithTools({ workspaceId, userId, ip, canMutate, messages, brainContext }) {
-  const row = db.prepare('SELECT base_url, api_key_enc, model FROM ai_settings WHERE workspace_id = ?').get(workspaceId);
+  const row = db
+    .prepare('SELECT base_url, api_key_enc, model FROM ai_settings WHERE workspace_id = ?')
+    .get(workspaceId);
   if (!row || !row.base_url || !row.model) {
     return { error: 'AI is not configured. Set an endpoint and model in AI settings first.', status: 400 };
   }
   let allowed;
-  try { allowed = endpointAllowed(row.base_url); } catch (e) {
+  try {
+    allowed = endpointAllowed(row.base_url);
+  } catch (e) {
     return { error: 'AI endpoint check unavailable: ' + String(e.message || e).slice(0, 100), status: 400 };
   }
   if (!allowed) return { error: 'Configured endpoint is not allowed.', status: 400 };
@@ -83,14 +89,23 @@ async function chatWithTools({ workspaceId, userId, ip, canMutate, messages, bra
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${key}` },
         body: JSON.stringify({
-          model: row.model, temperature: 0.2, stream: false,
-          messages: convo, tools, tool_choice: 'auto',
+          model: row.model,
+          temperature: 0.2,
+          stream: false,
+          messages: convo,
+          tools,
+          tool_choice: 'auto',
         }),
         signal: controller.signal,
       });
     } catch (e) {
       clearTimeout(timer);
-      return { error: 'Could not reach the AI endpoint: ' + (e.name === 'AbortError' ? 'timed out' : String(e.message || e).slice(0, 120)), status: 400 };
+      return {
+        error:
+          'Could not reach the AI endpoint: ' +
+          (e.name === 'AbortError' ? 'timed out' : String(e.message || e).slice(0, 120)),
+        status: 400,
+      };
     }
     clearTimeout(timer);
     if (!aiRes.ok) {
@@ -98,7 +113,11 @@ async function chatWithTools({ workspaceId, userId, ip, canMutate, messages, bra
       return { error: `AI endpoint error ${aiRes.status}: ${t.slice(0, 150)}`, status: 400 };
     }
     let json;
-    try { json = await aiRes.json(); } catch { return { error: 'AI returned non-JSON.', status: 400 }; }
+    try {
+      json = await aiRes.json();
+    } catch {
+      return { error: 'AI returned non-JSON.', status: 400 };
+    }
     const msg = (json && json.choices && json.choices[0] && json.choices[0].message) || {};
     const calls = Array.isArray(msg.tool_calls) ? msg.tool_calls : [];
 
@@ -109,11 +128,19 @@ async function chatWithTools({ workspaceId, userId, ip, canMutate, messages, bra
 
     // Record the assistant turn (with its tool calls) so the model sees its
     // own calls when the results come back.
-    convo.push({ role: 'assistant', content: msg.content || null, tool_calls: calls.map((c) => ({ id: c.id, type: 'function', function: c.function })) });
+    convo.push({
+      role: 'assistant',
+      content: msg.content || null,
+      tool_calls: calls.map((c) => ({ id: c.id, type: 'function', function: c.function })),
+    });
     for (const call of calls) {
       const name = call && call.function && call.function.name;
       let args = {};
-      try { args = JSON.parse(call.function.arguments || '{}'); } catch { /* model sent garbage; executor gets {} */ }
+      try {
+        args = JSON.parse(call.function.arguments || '{}');
+      } catch {
+        /* model sent garbage; executor gets {} */
+      }
       if (args === null || typeof args !== 'object' || Array.isArray(args)) args = {};
       const result = await executeTool(name, { workspaceId, userId, ip, canMutate: !!canMutate, args });
       const summary = result && (result.summary || result.error) ? String(result.summary || result.error) : 'done';
@@ -136,14 +163,20 @@ async function chatWithTools({ workspaceId, userId, ip, canMutate, messages, bra
  * lobby screen faces the entrance", "lunch menu runs 11:00-15:00") and the
  * ones whose words overlap the question ride along as context.
  */
-const STOPWORDS = new Set(('a,an,the,and,or,but,of,to,in,on,at,for,with,by,from,as,is,are,was,were,be,been,being,'
-  + 'it,its,this,that,these,those,i,you,he,she,we,they,them,my,your,our,their,his,her,me,us,do,does,did,'
-  + 'what,which,who,whom,whose,when,where,why,how,can,could,should,would,will,have,has,had,not,no,yes,'
-  + 'if,then,than,so,such,only,just,very,also,any,all,each,every,more,most,some,there,here,now,then')
-  .split(','));
+const STOPWORDS = new Set(
+  (
+    'a,an,the,and,or,but,of,to,in,on,at,for,with,by,from,as,is,are,was,were,be,been,being,' +
+    'it,its,this,that,these,those,i,you,he,she,we,they,them,my,your,our,their,his,her,me,us,do,does,did,' +
+    'what,which,who,whom,whose,when,where,why,how,can,could,should,would,will,have,has,had,not,no,yes,' +
+    'if,then,than,so,such,only,just,very,also,any,all,each,every,more,most,some,there,here,now,then'
+  ).split(','),
+);
 
 function messageWords(message) {
-  const words = String(message || '').toLowerCase().match(/[a-z0-9][a-z0-9']*/g) || [];
+  const words =
+    String(message || '')
+      .toLowerCase()
+      .match(/[a-z0-9][a-z0-9']*/g) || [];
   return new Set(words.filter((w) => w.length > 2 && !STOPWORDS.has(w)));
 }
 

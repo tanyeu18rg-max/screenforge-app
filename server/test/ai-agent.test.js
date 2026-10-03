@@ -38,13 +38,20 @@ db.exec(`CREATE TABLE ai_settings (workspace_id TEXT PRIMARY KEY, base_url TEXT,
 }
 
 const dbModulePath = require.resolve('../db/database');
-require.cache[dbModulePath] = { id: dbModulePath, filename: dbModulePath, loaded: true, exports: { db, pruneTelemetry() {}, pruneScreenshots() {} } };
+require.cache[dbModulePath] = {
+  id: dbModulePath,
+  filename: dbModulePath,
+  loaded: true,
+  exports: { db, pruneTelemetry() {}, pruneScreenshots() {} },
+};
 
 require('../routes/ai'); // pulls in lib/ai-agent + lib/ai-tools via the route
 const agent = require('../lib/ai-agent');
 const tools = require('../lib/ai-tools');
 
-const WS = 'ws1', WS2 = 'ws2', USER = 'u1';
+const WS = 'ws1',
+  WS2 = 'ws2',
+  USER = 'u1';
 const ctx = (over = {}) => ({ workspaceId: WS, userId: USER, ip: '127.0.0.1', canMutate: true, args: {}, ...over });
 
 test('toolList hides mutating tools from read-only sessions', () => {
@@ -58,8 +65,12 @@ test('toolList hides mutating tools from read-only sessions', () => {
 });
 
 test('overview_stats counts workspace rows only', async () => {
-  db.prepare("INSERT INTO devices (id, workspace_id, name, status) VALUES ('d1', 'ws1', 'Lobby', 'online'), ('d2', 'ws1', 'Back', 'offline'), ('d9', 'ws2', 'Other', 'online')").run();
-  db.prepare("INSERT INTO content (id, workspace_id, filename) VALUES ('m1', 'ws1', 'a.mp4'), ('m9', 'ws2', 'b.mp4')").run();
+  db.prepare(
+    "INSERT INTO devices (id, workspace_id, name, status) VALUES ('d1', 'ws1', 'Lobby', 'online'), ('d2', 'ws1', 'Back', 'offline'), ('d9', 'ws2', 'Other', 'online')",
+  ).run();
+  db.prepare(
+    "INSERT INTO content (id, workspace_id, filename) VALUES ('m1', 'ws1', 'a.mp4'), ('m9', 'ws2', 'b.mp4')",
+  ).run();
   const r = await tools.executeTool('overview_stats', ctx());
   assert.equal(r.data.displays.total, 2);
   assert.equal(r.data.displays.online, 1);
@@ -94,7 +105,10 @@ test('create_playlist writes a workspace-scoped row and audits', async () => {
 
 test('add_media_to_playlist appends and marks draft', async () => {
   const pl = db.prepare('SELECT id FROM playlists WHERE name = ?').get('Morning Loop');
-  const r = await tools.executeTool('add_media_to_playlist', ctx({ args: { playlist: pl.id, media: 'a.mp4', duration_sec: 15 } }));
+  const r = await tools.executeTool(
+    'add_media_to_playlist',
+    ctx({ args: { playlist: pl.id, media: 'a.mp4', duration_sec: 15 } }),
+  );
   assert.ok(!r.error, r.error);
   const item = db.prepare('SELECT * FROM playlist_items WHERE playlist_id = ?').get(pl.id);
   assert.equal(item.content_id, 'm1');
@@ -128,9 +142,15 @@ test('unknown tool is an error, not a crash', async () => {
 
 test('getBrainContext scores keyword overlap, workspace-scoped', () => {
   db.prepare("INSERT OR IGNORE INTO workspaces (id) VALUES ('ws1'), ('ws2')").run();
-  db.prepare("INSERT INTO ai_brain (id, workspace_id, title, content, tags) VALUES ('b1', 'ws1', 'Lobby screen', 'The lobby screen faces the entrance and shows the lunch menu from 11:00 to 15:00.', 'lobby,menu')").run();
-  db.prepare("INSERT INTO ai_brain (id, workspace_id, title, content, tags) VALUES ('b2', 'ws1', 'WiFi password', 'The guest wifi password is hunter2.', 'network')").run();
-  db.prepare("INSERT INTO ai_brain (id, workspace_id, title, content, tags) VALUES ('b3', 'ws2', 'Lobby screen', 'Other tenant secret.', '')").run();
+  db.prepare(
+    "INSERT INTO ai_brain (id, workspace_id, title, content, tags) VALUES ('b1', 'ws1', 'Lobby screen', 'The lobby screen faces the entrance and shows the lunch menu from 11:00 to 15:00.', 'lobby,menu')",
+  ).run();
+  db.prepare(
+    "INSERT INTO ai_brain (id, workspace_id, title, content, tags) VALUES ('b2', 'ws1', 'WiFi password', 'The guest wifi password is hunter2.', 'network')",
+  ).run();
+  db.prepare(
+    "INSERT INTO ai_brain (id, workspace_id, title, content, tags) VALUES ('b3', 'ws2', 'Lobby screen', 'Other tenant secret.', '')",
+  ).run();
   const c = agent.getBrainContext('ws1', 'what is on the lobby screen at lunch?');
   assert.match(c, /lobby screen faces the entrance/);
   assert.ok(!c.includes('hunter2'), 'unrelated entry not injected');
@@ -139,13 +159,21 @@ test('getBrainContext scores keyword overlap, workspace-scoped', () => {
 });
 
 test('chatWithTools refuses without AI configured', async () => {
-  const out = await agent.chatWithTools({ workspaceId: 'ws1', userId: 'u1', ip: '1.2.3.4', canMutate: false, messages: [{ role: 'user', content: 'hi' }] });
+  const out = await agent.chatWithTools({
+    workspaceId: 'ws1',
+    userId: 'u1',
+    ip: '1.2.3.4',
+    canMutate: false,
+    messages: [{ role: 'user', content: 'hi' }],
+  });
   assert.ok(out.error);
   assert.equal(out.status, 400);
 });
 
 test('chatWithTools runs the tool loop with a stubbed endpoint', async () => {
-  db.prepare("INSERT INTO ai_settings (workspace_id, base_url, model) VALUES ('ws1', 'https://ai.example.com/v1', 'test-model')").run();
+  db.prepare(
+    "INSERT INTO ai_settings (workspace_id, base_url, model) VALUES ('ws1', 'https://ai.example.com/v1', 'test-model')",
+  ).run();
   const calls = [];
   const realFetch = globalThis.fetch;
   globalThis.fetch = async (url, opts) => {
@@ -153,16 +181,30 @@ test('chatWithTools runs the tool loop with a stubbed endpoint', async () => {
     const first = calls.length === 1;
     return {
       ok: true,
-      json: async () => first
-        ? { choices: [{ message: { role: 'assistant', content: null, tool_calls: [
-              { id: 'call1', type: 'function', function: { name: 'overview_stats', arguments: '{}' } },
-            ] } }] }
-        : { choices: [{ message: { role: 'assistant', content: 'You have 2 displays, 1 online.' } }] },
+      json: async () =>
+        first
+          ? {
+              choices: [
+                {
+                  message: {
+                    role: 'assistant',
+                    content: null,
+                    tool_calls: [
+                      { id: 'call1', type: 'function', function: { name: 'overview_stats', arguments: '{}' } },
+                    ],
+                  },
+                },
+              ],
+            }
+          : { choices: [{ message: { role: 'assistant', content: 'You have 2 displays, 1 online.' } }] },
     };
   };
   try {
     const out = await agent.chatWithTools({
-      workspaceId: 'ws1', userId: 'u1', ip: '1.2.3.4', canMutate: false,
+      workspaceId: 'ws1',
+      userId: 'u1',
+      ip: '1.2.3.4',
+      canMutate: false,
       messages: [{ role: 'user', content: 'how is my network?' }],
     });
     assert.ok(!out.error, out.error);
@@ -176,4 +218,37 @@ test('chatWithTools runs the tool loop with a stubbed endpoint', async () => {
     globalThis.fetch = realFetch;
     db.prepare('DELETE FROM ai_settings WHERE workspace_id = ?').run('ws1');
   }
+});
+
+test('getBrainContext never leaks another workspace (WS2 entries excluded)', () => {
+  db.prepare(
+    "INSERT INTO ai_brain (id, workspace_id, title, content, tags) VALUES ('b-ws2', ?, 'Secret Menu', 'the other tenant lunch menu', '')",
+  ).run(WS2);
+  const out = agent.getBrainContext(WS, 'what is on the lunch menu');
+  assert.ok(!out.includes('Secret Menu'));
+  db.prepare("DELETE FROM ai_brain WHERE id = 'b-ws2'").run();
+});
+
+test('getBrainContext returns empty for stopword-only or empty messages', () => {
+  assert.equal(agent.getBrainContext('ws1', 'what is the'), '');
+  assert.equal(agent.getBrainContext('ws1', ''), '');
+  assert.equal(agent.getBrainContext('', 'lobby menu'), '');
+});
+
+test('getBrainContext caps at three entries', () => {
+  for (let i = 0; i < 5; i++) {
+    db.prepare(
+      "INSERT INTO ai_brain (id, workspace_id, title, content, tags) VALUES (?, 'ws1', ?, 'menu fact', '')",
+    ).run('b-cap-' + i, 'Cap ' + i);
+  }
+  const out = agent.getBrainContext('ws1', 'menu');
+  const lines = out.split('\n').filter((l) => l.startsWith('- '));
+  assert.equal(lines.length, 3);
+  db.prepare("DELETE FROM ai_brain WHERE id LIKE 'b-cap-%'").run();
+});
+
+test('systemPrompt states the session permission honestly', () => {
+  assert.match(agent.systemPrompt(true), /editor access/);
+  assert.match(agent.systemPrompt(false), /read-only/);
+  assert.ok(!agent.systemPrompt(false).includes('you may create playlists'));
 });

@@ -11,7 +11,11 @@ import { showToast } from '../components/toast.js';
 
 function canEditBrain() {
   let me = null;
-  try { me = JSON.parse(localStorage.getItem('user') || 'null'); } catch (_) { /* no user */ }
+  try {
+    me = JSON.parse(localStorage.getItem('user') || 'null');
+  } catch (_) {
+    /* no user */
+  }
   if (!me) return false;
   if (me.role === 'platform_admin' || me.is_platform_admin) return true;
   return ['workspace_admin', 'workspace_editor'].includes(me.current_workspace_role);
@@ -19,8 +23,11 @@ function canEditBrain() {
 
 function fmtDate(ts) {
   if (!ts) return '';
-  try { return new Date(ts * 1000).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' }); }
-  catch { return ''; }
+  try {
+    return new Date(ts * 1000).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' });
+  } catch {
+    return '';
+  }
 }
 
 export async function render(container) {
@@ -34,7 +41,9 @@ export async function render(container) {
         <div class="subtitle">Facts Kardinal AI knows about your network. Anything here is offered to the chat as context when it is relevant.</div>
       </div>
     </div>
-    ${editable ? `
+    ${
+      editable
+        ? `
     <div class="card" style="margin-bottom:20px">
       <h3 style="margin:0 0 12px;font-size:14px" id="brainFormTitle">Add knowledge</h3>
       <div style="display:grid;gap:10px;max-width:720px">
@@ -49,9 +58,11 @@ export async function render(container) {
           <button class="btn btn-secondary btn-sm" id="brainCancel" style="display:none">Cancel</button>
         </div>
       </div>
-    </div>` : `
+    </div>`
+        : `
     <div class="card" style="margin-bottom:20px"><p style="margin:0;font-size:13px;color:var(--text-muted)">
-      Editor access is required to add or change entries. What is listed here is still used as context by Kardinal AI when you chat.</p></div>`}
+      Editor access is required to add or change entries. What is listed here is still used as context by Kardinal AI when you chat.</p></div>`
+    }
     <div id="brainList" style="display:grid;gap:12px;max-width:900px"><p style="color:var(--text-muted)">Loading...</p></div>`;
 
   const listEl = container.querySelector('#brainList');
@@ -67,7 +78,8 @@ export async function render(container) {
       return;
     }
     if (!entries.length) {
-      listEl.innerHTML = '<p style="color:var(--text-muted)">Nothing here yet. Add the first fact above — screen locations, opening hours, menu schedules, anything the AI should know.</p>';
+      listEl.innerHTML =
+        '<p style="color:var(--text-muted)">Nothing here yet. Add the first fact above — screen locations, opening hours, menu schedules, anything the AI should know.</p>';
       return;
     }
     listEl.innerHTML = '';
@@ -75,7 +87,10 @@ export async function render(container) {
       const card = document.createElement('div');
       card.className = 'card';
       card.style.margin = '0';
-      const tags = String(e.tags || '').split(',').map((t) => t.trim()).filter(Boolean);
+      const tags = String(e.tags || '')
+        .split(',')
+        .map((t) => t.trim())
+        .filter(Boolean);
       card.innerHTML = `
         <div style="display:flex;justify-content:space-between;gap:12px;align-items:flex-start">
           <div style="min-width:0">
@@ -84,26 +99,43 @@ export async function render(container) {
             <p style="margin:0;font-size:13px;color:var(--text-muted);white-space:pre-wrap">${esc(e.preview || '')}${(e.preview || '').length >= 200 ? '…' : ''}</p>
             <div style="font-size:11px;color:var(--text-muted);margin-top:6px">${esc(fmtDate(e.created_at))}</div>
           </div>
-          ${editable ? `<div style="display:flex;gap:6px;flex:none">
+          ${
+            editable
+              ? `<div style="display:flex;gap:6px;flex:none">
             <button class="btn btn-secondary btn-sm" data-edit="${esc(e.id)}">Edit</button>
             <button class="btn btn-secondary btn-sm" data-del="${esc(e.id)}">Delete</button>
-          </div>` : ''}
+          </div>`
+              : ''
+          }
         </div>`;
       listEl.appendChild(card);
     }
     if (editable) {
-      listEl.querySelectorAll('[data-del]').forEach((b) => b.addEventListener('click', async () => {
-        if (!window.confirm('Delete this knowledge entry?')) return;
-        try { await api.aiBrainDelete(b.dataset.del); showToast('Entry deleted', 'success'); load(); }
-        catch (e) { showToast((e && e.message) || 'Delete failed', 'error'); }
-      }));
-      listEl.querySelectorAll('[data-edit]').forEach((b) => b.addEventListener('click', () => startEdit(b.dataset.edit)));
+      listEl.querySelectorAll('[data-del]').forEach((b) =>
+        b.addEventListener('click', async () => {
+          if (!window.confirm('Delete this knowledge entry?')) return;
+          try {
+            await api.aiBrainDelete(b.dataset.del);
+            showToast('Entry deleted', 'success');
+            load();
+          } catch (e) {
+            showToast((e && e.message) || 'Delete failed', 'error');
+          }
+        }),
+      );
+      listEl
+        .querySelectorAll('[data-edit]')
+        .forEach((b) => b.addEventListener('click', () => startEdit(b.dataset.edit)));
     }
   }
 
   async function startEdit(id) {
     let e = null;
-    try { e = (await api.aiBrainGet(id)).entry; } catch { return; }
+    try {
+      e = (await api.aiBrainGet(id)).entry;
+    } catch {
+      return;
+    }
     if (!e) return;
     container.querySelector('#brainTitle').value = e.title || '';
     container.querySelector('#brainTags').value = e.tags || '';
@@ -123,7 +155,9 @@ export async function render(container) {
     const saveBtn = container.querySelector('#brainSave');
     const cancelBtn = container.querySelector('#brainCancel');
     const resetForm = () => {
-      titleEl.value = ''; tagsEl.value = ''; contentEl.value = '';
+      titleEl.value = '';
+      tagsEl.value = '';
+      contentEl.value = '';
       editingId = null;
       container.querySelector('#brainFormTitle').textContent = 'Add knowledge';
       saveBtn.textContent = 'Add entry';
@@ -132,14 +166,19 @@ export async function render(container) {
     cancelBtn.addEventListener('click', resetForm);
     saveBtn.addEventListener('click', async () => {
       const data = { title: titleEl.value.trim(), tags: tagsEl.value.trim(), content: contentEl.value.trim() };
-      if (!data.title || !data.content) { showToast('Title and content are required', 'error'); return; }
+      if (!data.title || !data.content) {
+        showToast('Title and content are required', 'error');
+        return;
+      }
       try {
         if (editingId) await api.aiBrainUpdate(editingId, data);
         else await api.aiBrainAdd(data);
         showToast(editingId ? 'Entry updated' : 'Entry added', 'success');
         resetForm();
         load();
-      } catch (e) { showToast((e && e.message) || 'Save failed', 'error'); }
+      } catch (e) {
+        showToast((e && e.message) || 'Save failed', 'error');
+      }
     });
   }
 

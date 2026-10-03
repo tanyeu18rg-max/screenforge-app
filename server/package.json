@@ -10,7 +10,10 @@
     "build:legacy-player": "node scripts/build-legacy-player.js",
     "build:certified-hardware": "node scripts/build-certified-hardware.js",
     "test": "node --test --test-concurrency=2",
-    "smoke": "node smoke-ui.js"
+    "smoke": "node smoke-ui.js",
+    "lint": "eslint lib/ai-agent.js lib/ai-tools.js lib/sentry.js lib/secretbox.js test/ai-agent.test.js eslint.config.mjs",
+    "format:check": "prettier --check lib/ai-agent.js lib/ai-tools.js lib/sentry.js test/ai-agent.test.js ../frontend/js/components/ai-chat.js ../frontend/js/views/brain.js ../frontend/js/views/overview.js",
+    "format:write": "prettier --write lib/ai-agent.js lib/ai-tools.js lib/sentry.js test/ai-agent.test.js ../frontend/js/components/ai-chat.js ../frontend/js/views/brain.js ../frontend/js/views/overview.js"
   },
   "dependencies": {
     "@azure/msal-node": "^5.2.1",
@@ -33,7 +36,8 @@
     "socket.io-client": "^4.8.3",
     "stripe": "^20.4.1",
     "unzipper": "^0.12.3",
-    "uuid": "^14.0.0"
+    "uuid": "^14.0.0",
+    "@sentry/node": "^11.4.0"
   },
   "optionalDependencies": {
     "better-sqlite3": "12.9.0",
@@ -42,6 +46,9 @@
   "devDependencies": {
     "esbuild": "0.28.2",
     "js-yaml": "^4.2.0",
-    "sharp": "^0.35.3"
+    "sharp": "^0.35.3",
+    "eslint": "^9.39.2",
+    "globals": "^17.3.0",
+    "prettier": "^3.7.4"
   }
 }

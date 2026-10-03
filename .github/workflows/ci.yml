@@ -407,6 +407,45 @@ jobs:
         if: always()
         run: kill "$(cat "$RUNNER_TEMP/server-mesh.pid")" 2>/dev/null || true
 
+  # ── Kardinal layer gates ──────────────────────────────────────────────
+  # Upstream never adopted a linter or a dependency audit; the Kardinal layer
+  # holds its own code to both. The lint scope is documented in
+  # server/eslint.config.mjs (Kardinal files only — the upstream tree has
+  # ~500 pre-existing findings we deliberately do not churn).
+  lint:
+    name: Lint + format check (Kardinal layer)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: server
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '20'
+          cache: npm
+          cache-dependency-path: server/package-lock.json
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run format:check
+
+  audit:
+    name: Dependency audit (high+)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: server
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '20'
+          cache: npm
+          cache-dependency-path: server/package-lock.json
+      # No install needed: npm audit reads the lockfile. Fails on high or
+      # critical advisories in the production dependency tree.
+      - run: npm audit --omit=dev --audit-level=high
+
   # TODO (deferred - needs a tag earlier than HEAD, so meaningful from v1.8.0 on):
   # upgrade-path job. Restore a db created by the previous tagged release, boot
   # the current code against it, and assert migrations complete and /api/status
