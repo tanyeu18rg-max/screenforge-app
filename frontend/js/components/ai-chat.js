@@ -1,5 +1,6 @@
 import { api } from '../api.js';
 import { esc } from '../utils.js';
+import { t } from '../i18n.js';
 
 /*
  * Kardinal chat: a floating assistant button + slide-in drawer on every
@@ -91,13 +92,13 @@ export function initAiChat() {
   drawer.innerHTML = `
     <div class="kchat-head">
       <div><h3>Kardinal AI</h3><p>Your signage operator</p></div>
-      <button class="kchat-close" aria-label="Close chat">${CLOSE_SVG}</button>
+      <button class="kchat-close" aria-label="${t('ai.chat.close')}">${CLOSE_SVG}</button>
     </div>
     <div id="kchatMsgs"></div>
     <div class="kchat-chips" id="kchatChips"></div>
     <div class="kchat-foot">
-      <textarea id="kchatInput" placeholder="Ask about your screens..." aria-label="Chat message"></textarea>
-      <button id="kchatSend" aria-label="Send message">${SEND_SVG}</button>
+      <textarea id="kchatInput" placeholder="Ask about your screens..." aria-label="${t('ai.chat.message_label')}"></textarea>
+      <button id="kchatSend" aria-label="${t('ai.chat.send')}">${SEND_SVG}</button>
     </div>`;
   document.body.appendChild(drawer);
 

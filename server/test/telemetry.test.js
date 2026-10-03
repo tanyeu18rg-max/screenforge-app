@@ -148,12 +148,14 @@ test('an operator collector is ADDITIONAL — it never replaces the shared repor
   // redirect, the opt-in stops meaning what the UI says it means.
   reset();
   telemetry.setEnabled(true);
+  const origEndpoint = process.env.TELEMETRY_ENDPOINT;
+  process.env.TELEMETRY_ENDPOINT = 'https://telemetry.screenforge.com/collect';
   const original = process.env.TELEMETRY_EXTRA_ENDPOINT;
   process.env.TELEMETRY_EXTRA_ENDPOINT = 'https://mine.example.test/collect';
   try {
     const dests = telemetry.destinations();
     assert.equal(dests.length, 2, 'sharing on + own collector = both, never one');
-    assert.deepEqual(dests.map(d => d.kind).sort(), ['extra', 'screentinker']);
+    assert.deepEqual(dests.map(d => d.kind).sort(), ['extra', 'screenforge']);
 
     const hits = [];
     const spy = mock.method(globalThis, 'fetch', async (url) => { hits.push(url); return { ok: true, status: 200 }; });
@@ -161,9 +163,11 @@ test('an operator collector is ADDITIONAL — it never replaces the shared repor
       await telemetry.report(db);
       assert.equal(hits.length, 2, 'both destinations must receive the report');
       assert.ok(hits.includes('https://mine.example.test/collect'));
-      assert.ok(hits.some(u => u.includes('screentinker.com')), 'the shared report must still be sent');
+      assert.ok(hits.some(u => u.includes('screenforge.com')), 'the shared report must still be sent');
     } finally { spy.mock.restore(); }
   } finally {
+    if (origEndpoint === undefined) delete process.env.TELEMETRY_ENDPOINT;
+    else process.env.TELEMETRY_ENDPOINT = origEndpoint;
     if (original === undefined) delete process.env.TELEMETRY_EXTRA_ENDPOINT;
     else process.env.TELEMETRY_EXTRA_ENDPOINT = original;
   }
@@ -182,7 +186,7 @@ test('an operator can keep their own statistics while sharing nothing with us', 
     try {
       await telemetry.report(db);
       assert.deepEqual(hits, ['https://mine.example.test/collect']);
-      assert.ok(!hits.some(u => u.includes('screentinker.com')),
+      assert.ok(!hits.some(u => u.includes('screenforge.com')),
         'sharing is off — nothing may reach us, whatever else is configured');
     } finally { spy.mock.restore(); }
   } finally {

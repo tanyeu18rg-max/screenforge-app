@@ -26,8 +26,8 @@ const TITLE_MAX = 70;
 const DESC_MAX = 160;
 
 const decode = (s) => s
-  .replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>')
-  .replace(/&quot;/g, '"').replace(/&#39;/g, "'").replace(/&nbsp;/g, ' ');
+  .replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&mdash;/g, '—')
+  .replace(/&ndash;/g, '–').replace(/&quot;/g, '"').replace(/&#39;/g, "'").replace(/&nbsp;/g, ' ');
 
 /* Which file on disk serves a sitemap URL. `/` is the marketing landing page, NOT index.html,
  * which is the dashboard SPA (hence robots.txt disallowing /app). */
@@ -63,7 +63,7 @@ test('⚠️ every published page names its Markdown twin IN THE DOCUMENT', () =
     // And it must point at the URL the server actually serves: /foo.html -> /foo.md, / -> /index.md.
     const expected = u === '/' ? '/index.md'
       : (u.endsWith('/') ? `${u}index.md` : `${u.replace(/\.html$/, '')}.md`);
-    assert.equal(m[1], `https://screentinker.com${expected}`, `${u} points at the wrong rendition`);
+    assert.equal(m[1], `https://screenforge-tff9.vercel.app${expected}`, `${u} points at the wrong rendition`);
   }
 });
 

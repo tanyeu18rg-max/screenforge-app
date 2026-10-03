@@ -604,7 +604,7 @@ test('the DNS record is per-domain and per-claim, so an old record proves nothin
 
   const one = domainVerify.instructions('acme.test', a);
   const two = domainVerify.instructions('acme.test', b);
-  assert.equal(one.record_name, '_screentinker-verify.acme.test');
+  assert.equal(one.record_name, '_screenforge-verify.acme.test');
   assert.notEqual(one.txt_value, two.txt_value, 'reissuing changes what must be published');
   // TXT is the only accepted form: a CNAME alternative would need a wildcard zone this project
   // does not operate, so offering one would document a check that could never pass.

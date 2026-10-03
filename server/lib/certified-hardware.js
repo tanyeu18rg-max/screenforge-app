@@ -26,7 +26,7 @@ const config = require('../config');
 const URL = `${config.siteUrl}/certified-hardware`;
 const TITLE = 'Certified Hardware | Kardinal Screens';
 const DESCRIPTION =
-  'Device models tested with Kardinal Screens, what each one actually does, and which are not '
+  'Device models tested with Kardinal Screens, what each one does, and which are not '
   + 'supported. Certified Hardware under Kardinal Screens reseller agreements.';
 
 /** Status groups, in the order they appear on the page. Certified first, deliberately. */

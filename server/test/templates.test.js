@@ -281,7 +281,7 @@ async function installOfficial(bytesList, opts) {
     files[`packages/${manifest.id}-${manifest.version}.sttemplate`] = signedEnvelope(b);
   }
   catalog.setFetcher(async (url) => {
-    const rel = url.replace('https://screentinker.github.io/templates/', '');
+    const rel = url.replace('https://screenforge.github.io/templates/', '');
     if (files[rel]) return files[rel];
     throw new Error('404 ' + rel);
   });

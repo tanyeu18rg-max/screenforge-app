@@ -33,7 +33,7 @@ process.env.DATA_DIR = tmp;
 process.env.JWT_SECRET = 'test-secret-player-defer';
 // Explicitly neutral: these tests drive the state machine directly, and an operator's forced
 // setting leaking in from the environment would quietly invert half of them.
-delete process.env.SCREENTINKER_DEFER_PLAYERS;
+delete process.env.SCREENFORGE_DEFER_PLAYERS;
 
 const express = require('express');
 const { Server } = require('socket.io');
@@ -51,13 +51,13 @@ test('armed: default OFF on an ordinary restart, ON after a migration that touch
     'the boot after a plays migration is the one with a cold index and a backlog behind it');
 });
 
-test('SCREENTINKER_DEFER_PLAYERS forces the decision in both directions', () => {
+test('SCREENFORGE_DEFER_PLAYERS forces the decision in both directions', () => {
   bootDefer.__reset();
-  process.env.SCREENTINKER_DEFER_PLAYERS = '1';
+  process.env.SCREENFORGE_DEFER_PLAYERS = '1';
   assert.equal(bootDefer.armed({ migrationTouchedPlays: false }), true, '=1 must force it on');
-  process.env.SCREENTINKER_DEFER_PLAYERS = '0';
+  process.env.SCREENFORGE_DEFER_PLAYERS = '0';
   assert.equal(bootDefer.armed({ migrationTouchedPlays: true }), false, '=0 must force it off');
-  delete process.env.SCREENTINKER_DEFER_PLAYERS;
+  delete process.env.SCREENFORGE_DEFER_PLAYERS;
 });
 
 test('no backlog, no defer — a fresh install never holds off its own players', () => {

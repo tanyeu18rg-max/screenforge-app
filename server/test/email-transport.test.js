@@ -131,12 +131,12 @@ test('smtpFromAddress parses "Name <addr>", bare addr, and falls back to SMTP_US
 
 // ─────────────── sendEmail routing (SMTP path, mocked) ───────────────
 
-test('sendEmail via smtp routes to nodemailer with the [ScreenTinker] prefix', async () => {
+test('sendEmail via smtp routes to nodemailer with the [Kardinal Screens] prefix', async () => {
   const { mod, captured } = loadEmail(SMTP_OK, { mockSmtp: 'ok' });
   const r = await mod.sendEmail({ to: 'user@x.com', subject: 'Hello', text: 'hi there' });
   assert.deepEqual(r, { sent: true });
   assert.equal(captured.sendMail.length, 1);
-  assert.equal(captured.sendMail[0].subject, '[ScreenTinker] Hello');
+  assert.equal(captured.sendMail[0].subject, '[Kardinal Screens] Hello');
   assert.equal(captured.sendMail[0].to, 'user@x.com');
   assert.equal(captured.sendMail[0].from, 'ScreenTinker <noreply@example.com>');
   assert.match(captured.sendMail[0].html, /hi there/);

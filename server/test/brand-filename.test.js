@@ -21,14 +21,14 @@ test('an ordinary brand name comes through recognisably', () => {
 
 test('nothing configured falls back to the product name', () => {
   for (const empty of ['', '   ', null, undefined]) {
-    assert.equal(brandToFilenameStem(empty), 'ScreenTinker');
+    assert.equal(brandToFilenameStem(empty), 'Kardinal Screens');
   }
 });
 
 test('a name that sanitises away entirely still yields a usable filename', () => {
   // Otherwise the download would be called ".apk", which some browsers refuse to save at all.
-  assert.equal(brandToFilenameStem('日本語'), 'ScreenTinker');
-  assert.equal(brandToFilenameStem('***'), 'ScreenTinker');
+  assert.equal(brandToFilenameStem('日本語'), 'Kardinal Screens');
+  assert.equal(brandToFilenameStem('***'), 'Kardinal Screens');
 });
 
 test('⚠️ a quote cannot break out of the header', () => {

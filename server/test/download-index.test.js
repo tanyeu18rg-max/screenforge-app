@@ -147,31 +147,25 @@ test('the new guides are indexable, canonical and in the sitemap', () => {
     assert.match(html, /name="robots" content="index, follow"/, `${name} robots`);
     assert.match(
       html,
-      new RegExp(`<link rel="canonical" href="https://screentinker\\.com/guides/${name.replace('.', '\\.')}">`),
+      new RegExp(`<link rel="canonical" href="https://screenforge-tff9\\.vercel\\.app/guides/${name.replace('.', '\\.')}">`),
       `${name} canonical`
     );
     assert.ok(sitemap.includes(`/guides/${name}`), `${name} is missing from sitemap.xml`);
   }
 });
 
-test('the landing page links every platform it claims, and certified hardware from the nav', () => {
+test('the landing page nav links resolve to sections on the page', () => {
   const landing = fs.readFileSync(
     path.join(__dirname, '..', '..', 'frontend', 'landing.html'), 'utf8'
   );
-  // Derived from the page's own claim rather than hardcoded: adding a platform without updating the
-  // social cards is the drift that left "9 platforms" on the page after Vega shipped.
-  const claimed = Number((landing.match(/across (\d+) platforms/) || [])[1]);
-  const tiles = landing.match(/class="platform-item"/g) || [];
-  assert.equal(tiles.length, claimed, `${tiles.length} tiles but the page claims ${claimed}`);
-  // Every tile is a link now — a tile that is a bare <div> is a platform with nowhere to go, which
-  // is what this change removed.
-  assert.equal(
-    (landing.match(/<a class="platform-item"/g) || []).length, claimed,
-    'every platform tile must be a link'
-  );
-  // Named in reseller agreements, and people were hunting for it: it belongs in the nav.
-  assert.match(landing, /<a href="\/certified-hardware">Certified Hardware<\/a>/);
-  assert.ok(!landing.includes('9 platforms'), 'the social cards must not still say 9 platforms');
+  // The rebranded page has a simplified nav (no platform tiles). Every in-page
+  // anchor must point at a section that exists, so a nav link never 404s.
+  for (const id of ['features', 'pricing', 'faq']) {
+    assert.ok(landing.includes(`href="#${id}"`), `nav links #${id}`);
+    assert.ok(landing.includes(`id="${id}"`), `section #${id} exists`);
+  }
+  assert.ok(landing.includes('href="/#/register"'), 'signup link present');
+  assert.ok(!landing.includes('ScreenTinker'), 'old product name gone from landing');
 });
 
 /*

@@ -60,7 +60,7 @@ test('#329: the rest of the manifest is unchanged', () => {
   const xml = wgtCache.ssspConfigXml({ version: '2.0.7', size: 126929 });
   assert.match(xml, /^<\?xml version="1\.0" encoding="UTF-8"\?>/);
   assert.match(xml, /<ver>2\.0\.7<\/ver>/);
-  assert.match(xml, /<widgetname>ScreenTinker<\/widgetname>/);
+  assert.match(xml, /<widgetname>Kardinal Screens<\/widgetname>/);
   assert.match(xml, /<webtype>tizen<\/webtype>/);
 });
 

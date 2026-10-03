@@ -3383,4 +3383,7 @@ export default {
   'templates.image_bundled': 'Template image ({file})',
   'templates.widget_type_label': 'Template',
   'templates.widget_template_missing': 'The template {key} is not available: {error}',
+  'ai.chat.close': 'Close chat',
+  'ai.chat.message_label': 'Chat message',
+  'ai.chat.send': 'Send message',
 };

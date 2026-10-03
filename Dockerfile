@@ -68,6 +68,10 @@ COPY brightsign/ /app/brightsign/
 # Bundled plugins (countdown sample, etc.). Loaded only when PLUGINS_ENABLED=true;
 # operator-installed copies live on the /data volume at $DATA_DIR/plugins.
 COPY plugins/ /app/plugins/
+# webOS (.ipk) and Tizen (.wgt) player packages. Served from ../webos and ../tizen by the
+# self-update routes; without these the routes 404 in a container while working from a checkout.
+COPY webos/ /app/webos/
+COPY tizen/ /app/tizen/
 VOLUME ["/data"]
 EXPOSE 3001
 CMD ["node", "server.js"]

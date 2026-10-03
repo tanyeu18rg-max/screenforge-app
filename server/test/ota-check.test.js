@@ -28,9 +28,9 @@ before(async () => {
     PORT = await freePort();
     BASE = `http://127.0.0.1:${PORT}`;
   // the breaker only reports update_available when an APK actually exists — give the
-  // test server a dummy one (resolveApkPath checks DATA_DIR/ScreenTinker.apk).
+  // test server a dummy one (resolveApkPath checks DATA_DIR/Kardinal Screens.apk).
   fs.mkdirSync(DATA_DIR, { recursive: true });
-  fs.writeFileSync(path.join(DATA_DIR, 'ScreenTinker.apk'), Buffer.alloc(1024, 1));
+  fs.writeFileSync(path.join(DATA_DIR, 'Kardinal Screens.apk'), Buffer.alloc(1024, 1));
   const logFd = fs.openSync(LOG, 'w');
   proc = spawn('node', ['server.js'], { cwd: path.join(__dirname, '..'), env: { ...process.env, DATA_DIR, SELF_HOSTED: 'true', PORT: String(PORT), NODE_ENV: 'test' }, stdio: ['ignore', logFd, logFd] });
   let up = false;
@@ -98,7 +98,7 @@ test('global OTA off (OTA_ENABLED=false) -> no device is offered (reason ota_dis
   const P2 = 3992;
   const DD2 = path.join(os.tmpdir(), 'st-ota2-' + crypto.randomBytes(4).toString('hex'));
   fs.mkdirSync(DD2, { recursive: true });
-  fs.writeFileSync(path.join(DD2, 'ScreenTinker.apk'), Buffer.alloc(1024, 1));
+  fs.writeFileSync(path.join(DD2, 'Kardinal Screens.apk'), Buffer.alloc(1024, 1));
   const p2 = spawn('node', ['server.js'], { cwd: path.join(__dirname, '..'), env: { ...process.env, DATA_DIR: DD2, SELF_HOSTED: 'true', PORT: String(P2), NODE_ENV: 'test', OTA_ENABLED: 'false' }, stdio: 'ignore' });
   try {
     let up = false;

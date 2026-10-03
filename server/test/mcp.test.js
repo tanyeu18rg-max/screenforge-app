@@ -347,7 +347,7 @@ test('⚠️ the published server card cannot disagree with the handshake', () =
 
   // What the spec requires of the document itself.
   const id = protocol.identity({ version: '9.9.9' });
-  assert.equal(id.serverInfo.name, 'screentinker');
+  assert.equal(id.serverInfo.name, 'screenforge');
   assert.equal(id.serverInfo.version, '9.9.9');
   assert.ok(id.capabilities.tools, 'the card must list the tools capability');
   assert.match(body, /endpoint: `\$\{base\}\/mcp`/, 'it must name the transport endpoint');

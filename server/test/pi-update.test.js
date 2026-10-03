@@ -37,32 +37,32 @@ const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
 test('pickNewest orders by version, not by listing order or mtime', () => {
   const r = debCache.pickNewest([
-    'screentinker-pi_1.9.0_all.deb', 'screentinker-pi_1.10.0_all.deb', 'screentinker-pi_1.2.3_all.deb',
-    'README', 'screentinker-pi_1.11.0_arm64.deb', 'other_2.0.0_all.deb', 'screentinker-pi_bogus_all.deb',
+    'screenforge-pi_1.9.0_all.deb', 'screenforge-pi_1.10.0_all.deb', 'screenforge-pi_1.2.3_all.deb',
+    'README', 'screenforge-pi_1.11.0_arm64.deb', 'other_2.0.0_all.deb', 'screenforge-pi_bogus_all.deb',
   ]);
-  assert.deepEqual(r, { name: 'screentinker-pi_1.10.0_all.deb', version: '1.10.0' }, '1.10 > 1.9 numerically; wrong arch / name ignored');
+  assert.deepEqual(r, { name: 'screenforge-pi_1.10.0_all.deb', version: '1.10.0' }, '1.10 > 1.9 numerically; wrong arch / name ignored');
   assert.equal(debCache.pickNewest([]), null);
   assert.equal(debCache.pickNewest(['nothing.txt']), null);
 });
 
 test('⚠️ a release beats any prerelease — a test build is never offered to the whole fleet', () => {
-  const r = debCache.pickNewest(['screentinker-pi_1.2.0_all.deb', 'screentinker-pi_1.3.0~beta1_all.deb']);
+  const r = debCache.pickNewest(['screenforge-pi_1.2.0_all.deb', 'screenforge-pi_1.3.0~beta1_all.deb']);
   assert.equal(r.version, '1.2.0');
   // Only a directory with no release at all serves a prerelease, and Debian `~` is normalised.
-  assert.deepEqual(debCache.pickNewest(['screentinker-pi_1.3.0~beta2_all.deb', 'screentinker-pi_1.3.0~beta10_all.deb']),
-    { name: 'screentinker-pi_1.3.0~beta10_all.deb', version: '1.3.0-beta10' });
+  assert.deepEqual(debCache.pickNewest(['screenforge-pi_1.3.0~beta2_all.deb', 'screenforge-pi_1.3.0~beta10_all.deb']),
+    { name: 'screenforge-pi_1.3.0~beta10_all.deb', version: '1.3.0-beta10' });
 });
 
 test('deb-cache resolves DATA_DIR, hashes the file once, and never advertises a stale hash', async () => {
   fs.mkdirSync(DATA_DIR, { recursive: true });
-  const f = path.join(DATA_DIR, 'screentinker-pi_3.0.0_all.deb');
+  const f = path.join(DATA_DIR, 'screenforge-pi_3.0.0_all.deb');
   fs.writeFileSync(f, Buffer.from('first build'));
   debCache.refresh();
   assert.equal(debCache.get().exists, true);
   const first = await debCache.ready();
   assert.equal(first.sha256, crypto.createHash('sha256').update('first build').digest('hex'));
   assert.equal(first.version, '3.0.0');
-  assert.equal(first.filename, 'screentinker-pi_3.0.0_all.deb');
+  assert.equal(first.filename, 'screenforge-pi_3.0.0_all.deb');
 
   // Replaced in place with different bytes (and size): the old hash must not survive the refresh.
   fs.writeFileSync(f, Buffer.from('second build, longer'));
@@ -84,9 +84,9 @@ let proc, BASE;
 
 before(async () => {
   fs.mkdirSync(SRV_DIR, { recursive: true });
-  fs.writeFileSync(path.join(SRV_DIR, 'screentinker-pi_1.1.0_all.deb'), DEB_BYTES);
-  fs.writeFileSync(path.join(SRV_DIR, 'screentinker-pi_1.0.0_all.deb'), Buffer.from('older'));
-  fs.writeFileSync(path.join(SRV_DIR, 'screentinker-pi_1.2.0~rc1_all.deb'), Buffer.from('test build'));
+  fs.writeFileSync(path.join(SRV_DIR, 'screenforge-pi_1.1.0_all.deb'), DEB_BYTES);
+  fs.writeFileSync(path.join(SRV_DIR, 'screenforge-pi_1.0.0_all.deb'), Buffer.from('older'));
+  fs.writeFileSync(path.join(SRV_DIR, 'screenforge-pi_1.2.0~rc1_all.deb'), Buffer.from('test build'));
   const PORT = await freePort();
   BASE = `http://127.0.0.1:${PORT}`;
   proc = spawn('node', ['server.js'], {
@@ -117,7 +117,7 @@ test('an older Pi is offered the newest RELEASE, with the hash and size of the s
   assert.equal(dl.status, 200);
   const body = Buffer.from(await dl.arrayBuffer());
   assert.equal(crypto.createHash('sha256').update(body).digest('hex'), r.sha256, '⚠️ advertised hash must match the served bytes');
-  assert.match(dl.headers.get('content-disposition') || '', /screentinker-pi_1\.1\.0_all\.deb/);
+  assert.match(dl.headers.get('content-disposition') || '', /screenforge-pi_1\.1\.0_all\.deb/);
   assert.equal(dl.headers.get('x-package-sha256'), r.sha256);
 });
 
